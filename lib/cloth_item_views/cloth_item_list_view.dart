@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wardrobe_app/cloth_item.dart';
-import 'package:wardrobe_app/cloth_item_views/cloth_item_views.dart';
+import 'cloth_item_views_utils.dart';
 
 class ClothItemListView extends StatelessWidget {
   final List<ClothItem> clothItems;
@@ -29,14 +29,9 @@ class ClothItemListTile extends StatelessWidget {
       subtitle: Text(clothTypeTextMap[clothItem.type] ?? ""),
       trailing: SizedBox(
         width: 100,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: clothItem.attributes
-              .map((e) => Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Icon(clothAttributeIconMap[e]),
-                  ))
-              .toList(),
+        child: ClothItemAttributeIconRow(
+          clothItem.attributes,
+          alignEnd: true,
         ),
       ),
     );
