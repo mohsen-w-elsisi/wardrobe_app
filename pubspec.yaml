@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  font_awesome_flutter: ^10.7.0
+  rxdart: 
 
 dev_dependencies:
   flutter_test:

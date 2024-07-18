@@ -1,17 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wardrobe_app/cloth_item.dart';
-import 'package:wardrobe_app/home_screen.dart';
-
-class ClothItemCompoundView extends StatelessWidget {
-  final List<ClothItem> clothItems;
-
-  const ClothItemCompoundView(this.clothItems, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ClothItemListView(clothItems);
-  }
-}
+import 'package:wardrobe_app/cloth_item_views/cloth_item_views.dart';
 
 class ClothItemListView extends StatelessWidget {
   final List<ClothItem> clothItems;
@@ -21,9 +10,9 @@ class ClothItemListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      itemCount: mockClothItems.length,
+      itemCount: clothItems.length,
       separatorBuilder: (_, __) => const Divider(),
-      itemBuilder: (_, i) => ClothItemListTile(mockClothItems[i]),
+      itemBuilder: (_, i) => ClothItemListTile(clothItems[i]),
     );
   }
 }
@@ -37,6 +26,19 @@ class ClothItemListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(clothItem.name),
+      subtitle: Text(clothTypeTextMap[clothItem.type] ?? ""),
+      trailing: SizedBox(
+        width: 100,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: clothItem.attributes
+              .map((e) => Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Icon(clothAttributeIconMap[e]),
+                  ))
+              .toList(),
+        ),
+      ),
     );
   }
 }
