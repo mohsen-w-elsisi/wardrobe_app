@@ -15,11 +15,18 @@ class ClothItemCompoundView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ClothItemCompoundViewControlBar(settingsController),
-        Expanded(child: ClothItemGridView(clothItems)),
-      ],
+    return StreamBuilder<ClothItemCompoundViewSettings>(
+      stream: settingsController.stream,
+      builder: (_, __) => Column(
+        children: [
+          ClothItemCompoundViewControlBar(settingsController),
+          Expanded(
+            child: settingsController.layoutIs(ClothItemCompoundViewLayout.grid)
+                ? ClothItemGridView(clothItems)
+                : ClothItemListView(clothItems),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -42,10 +49,23 @@ class ClothItemCompoundViewControlBar extends StatelessWidget {
         ),
         const Text("name"),
         const Spacer(),
-        IconButton(onPressed: () {}, icon: const Icon(Icons.list))
+        IconButton(
+          onPressed: toggleLayout,
+          icon: Icon(
+            settingsController.layoutIs(ClothItemCompoundViewLayout.grid)
+                ? Icons.grid_view
+                : Icons.list,
+          ),
+        )
       ],
     );
   }
+
+  void toggleLayout() => settingsController.setLayout(
+        settingsController.layoutIs(ClothItemCompoundViewLayout.grid)
+            ? ClothItemCompoundViewLayout.list
+            : ClothItemCompoundViewLayout.grid,
+      );
 }
 
 class ClothItemCompoundViewSettingsController {
@@ -69,6 +89,12 @@ class ClothItemCompoundViewSettingsController {
     settings.sortMode = sortMode;
     _updateStream();
   }
+
+  bool layoutIs(ClothItemCompoundViewLayout testLayout) =>
+      testLayout == settings.layout;
+
+  bool sortModeIs(ClothItemCompoundViewSortMode testSortMode) =>
+      testSortMode == settings.sortMode;
 }
 
 class ClothItemCompoundViewSettings {
