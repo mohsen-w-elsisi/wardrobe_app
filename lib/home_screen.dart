@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wardrobe_app/cloth_item.dart';
+import 'package:wardrobe_app/settings_screen.dart';
 import 'cloth_item_views/cloth_item_views.dart';
 
 final mockClothItems = [
@@ -48,7 +49,7 @@ class HomeScreenBottomAppBar extends StatelessWidget {
       child: Row(
         children: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => _navigateTo(context, const SettingsScreen()),
             icon: const Icon(Icons.settings_outlined),
           ),
           IconButton(
@@ -56,6 +57,14 @@ class HomeScreenBottomAppBar extends StatelessWidget {
             icon: const Icon(Icons.checkroom_outlined),
           )
         ],
+      ),
+    );
+  }
+
+  void _navigateTo(BuildContext context, Widget screen) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => screen,
       ),
     );
   }
