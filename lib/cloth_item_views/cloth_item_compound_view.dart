@@ -47,16 +47,35 @@ class ClothItemCompoundViewControlBar extends StatelessWidget {
             style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
-        const Text("name"),
+        _sortModeDropDown(),
         const Spacer(),
-        IconButton(
-          onPressed: toggleLayout,
-          icon: Icon(
-            settingsController.layoutIs(ClothItemCompoundViewLayout.grid)
-                ? Icons.grid_view
-                : Icons.list,
-          ),
-        )
+        _layoutToggleButton()
+      ],
+    );
+  }
+
+  IconButton _layoutToggleButton() {
+    return IconButton(
+      onPressed: toggleLayout,
+      icon: Icon(
+        settingsController.layoutIs(ClothItemCompoundViewLayout.list)
+            ? Icons.grid_view
+            : Icons.list,
+      ),
+    );
+  }
+
+  DropdownButton<ClothItemCompoundViewSortMode> _sortModeDropDown() {
+    return DropdownButton(
+      icon: const Icon(Icons.sort),
+      value: settingsController.settings.sortMode,
+      onChanged: (value) => settingsController.setSortMode(value!),
+      items: [
+        for (final sortMode in ClothItemCompoundViewSortMode.values)
+          DropdownMenuItem(
+            value: sortMode,
+            child: Text(sortModeLabelMap[sortMode]!),
+          )
       ],
     );
   }
@@ -111,6 +130,11 @@ class ClothItemCompoundViewSettings {
     sortMode = ClothItemCompoundViewSortMode.byName;
   }
 }
+
+const Map<ClothItemCompoundViewSortMode, String> sortModeLabelMap = {
+  ClothItemCompoundViewSortMode.byDateCreated: "date created",
+  ClothItemCompoundViewSortMode.byName: "name",
+};
 
 enum ClothItemCompoundViewLayout { list, grid }
 
