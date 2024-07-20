@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:wardrobe_app/cloth_item.dart';
 import 'package:rxdart/rxdart.dart';
+
 import 'cloth_item_grid_view.dart';
 import 'cloth_item_list_view.dart';
+import 'cloth_item_views_utils.dart';
 
 class ClothItemCompoundView extends StatelessWidget {
   final List<ClothItem> clothItems;
@@ -65,13 +67,13 @@ class ClothItemCompoundViewControlBar extends StatelessWidget {
     );
   }
 
-  DropdownButton<ClothItemCompoundViewSortMode> _sortModeDropDown() {
+  DropdownButton<ClothItemSortMode> _sortModeDropDown() {
     return DropdownButton(
       icon: const Icon(Icons.sort),
       value: settingsController.settings.sortMode,
       onChanged: (value) => settingsController.setSortMode(value!),
       items: [
-        for (final sortMode in ClothItemCompoundViewSortMode.values)
+        for (final sortMode in ClothItemSortMode.values)
           DropdownMenuItem(
             value: sortMode,
             child: Text(sortModeLabelMap[sortMode]!),
@@ -104,7 +106,7 @@ class ClothItemCompoundViewSettingsController {
     _updateStream();
   }
 
-  void setSortMode(ClothItemCompoundViewSortMode sortMode) {
+  void setSortMode(ClothItemSortMode sortMode) {
     settings.sortMode = sortMode;
     _updateStream();
   }
@@ -112,13 +114,13 @@ class ClothItemCompoundViewSettingsController {
   bool layoutIs(ClothItemCompoundViewLayout testLayout) =>
       testLayout == settings.layout;
 
-  bool sortModeIs(ClothItemCompoundViewSortMode testSortMode) =>
+  bool sortModeIs(ClothItemSortMode testSortMode) =>
       testSortMode == settings.sortMode;
 }
 
 class ClothItemCompoundViewSettings {
   late ClothItemCompoundViewLayout layout;
-  late ClothItemCompoundViewSortMode sortMode;
+  late ClothItemSortMode sortMode;
 
   ClothItemCompoundViewSettings({
     required this.layout,
@@ -127,15 +129,8 @@ class ClothItemCompoundViewSettings {
 
   ClothItemCompoundViewSettings.defaultSettings() {
     layout = ClothItemCompoundViewLayout.grid;
-    sortMode = ClothItemCompoundViewSortMode.byName;
+    sortMode = ClothItemSortMode.byName;
   }
 }
 
-const Map<ClothItemCompoundViewSortMode, String> sortModeLabelMap = {
-  ClothItemCompoundViewSortMode.byDateCreated: "date created",
-  ClothItemCompoundViewSortMode.byName: "name",
-};
-
 enum ClothItemCompoundViewLayout { list, grid }
-
-enum ClothItemCompoundViewSortMode { byName, byDateCreated }
