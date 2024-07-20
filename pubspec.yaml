@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   font_awesome_flutter: ^10.7.0
+  provider: ^6.1.2
   rxdart: 
 
 dev_dependencies:
