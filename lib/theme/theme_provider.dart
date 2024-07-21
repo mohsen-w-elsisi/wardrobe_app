@@ -8,8 +8,12 @@ class ThemeProvider extends ChangeNotifier {
   ThemeProvider({required ColorSchemeSeedStorageAgent databaseAgent}) {
     _databaseInterface = databaseAgent;
     _databaseInterface.getColorSchemeSeed().then(
-          (savedColorSchemeSeed) => _colorSchemeSeed = savedColorSchemeSeed,
-        );
+      (savedColorSchemeSeed) {
+        if (savedColorSchemeSeed != null) {
+          _colorSchemeSeed = savedColorSchemeSeed;
+        }
+      },
+    );
   }
 
   void _updateDatabaseImage() =>

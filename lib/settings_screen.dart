@@ -32,23 +32,26 @@ class ColorSchemeDropDownSettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final items = [
+      for (final entry in colorSchemeSeedOptions.entries)
+        DropdownMenuItem(
+          value: entry.value.value,
+          child: Text(entry.key),
+        )
+    ];
+    print(items.map((e) => e.value));
+    print(context.watch<ThemeProvider>().colorSchemeSeed);
     return ListTile(
       title: const Text("color scheme"),
       trailing: DropdownButton(
-        value: context.watch<ThemeProvider>().colorSchemeSeed,
+        value: context.watch<ThemeProvider>().colorSchemeSeed.value,
         onChanged: (value) => _setColorSchemeSeed(context, value!),
-        items: [
-          for (final entry in colorSchemeSeedOptions.entries)
-            DropdownMenuItem(
-              value: entry.value,
-              child: Text(entry.key),
-            )
-        ],
+        items: items,
       ),
     );
   }
 
-  void _setColorSchemeSeed(BuildContext context, Color color) {
-    context.read<ThemeProvider>().colorSchemeSeed = color;
+  void _setColorSchemeSeed(BuildContext context, int colorValue) {
+    context.read<ThemeProvider>().colorSchemeSeed = Color(colorValue);
   }
 }

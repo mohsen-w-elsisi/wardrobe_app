@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wardrobe_app/home_screen.dart';
+import 'package:wardrobe_app/theme/shared_preferences_theme_storage_agent.dart';
 import 'package:wardrobe_app/theme/theme_provider.dart';
 import 'package:wardrobe_app/theme/utils.dart';
 
@@ -17,7 +18,7 @@ class App extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => ThemeProvider(
-            databaseAgent: MockColorSchemeSeedStorageAgent(),
+            databaseAgent: SharedPreferencesThemeStorageAgent(),
           ),
         ),
       ],
@@ -42,7 +43,7 @@ class App extends StatelessWidget {
 class MockColorSchemeSeedStorageAgent extends ColorSchemeSeedStorageAgent {
   @override
   Future<Color> getColorSchemeSeed() => Future.delayed(
-        Duration.zero,
+        Duration(seconds: 2),
         () => Colors.amber,
       );
 
