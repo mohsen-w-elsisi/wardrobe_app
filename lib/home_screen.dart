@@ -4,9 +4,10 @@ import 'package:wardrobe_app/settings_screen.dart';
 import 'cloth_item_views/cloth_item_views.dart';
 
 final mockClothItems = [
-  ClothItem(name: "AE blue", type: ClothItemType.top),
+  ClothItem(name: "AE blue", type: ClothItemType.top, id: "1"),
   ClothItem(
     name: "beige pants",
+    id: "2",
     type: ClothItemType.bottom,
     attributes: [ClothItemAttribute.sportive],
   ),
@@ -14,6 +15,7 @@ final mockClothItems = [
     name: "beige pants",
     type: ClothItemType.bottom,
     attributes: [ClothItemAttribute.classic, ClothItemAttribute.onFasion],
+    matchingItems: ["1", "2"],
   ),
 ];
 
@@ -32,7 +34,7 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: const Icon(Icons.add_outlined),
+        child: const Icon(Icons.checkroom_outlined),
       ),
       bottomNavigationBar: const HomeScreenBottomAppBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
@@ -54,7 +56,7 @@ class HomeScreenBottomAppBar extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.checkroom_outlined),
+            icon: const Icon(Icons.add),
           )
         ],
       ),

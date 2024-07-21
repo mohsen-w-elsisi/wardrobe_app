@@ -6,17 +6,19 @@ class ClothItem {
   ClothItemType type;
   bool isFavourite;
   List<ClothItemAttribute> attributes;
-
-  List<String> matchingItems = [];
+  List<String> matchingItems;
 
   ClothItem({
     required this.name,
     required this.type,
     this.isFavourite = false,
     this.attributes = const [],
+    this.matchingItems = const [],
+    DateTime? dateCreated,
+    String? id,
   }) {
-    dateCreated = DateTime.now();
-    id = dateCreated.toIso8601String();
+    this.dateCreated = dateCreated ?? DateTime.now();
+    this.id = id ?? this.dateCreated.toIso8601String();
   }
 }
 
