@@ -1,34 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:wardrobe_app/theme/theme_provider.dart';
+import 'package:get_it/get_it.dart';
+import 'package:wardrobe_app/theme/theme_settings_controller.dart';
 import 'package:wardrobe_app/theme/utils.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+  final themeSettingsController = GetIt.I.get<ThemeSettingsController>();
+
+  SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          const SliverAppBar.medium(
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text("settings"),
-            ),
-          ),
-          SliverList.list(
-            children: const [
-              ColorSchemeDropDownSettingsTile(),
-            ],
-          )
-        ],
-      ),
+      body: StreamBuilder<Object>(
+          stream: themeSettingsController.stream,
+          builder: (context, snapshot) {
+            return CustomScrollView(
+              slivers: <Widget>[
+                const SliverAppBar.medium(
+                  flexibleSpace: FlexibleSpaceBar(
+                    title: Text("settings"),
+                  ),
+                ),
+                SliverList.list(
+                  children: [
+                    ColorSchemeDropDownSettingsTile(),
+                  ],
+                )
+              ],
+            );
+          }),
     );
   }
 }
 
 class ColorSchemeDropDownSettingsTile extends StatelessWidget {
-  const ColorSchemeDropDownSettingsTile({super.key});
+  final themeSettingsController = GetIt.I.get<ThemeSettingsController>();
+
+  ColorSchemeDropDownSettingsTile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,19 +47,17 @@ class ColorSchemeDropDownSettingsTile extends StatelessWidget {
           child: Text(entry.key),
         )
     ];
-    print(items.map((e) => e.value));
-    print(context.watch<ThemeProvider>().colorSchemeSeed);
     return ListTile(
       title: const Text("color scheme"),
       trailing: DropdownButton(
-        value: context.watch<ThemeProvider>().colorSchemeSeed.value,
-        onChanged: (value) => _setColorSchemeSeed(context, value!),
+        value: themeSettingsController.colorSchemeSeed.value,
+        onChanged: (value) => _setColorSchemeSeed(value!),
         items: items,
       ),
     );
   }
 
-  void _setColorSchemeSeed(BuildContext context, int colorValue) {
-    context.read<ThemeProvider>().colorSchemeSeed = Color(colorValue);
+  void _setColorSchemeSeed(int colorValue) {
+    themeSettingsController.colorSchemeSeed = Color(colorValue);
   }
 }

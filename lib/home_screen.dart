@@ -49,7 +49,7 @@ class HomeScreenBottomAppBar extends StatelessWidget {
       child: Row(
         children: [
           IconButton(
-            onPressed: () => _navigateTo(context, const SettingsScreen()),
+            onPressed: () => _navigateTo(context, SettingsScreen()),
             icon: const Icon(Icons.settings_outlined),
           ),
           IconButton(

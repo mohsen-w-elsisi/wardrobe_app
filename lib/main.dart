@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/home_screen.dart';
 import 'package:wardrobe_app/theme/shared_preferences_theme_storage_agent.dart';
-import 'package:wardrobe_app/theme/theme_provider.dart';
-import 'package:wardrobe_app/theme/utils.dart';
+import 'package:wardrobe_app/theme/theme_settings_controller.dart';
 
 void main() {
   runApp(const App());
@@ -14,39 +13,35 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => ThemeProvider(
-            databaseAgent: SharedPreferencesThemeStorageAgent(),
-          ),
-        ),
-      ],
-      child: Builder(
-        builder: (context) => MaterialApp(
+    _registerThemeSettingsController();
+
+    final themeSettingsController = GetIt.I.get<ThemeSettingsController>();
+
+    return StreamBuilder<Color>(
+      stream: themeSettingsController.stream,
+      builder: (context, snapshot) {
+        return MaterialApp(
           theme: ThemeData(
             useMaterial3: true,
-            colorSchemeSeed: context.watch<ThemeProvider>().colorSchemeSeed,
+            colorSchemeSeed: themeSettingsController.colorSchemeSeed,
           ),
           darkTheme: ThemeData(
             useMaterial3: true,
-            colorSchemeSeed: context.watch<ThemeProvider>().colorSchemeSeed,
-            brightness: Brightness.dark,
+            colorSchemeSeed: themeSettingsController.colorSchemeSeed,
           ),
           home: const HomeScreen(),
-        ),
-      ),
+        );
+      },
     );
   }
-}
 
-class MockColorSchemeSeedStorageAgent extends ColorSchemeSeedStorageAgent {
-  @override
-  Future<Color> getColorSchemeSeed() => Future.delayed(
-        Duration(seconds: 2),
-        () => Colors.amber,
+  void _registerThemeSettingsController() {
+    if (!GetIt.I.isRegistered<ThemeSettingsController>()) {
+      GetIt.I.registerSingleton<ThemeSettingsController>(
+        ThemeSettingsController(
+          storageAgent: SharedPreferencesThemeStorageAgent(),
+        ),
       );
-
-  @override
-  void saveColorSchemeSeed(Color colorSchemeSeed) {}
+    }
+  }
 }
