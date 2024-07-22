@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wardrobe_app/cloth_item.dart';
+import 'package:get_it/get_it.dart';
+import 'package:wardrobe_app/cloth_item/cloth_item.dart';
+import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
+import 'package:wardrobe_app/cloth_item_views/cloth_item_views.dart';
 
 class ClothItemDetailScreen extends StatelessWidget {
   final ClothItem clothItem;
@@ -13,11 +16,31 @@ class ClothItemDetailScreen extends StatelessWidget {
         slivers: <Widget>[
           ClothItemDetailScreenAppBar(clothItem: clothItem),
           ClothItemDetailScreenAttributeChips(clothItem: clothItem),
-          SliverList.list(
-            children: const [],
-          )
+          ClothItemDetailScreenMatchingItemList(clothItem: clothItem),
         ],
       ),
+    );
+  }
+}
+
+class ClothItemDetailScreenMatchingItemList extends StatelessWidget {
+  final _clothItemManager = GetIt.I.get<ClothItemManager>();
+  final ClothItem clothItem;
+
+  ClothItemDetailScreenMatchingItemList({
+    super.key,
+    required this.clothItem,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList.list(
+      children: [
+        for (final item in _clothItemManager.getMatchingItems(clothItem))
+          ListTile(
+            title: Text(item.name),
+          )
+      ],
     );
   }
 }

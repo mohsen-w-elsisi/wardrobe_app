@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wardrobe_app/cloth_item.dart';
+import 'package:get_it/get_it.dart';
+import 'package:wardrobe_app/cloth_item/cloth_item.dart';
+import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
 import 'package:wardrobe_app/settings_screen.dart';
 import 'cloth_item_views/cloth_item_views.dart';
 
@@ -20,7 +22,9 @@ final mockClothItems = [
 ];
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final clothItemManager = GetIt.I.get<ClothItemManager>();
+
+  HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,20 +34,27 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ClothItemCompoundView(mockClothItems),
+        child: StreamBuilder<List<ClothItem>>(
+          stream: clothItemManager.stream,
+          builder: (context, snapshot) {
+            return ClothItemCompoundView(clothItemManager.clothItems);
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         child: const Icon(Icons.checkroom_outlined),
       ),
-      bottomNavigationBar: const HomeScreenBottomAppBar(),
+      bottomNavigationBar: HomeScreenBottomAppBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
     );
   }
 }
 
 class HomeScreenBottomAppBar extends StatelessWidget {
-  const HomeScreenBottomAppBar({super.key});
+  final clothItemManager = GetIt.I.get<ClothItemManager>();
+
+  HomeScreenBottomAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +66,9 @@ class HomeScreenBottomAppBar extends StatelessWidget {
             icon: const Icon(Icons.settings_outlined),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () => clothItemManager.saveNewItem(
+              ClothItem(name: "AE blue", type: ClothItemType.top, id: "1"),
+            ),
             icon: const Icon(Icons.add),
           )
         ],
