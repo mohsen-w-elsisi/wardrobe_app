@@ -1,33 +1,26 @@
-import 'package:rxdart/rxdart.dart';
+import 'package:flutter/material.dart';
 import 'cloth_item.dart';
 
-class ClothItemManager {
-  static const boxName = "cloth items";
+class ClothItemManager extends ChangeNotifier {
   late final List<ClothItem> _clothItems;
-  late final BehaviorSubject<List<ClothItem>> _behaviorSubject;
   final ClothItemStorageAgent storageAgent;
 
   ClothItemManager({required this.storageAgent}) {
     _clothItems = storageAgent.loadAllClothItems();
-    _behaviorSubject = BehaviorSubject.seeded(_clothItems);
   }
 
-  void _updateBehaviourSubject() => _behaviorSubject.add(_clothItems);
-
   List<ClothItem> get clothItems => _clothItems;
-
-  Stream<List<ClothItem>> get stream => _behaviorSubject.stream;
 
   void saveNewItem(ClothItem clothItem) {
     storageAgent.saveClothItem(clothItem);
     _clothItems.add(clothItem);
-    _updateBehaviourSubject();
+    notifyListeners();
   }
 
   void saveManyNewItems(List<ClothItem> clothItems) {
-    storageAgent.saveClothItem(clothItem);
+    clothItems.forEach(storageAgent.saveClothItem);
     _clothItems.addAll(clothItems);
-    _updateBehaviourSubject();
+    notifyListeners();
   }
 
   ClothItem? getClothItemById(String id) {
@@ -38,11 +31,18 @@ class ClothItemManager {
     return matchedClothItem.id != "" ? matchedClothItem : null;
   }
 
-  List<ClothItem> getMatchingItems(ClothItem clothItem) => _clothItems
-      .where(
-        (testClothItem) => clothItem.matchingItems.contains(testClothItem.id),
-      )
-      .toList();
+  List<ClothItem> getMatchingItems(ClothItem clothItem) {
+    return _clothItems
+        .where(
+          (testClothItem) => clothItem.matchingItems.contains(testClothItem.id),
+        )
+        .toList();
+  }
+
+  void deleteAllItems() {
+    _clothItems.forEach(storageAgent.deleteClothItem);
+    notifyListeners();
+  }
 }
 
 abstract class ClothItemStorageAgent {

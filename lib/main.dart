@@ -35,9 +35,9 @@ class App extends StatelessWidget {
 
     final themeSettingsController = GetIt.I.get<ThemeSettingsController>();
 
-    return StreamBuilder<Color>(
-      stream: themeSettingsController.stream,
-      builder: (context, snapshot) {
+    return ListenableBuilder(
+      listenable: themeSettingsController,
+      builder: (context, _) {
         return MaterialApp(
           theme: ThemeData(
             useMaterial3: true,

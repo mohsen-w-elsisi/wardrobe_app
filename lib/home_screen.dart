@@ -32,14 +32,11 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("placeHolder"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: StreamBuilder<List<ClothItem>>(
-          stream: clothItemManager.stream,
-          builder: (context, snapshot) {
-            return ClothItemCompoundView(clothItemManager.clothItems);
-          },
-        ),
+      body: ListenableBuilder(
+        listenable: clothItemManager,
+        builder: (context, _) {
+          return ClothItemCompoundView(clothItemManager.clothItems);
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},

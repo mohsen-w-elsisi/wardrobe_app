@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'cloth_item_grid_view.dart';
 import 'cloth_item_list_view.dart';
@@ -17,8 +16,8 @@ class ClothItemCompoundView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ClothItemCompoundViewSettings>(
-      stream: settingsController.stream,
+    return ListenableBuilder(
+      listenable: settingsController,
       builder: (_, __) => Column(
         children: [
           ClothItemCompoundViewControlBar(settingsController),
@@ -89,26 +88,19 @@ class ClothItemCompoundViewControlBar extends StatelessWidget {
       );
 }
 
-class ClothItemCompoundViewSettingsController {
-  late final BehaviorSubject<ClothItemCompoundViewSettings> _behaviorSubject;
+class ClothItemCompoundViewSettingsController extends ChangeNotifier {
   final ClothItemCompoundViewSettings settings;
 
-  ClothItemCompoundViewSettingsController(this.settings) {
-    _behaviorSubject = BehaviorSubject.seeded(settings);
-  }
-
-  Stream<ClothItemCompoundViewSettings> get stream => _behaviorSubject.stream;
-
-  void _updateStream() => _behaviorSubject.add(settings);
+  ClothItemCompoundViewSettingsController(this.settings);
 
   void setLayout(ClothItemCompoundViewLayout layout) {
     settings.layout = layout;
-    _updateStream();
+    notifyListeners();
   }
 
   void setSortMode(ClothItemSortMode sortMode) {
     settings.sortMode = sortMode;
-    _updateStream();
+    notifyListeners();
   }
 
   bool layoutIs(ClothItemCompoundViewLayout testLayout) =>
@@ -119,18 +111,17 @@ class ClothItemCompoundViewSettingsController {
 }
 
 class ClothItemCompoundViewSettings {
-  late ClothItemCompoundViewLayout layout;
-  late ClothItemSortMode sortMode;
+  ClothItemCompoundViewLayout layout;
+  ClothItemSortMode sortMode;
 
   ClothItemCompoundViewSettings({
     required this.layout,
     required this.sortMode,
   });
 
-  ClothItemCompoundViewSettings.defaultSettings() {
-    layout = ClothItemCompoundViewLayout.grid;
-    sortMode = ClothItemSortMode.byName;
-  }
+  ClothItemCompoundViewSettings.defaultSettings()
+      : layout = ClothItemCompoundViewLayout.grid,
+        sortMode = ClothItemSortMode.byName;
 }
 
 enum ClothItemCompoundViewLayout { list, grid }

@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
 import 'package:wardrobe_app/cloth_item_views/cloth_item_views.dart';
+import 'package:wardrobe_app/cloth_item_views/cloth_item_views_utils.dart';
 
 class ClothItemDetailScreen extends StatelessWidget {
   final ClothItem clothItem;
@@ -34,13 +35,9 @@ class ClothItemDetailScreenMatchingItemList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList.list(
-      children: [
-        for (final item in _clothItemManager.getMatchingItems(clothItem))
-          ListTile(
-            title: Text(item.name),
-          )
-      ],
+    return ClothItemListView(
+      _clothItemManager.getMatchingItems(clothItem),
+      sliver: true,
     );
   }
 }
@@ -61,7 +58,10 @@ class ClothItemDetailScreenAttributeChips extends StatelessWidget {
           for (final attribute in clothItem.attributes)
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Chip(label: Text(attribute.name)),
+              child: Chip(
+                label: Text(attribute.name),
+                avatar: Icon(clothAttributeIconMap[attribute]),
+              ),
             )
         ],
       ),
