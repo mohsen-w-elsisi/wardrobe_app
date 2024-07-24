@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
+import 'package:wardrobe_app/cloth_item_editers/cloth_item_matching_dialog.dart';
 import 'package:wardrobe_app/cloth_item_views/cloth_item_views_utils.dart';
+import 'new_cloth_item_manager.dart';
 
 class NewClothItemScreen extends StatelessWidget {
   final newClothItemManager = NewClothItemManager();
@@ -47,10 +49,16 @@ class NewClothItemNextStepButton extends StatelessWidget {
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 8),
       child: FilledButton(
-        onPressed: () {
-          clothItemManager.saveNewItem(newClothItemManager.clothItem);
-          Navigator.pop(context);
-        },
+        onPressed: () => showDialog(
+          context: context,
+          builder: (context) => ClothItemMatchingDialog(
+            newClothItemManager: newClothItemManager,
+            onDismiss: (context) {
+              clothItemManager.saveNewItem(newClothItemManager.clothItem);
+              Navigator.pop(context);
+            },
+          ),
+        ),
         child: const Text("next"),
       ),
     );
@@ -135,24 +143,4 @@ class NewClothItemNameField extends StatelessWidget {
       onChanged: (text) => newClothItemManager.name = text,
     );
   }
-}
-
-class NewClothItemManager {
-  late final DateTime dateCreated;
-  final isFavourite = false;
-  String name = "";
-  ClothItemType type = ClothItemType.top;
-  List<ClothItemAttribute> attributes = [];
-  List<String> matchingItems = [];
-
-  NewClothItemManager() : dateCreated = DateTime.now();
-
-  ClothItem get clothItem => ClothItem(
-        dateCreated: dateCreated,
-        isFavourite: isFavourite,
-        name: name,
-        type: type,
-        attributes: attributes,
-        matchingItems: matchingItems,
-      );
 }

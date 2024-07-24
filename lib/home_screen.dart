@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
-import 'package:wardrobe_app/new_cloth_item_screen.dart';
+import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_screen.dart';
 import 'package:wardrobe_app/settings_screen.dart';
 import 'cloth_item_views/cloth_item_views.dart';
 
