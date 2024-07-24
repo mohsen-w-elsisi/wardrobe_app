@@ -64,7 +64,7 @@ class ColorSchemeClearWardrobeTile extends StatelessWidget {
             onPressed: Navigator.of(context).pop,
             child: const Text("cancel"),
           ),
-          ElevatedButton(
+          FilledButton(
             onPressed: () {
               Navigator.pop(context);
               clothItemManager.deleteAllItems();
