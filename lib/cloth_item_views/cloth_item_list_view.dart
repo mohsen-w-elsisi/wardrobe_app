@@ -59,7 +59,7 @@ class ClothItemListTile extends StatelessWidget {
   void _navigateToDetailsPage(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => ClothItemDetailScreen(clothItem),
+        builder: (context) => ClothItemDetailScreen(clothItem.id),
       ),
     );
   }

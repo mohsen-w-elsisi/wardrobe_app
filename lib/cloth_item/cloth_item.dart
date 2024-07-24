@@ -1,8 +1,10 @@
+import "package:flutter/material.dart";
 import "package:hive/hive.dart";
 
 part 'cloth_item.g.dart';
 
 @HiveType(typeId: 1)
+@immutable
 class ClothItem {
   @HiveField(1)
   late final String id;
@@ -11,19 +13,19 @@ class ClothItem {
   late final DateTime dateCreated;
 
   @HiveField(3)
-  String name;
+  final String name;
 
   @HiveField(4)
-  ClothItemType type;
+  final ClothItemType type;
 
   @HiveField(5)
-  bool isFavourite;
+  final bool isFavourite;
 
   @HiveField(6)
-  List<ClothItemAttribute> attributes;
+  final List<ClothItemAttribute> attributes;
 
   @HiveField(7)
-  List<String> matchingItems;
+  final List<String> matchingItems;
 
   ClothItem({
     required this.name,
@@ -45,9 +47,26 @@ class ClothItem {
     this.attributes = const [],
     this.matchingItems = const [],
     this.isFavourite = false,
-  }) {
-    dateCreated = DateTime.now();
-  }
+  }) : dateCreated = DateTime.now();
+
+  ClothItem copyWith({
+    final String? name,
+    final ClothItemType? type,
+    final String? id,
+    final List<ClothItemAttribute>? attributes,
+    final List<String>? matchingItems,
+    final bool? isFavourite,
+    final DateTime? dateCreated,
+  }) =>
+      ClothItem(
+        name: name ?? this.name,
+        type: type ?? this.type,
+        id: id ?? this.id,
+        attributes: attributes ?? this.attributes,
+        matchingItems: matchingItems ?? this.matchingItems,
+        isFavourite: isFavourite ?? this.isFavourite,
+        dateCreated: dateCreated ?? this.dateCreated,
+      );
 }
 
 @HiveType(typeId: 2)

@@ -16,6 +16,18 @@ class HiveClothItemStorageAgent extends ClothItemStorageAgent {
     _box = await Hive.openBox(boxName);
   }
 
+  int? _findIndexOfItem(ClothItem clothItem) {
+    final allItems = loadAllClothItems();
+    int? indexOfItemToDelete;
+    for (var i = 0; i < allItems.length; i++) {
+      if (allItems[i].id == clothItem.id) {
+        indexOfItemToDelete = i;
+        break;
+      }
+    }
+    return indexOfItemToDelete;
+  }
+
   @override
   List<ClothItem> loadAllClothItems() {
     return [
@@ -28,14 +40,16 @@ class HiveClothItemStorageAgent extends ClothItemStorageAgent {
   void saveClothItem(ClothItem clothItem) => _box.add(clothItem);
 
   @override
-  void deleteClothItem(ClothItem clothiItem) {
-    // TODO: implement deleteClothItem
-    throw UnimplementedError();
+  void deleteClothItem(ClothItem clothItem) {
+    final itemIndex = _findIndexOfItem(clothItem);
+    assert(itemIndex != null);
+    _box.deleteAt(itemIndex!);
   }
 
   @override
   void updateClothItem(ClothItem clothItem) {
-    // TODO: implement updateClothItem
-    throw UnimplementedError();
+    final itemIndex = _findIndexOfItem(clothItem);
+    assert(itemIndex != null);
+    _box.putAt(itemIndex!, clothItem);
   }
 }

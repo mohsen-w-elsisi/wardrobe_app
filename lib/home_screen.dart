@@ -11,13 +11,13 @@ final mockClothItems = [
     name: "beige pants",
     id: "2",
     type: ClothItemType.bottom,
-    attributes: [ClothItemAttribute.sportive],
+    attributes: const [ClothItemAttribute.sportive],
   ),
   ClothItem(
     name: "beige pants",
     type: ClothItemType.bottom,
-    attributes: [ClothItemAttribute.classic, ClothItemAttribute.onFasion],
-    matchingItems: ["1", "2"],
+    attributes: const [ClothItemAttribute.classic, ClothItemAttribute.onFasion],
+    matchingItems: const ["1", "2"],
   ),
 ];
 

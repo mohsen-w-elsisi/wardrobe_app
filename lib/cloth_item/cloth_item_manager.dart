@@ -9,6 +9,10 @@ class ClothItemManager extends ChangeNotifier {
     _clothItems = storageAgent.loadAllClothItems();
   }
 
+  int? _findIndexOfItem(ClothItem clothItem) => _clothItems.indexWhere(
+        (testClothItem) => testClothItem.id == clothItem.id,
+      );
+
   List<ClothItem> get clothItems => _clothItems;
 
   void saveNewItem(ClothItem clothItem) {
@@ -39,6 +43,21 @@ class ClothItemManager extends ChangeNotifier {
         .toList();
   }
 
+  void toggleFavouriteForItem(ClothItem clothItem) {
+    final newItem = clothItem.copyWith(isFavourite: !clothItem.isFavourite);
+    final itemIndex = _findIndexOfItem(clothItem)!;
+    storageAgent.updateClothItem(newItem);
+    _clothItems[itemIndex] = newItem;
+    notifyListeners();
+  }
+
+  void deleteItem(ClothItem clothItem) {
+    final itemIndex = _findIndexOfItem(clothItem)!;
+    storageAgent.deleteClothItem(clothItem);
+    _clothItems.removeAt(itemIndex);
+    notifyListeners();
+  }
+
   void deleteAllItems() {
     _clothItems.forEach(storageAgent.deleteClothItem);
     notifyListeners();
@@ -48,6 +67,6 @@ class ClothItemManager extends ChangeNotifier {
 abstract class ClothItemStorageAgent {
   List<ClothItem> loadAllClothItems();
   void saveClothItem(ClothItem clothItem);
-  void deleteClothItem(ClothItem clothiItem);
+  void deleteClothItem(ClothItem clothItem);
   void updateClothItem(ClothItem clothItem);
 }

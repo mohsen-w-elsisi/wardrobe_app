@@ -29,7 +29,7 @@ class ClothItemGridCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) => ClothItemDetailScreen(clothItem),
+          builder: (_) => ClothItemDetailScreen(clothItem.id),
         ),
       ),
       child: Card(

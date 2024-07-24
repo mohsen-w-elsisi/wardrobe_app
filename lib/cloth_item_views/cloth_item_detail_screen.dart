@@ -6,19 +6,28 @@ import 'package:wardrobe_app/cloth_item_views/cloth_item_views.dart';
 import 'package:wardrobe_app/cloth_item_views/cloth_item_views_utils.dart';
 
 class ClothItemDetailScreen extends StatelessWidget {
-  final ClothItem clothItem;
+  final clothItemManager = GetIt.I.get<ClothItemManager>();
+  final String clothItemId;
 
-  const ClothItemDetailScreen(this.clothItem, {super.key});
+  ClothItemDetailScreen(this.clothItemId, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          ClothItemDetailScreenAppBar(clothItem: clothItem),
-          ClothItemDetailScreenAttributeChips(clothItem: clothItem),
-          ClothItemDetailScreenMatchingItemList(clothItem: clothItem),
-        ],
+      body: ListenableBuilder(
+        listenable: clothItemManager,
+        builder: (_, __) {
+          final clothItem = clothItemManager.getClothItemById(clothItemId);
+          if (clothItem == null) return Container();
+
+          return CustomScrollView(
+            slivers: <Widget>[
+              ClothItemDetailScreenAppBar(clothItem: clothItem),
+              ClothItemDetailScreenAttributeChips(clothItem: clothItem),
+              ClothItemDetailScreenMatchingItemList(clothItem: clothItem),
+            ],
+          );
+        },
       ),
     );
   }
@@ -70,9 +79,10 @@ class ClothItemDetailScreenAttributeChips extends StatelessWidget {
 }
 
 class ClothItemDetailScreenAppBar extends StatelessWidget {
+  final clothItemManager = GetIt.I.get<ClothItemManager>();
   final ClothItem clothItem;
 
-  const ClothItemDetailScreenAppBar({
+  ClothItemDetailScreenAppBar({
     super.key,
     required this.clothItem,
   });
@@ -83,8 +93,11 @@ class ClothItemDetailScreenAppBar extends StatelessWidget {
       title: Text(clothItem.name),
       actions: [
         IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.favorite_outline),
+          onPressed: () => clothItemManager.toggleFavouriteForItem(clothItem),
+          icon: Icon(
+            clothItem.isFavourite ? Icons.favorite : Icons.favorite_outline,
+            color: Colors.red,
+          ),
         ),
         IconButton(
           onPressed: () {},
@@ -95,7 +108,10 @@ class ClothItemDetailScreenAppBar extends StatelessWidget {
           icon: const Icon(Icons.edit_outlined),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            clothItemManager.deleteItem(clothItem);
+            Navigator.pop(context);
+          },
           icon: const Icon(Icons.delete_outline),
         ),
       ],
