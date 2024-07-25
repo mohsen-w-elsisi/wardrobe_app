@@ -21,6 +21,7 @@ class ClothItemManager extends ChangeNotifier {
   void saveNewItem(ClothItem clothItem) {
     storageAgent.saveClothItem(clothItem);
     _clothItems.add(clothItem);
+    updateMatchingItemsToReference(clothItem);
     notifyListeners();
   }
 
@@ -46,7 +47,16 @@ class ClothItemManager extends ChangeNotifier {
         .toList();
   }
 
+  void updateMatchingItemsToReference(ClothItem clothItem) => clothItem
+      .matchingItems
+      .map(getClothItemById)
+      .whereType<ClothItem>()
+      .where((e) => !e.matchingItems.contains(clothItem.id))
+      .map((e) => e.copyWith(matchingItems: [...e.matchingItems, clothItem.id]))
+      .forEach(replaceItem);
+
   void replaceItem(ClothItem clothItem) {
+    updateMatchingItemsToReference(clothItem);
     final itemIndex = _findIndexOfItem(clothItem)!;
     _clothItems[itemIndex] = clothItem;
     storageAgent.saveClothItem(clothItem);
@@ -77,7 +87,7 @@ class ClothItemManager extends ChangeNotifier {
   }
 
   void deleteAllItems() {
-    _clothItems.forEach(storageAgent.deleteClothItem);
+    [..._clothItems].forEach(deleteItem);
     notifyListeners();
   }
 }
