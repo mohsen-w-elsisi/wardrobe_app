@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
+import 'package:wardrobe_app/cloth_item_editers/cloth_item_matching_dialog.dart';
+import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_manager.dart';
+import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_screen.dart';
 import 'package:wardrobe_app/cloth_item_views/cloth_item_views.dart';
 import 'package:wardrobe_app/cloth_item_views/cloth_item_views_utils.dart';
 
@@ -62,17 +65,20 @@ class ClothItemDetailScreenAttributeChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Row(
-        children: [
-          for (final attribute in clothItem.attributes)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Chip(
-                label: Text(attribute.name),
-                avatar: Icon(clothAttributeIconMap[attribute]),
-              ),
-            )
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Wrap(
+          children: [
+            for (final attribute in clothItem.attributes)
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Chip(
+                  label: Text(attribute.name),
+                  avatar: Icon(clothAttributeIconMap[attribute]),
+                ),
+              )
+          ],
+        ),
       ),
     );
   }
@@ -100,19 +106,37 @@ class ClothItemDetailScreenAppBar extends StatelessWidget {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () => showDialog(
+            context: context,
+            builder: (context) {
+              final newClothItemManager = NewClothItemManager.from(clothItem);
+              return ClothItemMatchingDialog(
+                newClothItemManager: newClothItemManager,
+                onDismiss: (context) => clothItemManager.replaceItem(
+                  newClothItemManager.clothItem,
+                ),
+              );
+            },
+          ),
           icon: const Icon(Icons.join_full_outlined),
         ),
         IconButton(
-          onPressed: () {},
           icon: const Icon(Icons.edit_outlined),
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => NewClothItemScreen(
+                newClothItemManager: NewClothItemManager.from(clothItem),
+                showMatchingsDialog: false,
+              ),
+            ),
+          ),
         ),
         IconButton(
+          icon: const Icon(Icons.delete_outline),
           onPressed: () {
             clothItemManager.deleteItem(clothItem);
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.delete_outline),
         ),
       ],
     );

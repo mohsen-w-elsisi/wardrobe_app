@@ -7,9 +7,14 @@ import 'package:wardrobe_app/cloth_item_views/cloth_item_views_utils.dart';
 import 'new_cloth_item_manager.dart';
 
 class NewClothItemScreen extends StatelessWidget {
-  final newClothItemManager = NewClothItemManager();
+  final NewClothItemManager newClothItemManager;
+  final bool showMatchingsDialog;
 
-  NewClothItemScreen({super.key});
+  const NewClothItemScreen({
+    required this.newClothItemManager,
+    this.showMatchingsDialog = true,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +31,10 @@ class NewClothItemScreen extends StatelessWidget {
             NewClothItemAttributeSelector(
                 newClothItemManager: newClothItemManager),
             const Spacer(),
-            NewClothItemNextStepButton(newClothItemManager: newClothItemManager)
+            NewClothItemNextStepButton(
+              newClothItemManager: newClothItemManager,
+              showMatchingsDialog: showMatchingsDialog,
+            )
           ],
         ),
       ),
@@ -37,9 +45,11 @@ class NewClothItemScreen extends StatelessWidget {
 class NewClothItemNextStepButton extends StatelessWidget {
   final clothItemManager = GetIt.I.get<ClothItemManager>();
   final NewClothItemManager newClothItemManager;
+  final bool showMatchingsDialog;
 
   NewClothItemNextStepButton({
     required this.newClothItemManager,
+    this.showMatchingsDialog = true,
     super.key,
   });
 
@@ -49,19 +59,27 @@ class NewClothItemNextStepButton extends StatelessWidget {
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 8),
       child: FilledButton(
-        onPressed: () => showDialog(
-          context: context,
-          builder: (context) => ClothItemMatchingDialog(
-            newClothItemManager: newClothItemManager,
-            onDismiss: (context) {
-              clothItemManager.saveNewItem(newClothItemManager.clothItem);
-              Navigator.pop(context);
-            },
-          ),
-        ),
+        onPressed: () => (showMatchingsDialog
+            ? _showItemMatchingDialog
+            : _saveItem)(context),
         child: const Text("next"),
       ),
     );
+  }
+
+  void _showItemMatchingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => ClothItemMatchingDialog(
+        newClothItemManager: newClothItemManager,
+        onDismiss: _saveItem,
+      ),
+    );
+  }
+
+  void _saveItem(BuildContext context) {
+    clothItemManager.addOrReplaceItem(newClothItemManager.clothItem);
+    Navigator.pop(context);
   }
 }
 
@@ -132,15 +150,35 @@ class NewClothItemTypeSelector extends StatelessWidget {
   }
 }
 
-class NewClothItemNameField extends StatelessWidget {
+class NewClothItemNameField extends StatefulWidget {
   final NewClothItemManager newClothItemManager;
 
   const NewClothItemNameField({required this.newClothItemManager, super.key});
 
   @override
+  State<NewClothItemNameField> createState() => _NewClothItemNameFieldState();
+}
+
+class _NewClothItemNameFieldState extends State<NewClothItemNameField> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.newClothItemManager.name);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextField(
-      onChanged: (text) => newClothItemManager.name = text,
+      controller: _controller,
+      onChanged: (text) => widget.newClothItemManager.name = text,
     );
   }
 }

@@ -9,9 +9,12 @@ class ClothItemManager extends ChangeNotifier {
     _clothItems = storageAgent.loadAllClothItems();
   }
 
-  int? _findIndexOfItem(ClothItem clothItem) => _clothItems.indexWhere(
-        (testClothItem) => testClothItem.id == clothItem.id,
-      );
+  int? _findIndexOfItem(ClothItem clothItem) {
+    final index = _clothItems.indexWhere(
+      (testClothItem) => testClothItem.id == clothItem.id,
+    );
+    return index.isNegative ? null : index;
+  }
 
   List<ClothItem> get clothItems => _clothItems;
 
@@ -41,6 +44,21 @@ class ClothItemManager extends ChangeNotifier {
           (testClothItem) => clothItem.matchingItems.contains(testClothItem.id),
         )
         .toList();
+  }
+
+  void replaceItem(ClothItem clothItem) {
+    final itemIndex = _findIndexOfItem(clothItem)!;
+    _clothItems[itemIndex] = clothItem;
+    storageAgent.saveClothItem(clothItem);
+    notifyListeners();
+  }
+
+  void addOrReplaceItem(ClothItem clothItem) {
+    if (_findIndexOfItem(clothItem) == null) {
+      saveNewItem(clothItem);
+    } else {
+      replaceItem(clothItem);
+    }
   }
 
   void toggleFavouriteForItem(ClothItem clothItem) {
