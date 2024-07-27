@@ -20,8 +20,13 @@ class ClothItemAttributeIconRow extends StatelessWidget {
       children: [
         for (final attribute in attributes)
           Padding(
-            padding: const EdgeInsets.only(left: 4, right: 4),
-            child: Icon(clothAttributeIconMap[attribute]),
+            padding: alignEnd
+                ? const EdgeInsets.only(left: 4)
+                : const EdgeInsets.only(right: 4),
+            child: Icon(
+              clothAttributeIconMap[attribute],
+              size: 20,
+            ),
           )
       ],
     );

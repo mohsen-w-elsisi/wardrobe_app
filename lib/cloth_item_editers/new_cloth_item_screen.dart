@@ -78,7 +78,7 @@ class NewClothItemNextStepButton extends StatelessWidget {
   }
 
   void _saveItem(BuildContext context) {
-    clothItemManager.addOrReplaceItem(newClothItemManager.clothItem);
+    clothItemManager.saveItem(newClothItemManager.clothItem);
     Navigator.pop(context);
   }
 }

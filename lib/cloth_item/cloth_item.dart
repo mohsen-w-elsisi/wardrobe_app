@@ -1,3 +1,5 @@
+import "package:collection/collection.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:hive/hive.dart";
 
@@ -67,6 +69,22 @@ class ClothItem {
         isFavourite: isFavourite ?? this.isFavourite,
         dateCreated: dateCreated ?? this.dateCreated,
       );
+
+  bool isIdenticalTo(ClothItem clothItem) {
+    return (clothItem.id == id &&
+        clothItem.isFavourite == isFavourite &&
+        clothItem.name == name &&
+        clothItem.dateCreated.toString() == dateCreated.toString() &&
+        clothItem.type == type &&
+        const IterableEquality().equals(
+          clothItem.attributes as Iterable,
+          attributes as Iterable,
+        ) &&
+        const IterableEquality().equals(
+          clothItem.matchingItems as Iterable,
+          matchingItems as Iterable,
+        ));
+  }
 }
 
 @HiveType(typeId: 2)

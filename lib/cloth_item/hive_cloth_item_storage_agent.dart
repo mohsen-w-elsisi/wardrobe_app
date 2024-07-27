@@ -16,8 +16,14 @@ class HiveClothItemStorageAgent extends ClothItemStorageAgent {
     _box = await Hive.openBox(boxName);
   }
 
+  @override
+  List<ClothItem> get savedItems => [
+        for (int i = 0; i < _box.length; i++)
+          if (_box.getAt(i) != null) _box.getAt(i)!
+      ];
+
   int? _findIndexOfItem(ClothItem clothItem) {
-    final allItems = loadAllClothItems();
+    final allItems = savedItems;
     int? indexOfItemToDelete;
     for (var i = 0; i < allItems.length; i++) {
       if (allItems[i].id == clothItem.id) {
@@ -29,27 +35,28 @@ class HiveClothItemStorageAgent extends ClothItemStorageAgent {
   }
 
   @override
-  List<ClothItem> loadAllClothItems() {
-    return [
-      for (int i = 0; i < _box.length; i++)
-        if (_box.getAt(i) != null) _box.getAt(i)!
-    ];
-  }
-
-  @override
-  void saveClothItem(ClothItem clothItem) => _box.add(clothItem);
-
-  @override
-  void deleteClothItem(ClothItem clothItem) {
+  Future<void> saveClothItem(ClothItem clothItem) async {
     final itemIndex = _findIndexOfItem(clothItem);
-    assert(itemIndex != null);
-    _box.deleteAt(itemIndex!);
+    if (itemIndex == null) {
+      await _box.add(clothItem);
+    } else {
+      await _box.putAt(itemIndex, clothItem);
+    }
   }
 
   @override
-  void updateClothItem(ClothItem clothItem) {
-    final itemIndex = _findIndexOfItem(clothItem);
-    assert(itemIndex != null);
-    _box.putAt(itemIndex!, clothItem);
+  Future<void> saveManyClothItems(List<ClothItem> clothItems) async {
+    for (var clothItem in clothItems) {
+      await saveClothItem(clothItem);
+    }
   }
+
+  @override
+  Future<void> deleteClothItem(ClothItem clothItem) async {
+    final itemIndex = _findIndexOfItem(clothItem)!;
+    await _box.deleteAt(itemIndex);
+  }
+
+  @override
+  Future<void> deleteAll() async => await _box.clear();
 }

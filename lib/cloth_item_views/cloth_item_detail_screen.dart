@@ -112,7 +112,7 @@ class ClothItemDetailScreenAppBar extends StatelessWidget {
               final newClothItemManager = NewClothItemManager.from(clothItem);
               return ClothItemMatchingDialog(
                 newClothItemManager: newClothItemManager,
-                onDismiss: (context) => clothItemManager.replaceItem(
+                onDismiss: (context) => clothItemManager.saveItem(
                   newClothItemManager.clothItem,
                 ),
               );

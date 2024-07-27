@@ -2,12 +2,41 @@ import 'package:flutter/material.dart';
 import 'cloth_item.dart';
 
 class ClothItemManager extends ChangeNotifier {
-  late final List<ClothItem> _clothItems;
+  late List<ClothItem> _clothItems;
   final ClothItemStorageAgent storageAgent;
 
   ClothItemManager({required this.storageAgent}) {
-    _clothItems = storageAgent.loadAllClothItems();
+    _clothItems = storageAgent.savedItems;
+    _filterDuplicates();
   }
+
+  void _reportChange() {
+    _filterDuplicates();
+    _updateStorage();
+    notifyListeners();
+  }
+
+  void _filterDuplicates() {
+    final clothItemIds = <String>[];
+    for (final item in _clothItems) {
+      if (!clothItemIds.contains(item.id)) {
+        clothItemIds.add(item.id);
+      }
+    }
+    _clothItems = clothItemIds.map(getClothItemById).nonNulls.toList();
+  }
+
+  void _updateStorage() async {
+    await storageAgent.deleteAll();
+    await storageAgent.saveManyClothItems(_clothItems);
+  }
+
+  void _repairMatchingItemWeb(ClothItem clothItem) => clothItem.matchingItems
+      .map(getClothItemById)
+      .nonNulls
+      .where((e) => !e.matchingItems.contains(clothItem.id))
+      .map((e) => e.copyWith(matchingItems: [...e.matchingItems, clothItem.id]))
+      .forEach(saveItem);
 
   int? _findIndexOfItem(ClothItem clothItem) {
     final index = _clothItems.indexWhere(
@@ -17,19 +46,6 @@ class ClothItemManager extends ChangeNotifier {
   }
 
   List<ClothItem> get clothItems => _clothItems;
-
-  void saveNewItem(ClothItem clothItem) {
-    storageAgent.saveClothItem(clothItem);
-    _clothItems.add(clothItem);
-    updateMatchingItemsToReference(clothItem);
-    notifyListeners();
-  }
-
-  void saveManyNewItems(List<ClothItem> clothItems) {
-    clothItems.forEach(storageAgent.saveClothItem);
-    _clothItems.addAll(clothItems);
-    notifyListeners();
-  }
 
   ClothItem? getClothItemById(String id) {
     final matchedClothItem = _clothItems.firstWhere(
@@ -47,54 +63,38 @@ class ClothItemManager extends ChangeNotifier {
         .toList();
   }
 
-  void updateMatchingItemsToReference(ClothItem clothItem) => clothItem
-      .matchingItems
-      .map(getClothItemById)
-      .whereType<ClothItem>()
-      .where((e) => !e.matchingItems.contains(clothItem.id))
-      .map((e) => e.copyWith(matchingItems: [...e.matchingItems, clothItem.id]))
-      .forEach(replaceItem);
-
-  void replaceItem(ClothItem clothItem) {
-    updateMatchingItemsToReference(clothItem);
-    final itemIndex = _findIndexOfItem(clothItem)!;
-    _clothItems[itemIndex] = clothItem;
-    storageAgent.saveClothItem(clothItem);
-    notifyListeners();
-  }
-
-  void addOrReplaceItem(ClothItem clothItem) {
-    if (_findIndexOfItem(clothItem) == null) {
-      saveNewItem(clothItem);
+  void saveItem(ClothItem clothItem) {
+    final itemIndex = _findIndexOfItem(clothItem);
+    if (itemIndex == null) {
+      _clothItems.add(clothItem);
     } else {
-      replaceItem(clothItem);
+      _clothItems[itemIndex] = clothItem;
     }
+    _repairMatchingItemWeb(clothItem);
+    _reportChange();
   }
 
   void toggleFavouriteForItem(ClothItem clothItem) {
     final newItem = clothItem.copyWith(isFavourite: !clothItem.isFavourite);
-    final itemIndex = _findIndexOfItem(clothItem)!;
-    storageAgent.updateClothItem(newItem);
-    _clothItems[itemIndex] = newItem;
-    notifyListeners();
+    saveItem(newItem);
   }
 
   void deleteItem(ClothItem clothItem) {
     final itemIndex = _findIndexOfItem(clothItem)!;
-    storageAgent.deleteClothItem(clothItem);
     _clothItems.removeAt(itemIndex);
-    notifyListeners();
+    _reportChange();
   }
 
   void deleteAllItems() {
-    [..._clothItems].forEach(deleteItem);
-    notifyListeners();
+    _clothItems = [];
+    _reportChange();
   }
 }
 
 abstract class ClothItemStorageAgent {
-  List<ClothItem> loadAllClothItems();
-  void saveClothItem(ClothItem clothItem);
-  void deleteClothItem(ClothItem clothItem);
-  void updateClothItem(ClothItem clothItem);
+  late List<ClothItem> savedItems;
+  Future<void>? saveClothItem(ClothItem clothItem);
+  Future<void>? saveManyClothItems(List<ClothItem> clothItems);
+  Future<void>? deleteClothItem(ClothItem clothItem);
+  Future<void>? deleteAll();
 }

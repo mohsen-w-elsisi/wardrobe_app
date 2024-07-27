@@ -37,12 +37,16 @@ class ClothItemGridCard extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              const Expanded(child: Placeholder()),
+              const Expanded(child: SizedBox.square(child: Placeholder())),
               Padding(
                 padding: const EdgeInsets.only(top: 4, bottom: 4),
-                child: Text(
-                  clothItem.name,
-                  style: Theme.of(context).textTheme.headlineMedium,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    clothItem.name,
+                    style: Theme.of(context).textTheme.titleLarge,
+                    textAlign: TextAlign.start,
+                  ),
                 ),
               ),
               ClothItemAttributeIconRow(clothItem.attributes),
