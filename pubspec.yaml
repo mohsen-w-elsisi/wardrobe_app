@@ -7,14 +7,13 @@ environment:
   sdk: '>=3.4.3 <4.0.0'
 
 dependencies:
-  camera: ^0.11.0+1
-  collection: ^1.18.0
   flutter:
     sdk: flutter
   font_awesome_flutter: ^10.7.0
   get_it: ^7.7.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  image_picker: ^1.1.2
   shared_preferences: ^2.2.3
 
 dev_dependencies:

@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
-import 'package:wardrobe_app/cloth_item_editers/new_item_camera_dialog.dart';
 import 'package:wardrobe_app/cloth_item_editers/cloth_item_matching_dialog.dart';
+import 'package:wardrobe_app/cloth_item_views/cloth_item_image.dart';
 import 'package:wardrobe_app/cloth_item_views/cloth_item_views_utils.dart';
 import 'new_cloth_item_manager.dart';
 
@@ -46,6 +49,7 @@ class NewClothItemScreen extends StatelessWidget {
 
 class NewClothItemPhotoSelector extends StatelessWidget {
   final NewClothItemManager newClothItemManager;
+
   const NewClothItemPhotoSelector({
     required this.newClothItemManager,
     super.key,
@@ -53,27 +57,59 @@ class NewClothItemPhotoSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => showDialog(
-        context: context,
-        builder: (context) => NewItemCameraDialog(
-          newClothItemManager: newClothItemManager,
-        ),
+    return StatefulBuilder(
+      builder: (context, setState) => GestureDetector(
+        onTap: () => _showImageSourceOptions(context, setState),
+        child: newClothItemManager.image.isEmpty
+            ? _blankImageSelector(context)
+            : ClothItemImage(image: newClothItemManager.image),
       ),
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(20)),
-            color: Theme.of(context).colorScheme.secondaryFixedDim,
-          ),
-          child: const Center(
-            child: Icon(Icons.camera_alt, size: 48),
-          ),
+    );
+  }
+
+  Future<dynamic> _showImageSourceOptions(
+    BuildContext context,
+    StateSetter setState,
+  ) {
+    return showModalBottomSheet(
+      context: context,
+      builder: (_) => Column(
+        children: [
+          for (final source in ImageSource.values)
+            ListTile(
+              onTap: () async {
+                Navigator.pop(context);
+                await _pickImage(source);
+                setState(() {});
+              },
+              title: Text(source.name),
+            )
+        ],
+      ),
+    );
+  }
+
+  Widget _blankImageSelector(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 1,
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
+          color: Theme.of(context).colorScheme.secondaryFixedDim,
+        ),
+        child: const Center(
+          child: Icon(Icons.camera_alt, size: 48),
         ),
       ),
     );
+  }
+
+  Future<void> _pickImage(ImageSource imageSource) async {
+    final imageXFile = await ImagePicker().pickImage(source: imageSource);
+    if (imageXFile == null) return;
+    final imageBytes = await File(imageXFile.path).readAsBytes();
+    newClothItemManager.image = imageBytes;
   }
 }
 
