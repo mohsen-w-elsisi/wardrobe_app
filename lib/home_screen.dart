@@ -1,27 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
 import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_manager.dart';
 import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_screen.dart';
 import 'package:wardrobe_app/settings_screen.dart';
 import 'cloth_item_views/cloth_item_views.dart';
-
-final mockClothItems = [
-  ClothItem(name: "AE blue", type: ClothItemType.top, id: "1"),
-  ClothItem(
-    name: "beige pants",
-    id: "2",
-    type: ClothItemType.bottom,
-    attributes: const [ClothItemAttribute.sportive],
-  ),
-  ClothItem(
-    name: "beige pants",
-    type: ClothItemType.bottom,
-    attributes: const [ClothItemAttribute.classic, ClothItemAttribute.onFasion],
-    matchingItems: const ["1", "2"],
-  ),
-];
 
 class HomeScreen extends StatelessWidget {
   final clothItemManager = GetIt.I.get<ClothItemManager>();

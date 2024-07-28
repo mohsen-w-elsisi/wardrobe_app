@@ -5,6 +5,7 @@ import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
 import 'package:wardrobe_app/cloth_item_editers/cloth_item_matching_dialog.dart';
 import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_manager.dart';
 import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_screen.dart';
+import 'package:wardrobe_app/cloth_item_views/cloth_item_image.dart';
 import 'package:wardrobe_app/cloth_item_views/cloth_item_views.dart';
 import 'package:wardrobe_app/cloth_item_views/cloth_item_views_utils.dart';
 
@@ -26,11 +27,37 @@ class ClothItemDetailScreen extends StatelessWidget {
           return CustomScrollView(
             slivers: <Widget>[
               ClothItemDetailScreenAppBar(clothItem: clothItem),
+              ClothItemDetailScreenImage(clothItem: clothItem),
               ClothItemDetailScreenAttributeChips(clothItem: clothItem),
               ClothItemDetailScreenMatchingItemList(clothItem: clothItem),
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+class ClothItemDetailScreenImage extends StatelessWidget {
+  const ClothItemDetailScreenImage({
+    super.key,
+    required this.clothItem,
+  });
+
+  final ClothItem clothItem;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 8.0,
+          vertical: 8,
+        ),
+        child: Hero(
+          tag: clothItem.name,
+          child: ClothItemImage(image: clothItem.image),
+        ),
       ),
     );
   }

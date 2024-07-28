@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
+import 'package:wardrobe_app/cloth_item_editers/new_item_camera_dialog.dart';
 import 'package:wardrobe_app/cloth_item_editers/cloth_item_matching_dialog.dart';
 import 'package:wardrobe_app/cloth_item_views/cloth_item_views_utils.dart';
 import 'new_cloth_item_manager.dart';
@@ -26,6 +27,7 @@ class NewClothItemScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
+            NewClothItemPhotoSelector(newClothItemManager: newClothItemManager),
             NewClothItemNameField(newClothItemManager: newClothItemManager),
             NewClothItemTypeSelector(newClothItemManager: newClothItemManager),
             NewClothItemAttributeSelector(
@@ -36,6 +38,39 @@ class NewClothItemScreen extends StatelessWidget {
               showMatchingsDialog: showMatchingsDialog,
             )
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class NewClothItemPhotoSelector extends StatelessWidget {
+  final NewClothItemManager newClothItemManager;
+  const NewClothItemPhotoSelector({
+    required this.newClothItemManager,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => showDialog(
+        context: context,
+        builder: (context) => NewItemCameraDialog(
+          newClothItemManager: newClothItemManager,
+        ),
+      ),
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
+            color: Theme.of(context).colorScheme.secondaryFixedDim,
+          ),
+          child: const Center(
+            child: Icon(Icons.camera_alt, size: 48),
+          ),
         ),
       ),
     );

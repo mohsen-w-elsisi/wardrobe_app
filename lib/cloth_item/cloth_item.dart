@@ -1,6 +1,4 @@
-import "package:collection/collection.dart";
 import "package:flutter/foundation.dart";
-import "package:flutter/material.dart";
 import "package:hive/hive.dart";
 
 part 'cloth_item.g.dart';
@@ -9,10 +7,10 @@ part 'cloth_item.g.dart';
 @immutable
 class ClothItem {
   @HiveField(1)
-  late final String id;
+  final String id;
 
   @HiveField(2)
-  late final DateTime dateCreated;
+  final DateTime dateCreated;
 
   @HiveField(3)
   final String name;
@@ -29,18 +27,19 @@ class ClothItem {
   @HiveField(7)
   final List<String> matchingItems;
 
-  ClothItem({
+  @HiveField(8)
+  final Uint8List image;
+
+  const ClothItem({
     required this.name,
     required this.type,
-    this.isFavourite = false,
-    this.attributes = const [],
-    this.matchingItems = const [],
-    DateTime? dateCreated,
-    String? id,
-  }) {
-    this.dateCreated = dateCreated ?? DateTime.now();
-    this.id = id ?? this.dateCreated.toIso8601String();
-  }
+    required this.isFavourite,
+    required this.attributes,
+    required this.matchingItems,
+    required this.dateCreated,
+    required this.id,
+    required this.image,
+  });
 
   ClothItem.blank({
     this.name = "",
@@ -49,7 +48,8 @@ class ClothItem {
     this.attributes = const [],
     this.matchingItems = const [],
     this.isFavourite = false,
-  }) : dateCreated = DateTime.now();
+  })  : dateCreated = DateTime.now(),
+        image = Uint8List(0);
 
   ClothItem copyWith({
     final String? name,
@@ -59,32 +59,17 @@ class ClothItem {
     final List<String>? matchingItems,
     final bool? isFavourite,
     final DateTime? dateCreated,
+    final Uint8List? image,
   }) =>
       ClothItem(
-        name: name ?? this.name,
-        type: type ?? this.type,
-        id: id ?? this.id,
-        attributes: attributes ?? this.attributes,
-        matchingItems: matchingItems ?? this.matchingItems,
-        isFavourite: isFavourite ?? this.isFavourite,
-        dateCreated: dateCreated ?? this.dateCreated,
-      );
-
-  bool isIdenticalTo(ClothItem clothItem) {
-    return (clothItem.id == id &&
-        clothItem.isFavourite == isFavourite &&
-        clothItem.name == name &&
-        clothItem.dateCreated.toString() == dateCreated.toString() &&
-        clothItem.type == type &&
-        const IterableEquality().equals(
-          clothItem.attributes as Iterable,
-          attributes as Iterable,
-        ) &&
-        const IterableEquality().equals(
-          clothItem.matchingItems as Iterable,
-          matchingItems as Iterable,
-        ));
-  }
+          name: name ?? this.name,
+          type: type ?? this.type,
+          id: id ?? this.id,
+          attributes: attributes ?? this.attributes,
+          matchingItems: matchingItems ?? this.matchingItems,
+          isFavourite: isFavourite ?? this.isFavourite,
+          dateCreated: dateCreated ?? this.dateCreated,
+          image: image ?? this.image);
 }
 
 @HiveType(typeId: 2)

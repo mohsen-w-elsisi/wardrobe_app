@@ -22,15 +22,16 @@ class ClothItemAdapter extends TypeAdapter<ClothItem> {
       isFavourite: fields[5] as bool,
       attributes: (fields[6] as List).cast<ClothItemAttribute>(),
       matchingItems: (fields[7] as List).cast<String>(),
-      dateCreated: fields[2] as DateTime?,
-      id: fields[1] as String?,
+      dateCreated: fields[2] as DateTime,
+      id: fields[1] as String,
+      image: fields[8] as Uint8List,
     );
   }
 
   @override
   void write(BinaryWriter writer, ClothItem obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(1)
       ..write(obj.id)
       ..writeByte(2)
@@ -44,7 +45,9 @@ class ClothItemAdapter extends TypeAdapter<ClothItem> {
       ..writeByte(6)
       ..write(obj.attributes)
       ..writeByte(7)
-      ..write(obj.matchingItems);
+      ..write(obj.matchingItems)
+      ..writeByte(8)
+      ..write(obj.image);
   }
 
   @override

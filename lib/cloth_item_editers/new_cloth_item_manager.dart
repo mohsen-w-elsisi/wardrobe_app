@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 
 class NewClothItemManager {
@@ -8,6 +10,7 @@ class NewClothItemManager {
   ClothItemType type;
   List<ClothItemAttribute> attributes;
   List<String> matchingItems;
+  Uint8List image;
 
   NewClothItemManager()
       : dateCreated = DateTime.now(),
@@ -15,7 +18,8 @@ class NewClothItemManager {
         type = ClothItemType.top,
         attributes = [],
         matchingItems = [],
-        isFavourite = false;
+        isFavourite = false,
+        image = Uint8List(0);
 
   NewClothItemManager.from(ClothItem clothitem)
       : dateCreated = clothitem.dateCreated,
@@ -24,15 +28,17 @@ class NewClothItemManager {
         type = clothitem.type,
         attributes = clothitem.attributes,
         matchingItems = clothitem.matchingItems,
-        isFavourite = clothitem.isFavourite;
+        isFavourite = clothitem.isFavourite,
+        image = clothitem.image;
 
   ClothItem get clothItem => ClothItem(
-        id: id,
+        id: id ?? dateCreated.toIso8601String(),
         name: name,
         type: type,
         dateCreated: dateCreated,
         isFavourite: isFavourite,
         attributes: attributes,
         matchingItems: matchingItems,
+        image: image,
       );
 }
