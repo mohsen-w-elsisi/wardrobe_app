@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
 import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_manager.dart';
 import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_screen.dart';
+import 'package:wardrobe_app/outfiting/outfit_maker_screen.dart';
 import 'package:wardrobe_app/settings_screen.dart';
 import 'cloth_item_views/cloth_item_views.dart';
 
@@ -24,7 +25,7 @@ class HomeScreen extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => _navigateTo(context, OutfitMakerScreen()),
         child: const Icon(Icons.checkroom_outlined),
       ),
       bottomNavigationBar: HomeScreenBottomAppBar(),
@@ -60,12 +61,12 @@ class HomeScreenBottomAppBar extends StatelessWidget {
       ),
     );
   }
+}
 
-  void _navigateTo(BuildContext context, Widget screen) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => screen,
-      ),
-    );
-  }
+void _navigateTo(BuildContext context, Widget screen) {
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (_) => screen,
+    ),
+  );
 }
