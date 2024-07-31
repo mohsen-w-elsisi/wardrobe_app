@@ -60,16 +60,33 @@ class ClothItem {
     final bool? isFavourite,
     final DateTime? dateCreated,
     final Uint8List? image,
-  }) =>
-      ClothItem(
-          name: name ?? this.name,
-          type: type ?? this.type,
-          id: id ?? this.id,
-          attributes: attributes ?? this.attributes,
-          matchingItems: matchingItems ?? this.matchingItems,
-          isFavourite: isFavourite ?? this.isFavourite,
-          dateCreated: dateCreated ?? this.dateCreated,
-          image: image ?? this.image);
+  }) {
+    return ClothItem(
+      name: name ?? this.name,
+      type: type ?? this.type,
+      id: id ?? this.id,
+      attributes: attributes ?? this.attributes,
+      matchingItems: matchingItems ?? this.matchingItems,
+      isFavourite: isFavourite ?? this.isFavourite,
+      dateCreated: dateCreated ?? this.dateCreated,
+      image: image ?? this.image,
+    );
+  }
+
+  bool get isBlank => id == "";
+
+  bool isMatchingItem(ClothItem clothItem) =>
+      matchingItems.contains(clothItem.id);
+
+  bool hasSameIdAs(ClothItem clothItem) => clothItem.id == id;
+
+  ClothItem toggleFavourite() => copyWith(isFavourite: !isFavourite);
+
+  ClothItem addMatchingItem(ClothItem newMatchingItem) {
+    return copyWith(
+      matchingItems: [...matchingItems, newMatchingItem.id],
+    );
+  }
 }
 
 @HiveType(typeId: 2)

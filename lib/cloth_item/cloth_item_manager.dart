@@ -10,73 +10,15 @@ class ClothItemManager extends ChangeNotifier {
     _filterDuplicates();
   }
 
-  void _reportChange() {
-    _filterDuplicates();
-    _updateStorage();
-    notifyListeners();
-  }
-
-  void _filterDuplicates() {
-    final clothItemIds = <String>[];
-    for (final item in _clothItems) {
-      if (!clothItemIds.contains(item.id)) {
-        clothItemIds.add(item.id);
-      }
-    }
-    _clothItems = clothItemIds.map(getClothItemById).nonNulls.toList();
-  }
-
-  void _updateStorage() async {
-    await storageAgent.deleteAll();
-    await storageAgent.saveManyClothItems(_clothItems);
-  }
-
-  void _repairMatchingItemWeb(ClothItem clothItem) => clothItem.matchingItems
-      .map(getClothItemById)
-      .nonNulls
-      .where((e) => !e.matchingItems.contains(clothItem.id))
-      .map((e) => e.copyWith(matchingItems: [...e.matchingItems, clothItem.id]))
-      .forEach(saveItem);
-
-  int? _findIndexOfItem(ClothItem clothItem) {
-    final index = _clothItems.indexWhere(
-      (testClothItem) => testClothItem.id == clothItem.id,
-    );
-    return index.isNegative ? null : index;
-  }
-
   List<ClothItem> get clothItems => _clothItems;
 
-  ClothItem? getClothItemById(String id) {
-    final matchedClothItem = _clothItems.firstWhere(
-      (clothItem) => clothItem.id == id,
-      orElse: () => ClothItem.blank(),
-    );
-    return matchedClothItem.id != "" ? matchedClothItem : null;
-  }
-
-  List<ClothItem> getMatchingItems(ClothItem clothItem) {
-    return _clothItems
-        .where(
-          (testClothItem) => clothItem.matchingItems.contains(testClothItem.id),
-        )
-        .toList();
-  }
-
   void saveItem(ClothItem clothItem) {
-    final itemIndex = _findIndexOfItem(clothItem);
-    if (itemIndex == null) {
-      _clothItems.add(clothItem);
+    if (_itemIsAlreadySaved(clothItem)) {
+      _overwriteExistingItemOfSameId(clothItem);
     } else {
-      _clothItems[itemIndex] = clothItem;
+      _saveNewItem(clothItem);
     }
     _repairMatchingItemWeb(clothItem);
-    _reportChange();
-  }
-
-  void toggleFavouriteForItem(ClothItem clothItem) {
-    final newItem = clothItem.copyWith(isFavourite: !clothItem.isFavourite);
-    saveItem(newItem);
   }
 
   void deleteItem(ClothItem clothItem) {
@@ -88,6 +30,71 @@ class ClothItemManager extends ChangeNotifier {
   void deleteAllItems() {
     _clothItems = [];
     _reportChange();
+  }
+
+  void toggleFavouriteForItem(ClothItem clothItem) {
+    final adjustedItem = clothItem.toggleFavourite();
+    saveItem(adjustedItem);
+  }
+
+  List<ClothItem> getMatchingItems(ClothItem clothItem) {
+    return _clothItems.where(clothItem.isMatchingItem).toList();
+  }
+
+  void _saveNewItem(ClothItem clothItem) {
+    _clothItems.add(clothItem);
+    _reportChange();
+  }
+
+  void _overwriteExistingItemOfSameId(ClothItem clothItem) {
+    final itemIndex = _findIndexOfItem(clothItem)!;
+    _clothItems[itemIndex] = clothItem;
+    _reportChange();
+  }
+
+  void _reportChange() {
+    _filterDuplicates();
+    _updateStorage();
+    notifyListeners();
+  }
+
+  void _updateStorage() async {
+    await storageAgent.deleteAll();
+    await storageAgent.saveManyClothItems(_clothItems);
+  }
+
+  // TODO: should I refactor this into a seperate class?
+  void _filterDuplicates() {
+    final clothItemIds = <String>[];
+    for (final item in _clothItems) {
+      if (!clothItemIds.contains(item.id)) {
+        clothItemIds.add(item.id);
+      }
+    }
+    _clothItems = clothItemIds.map(getClothItemById).nonNulls.toList();
+  }
+
+  void _repairMatchingItemWeb(ClothItem clothItem) => clothItem.matchingItems
+      .map(getClothItemById)
+      .nonNulls
+      .where((e) => !e.isMatchingItem(clothItem))
+      .map((e) => e.addMatchingItem(clothItem))
+      .forEach(saveItem);
+
+  bool _itemIsAlreadySaved(ClothItem clothItem) =>
+      _findIndexOfItem(clothItem) != null;
+
+  int? _findIndexOfItem(ClothItem clothItem) {
+    final index = _clothItems.indexWhere(clothItem.hasSameIdAs);
+    return index.isNegative ? null : index;
+  }
+
+  ClothItem? getClothItemById(String id) {
+    final matchedClothItem = _clothItems.firstWhere(
+      (clothItem) => clothItem.id == id,
+      orElse: () => ClothItem.blank(),
+    );
+    return matchedClothItem.isBlank ? null : matchedClothItem;
   }
 }
 

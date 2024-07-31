@@ -1,12 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
-import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
 
 class OutfitMakerManager extends ChangeNotifier {
   int _currentStep = 0;
-
-  final _clothItemManager = GetIt.I.get<ClothItemManager>();
 
   final Map<ClothItemType, ClothItem?> _selectedItems = {
     for (final type in ClothItemType.values) type: null
@@ -17,6 +13,7 @@ class OutfitMakerManager extends ChangeNotifier {
   OutfitMakerManager({this.onLastStepDone});
 
   int get currentStep => _currentStep;
+
   set currentStep(int input) {
     _currentStep = input;
     notifyListeners();

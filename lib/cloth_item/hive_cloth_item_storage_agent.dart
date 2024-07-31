@@ -9,38 +9,22 @@ class HiveClothItemStorageAgent extends ClothItemStorageAgent {
   late final Box<ClothItem> _box;
 
   Future<void> initialize() async {
-    Hive.registerAdapter(ClothItemAdapter());
-    Hive.registerAdapter(ClothItemTypeAdapter());
-    Hive.registerAdapter(ClothItemAttributeAdapter());
-
+    _registerHiveAdapters();
     _box = await Hive.openBox(boxName);
   }
 
-  @override
-  List<ClothItem> get savedItems => [
-        for (int i = 0; i < _box.length; i++)
-          if (_box.getAt(i) != null) _box.getAt(i)!
-      ];
-
-  int? _findIndexOfItem(ClothItem clothItem) {
-    final allItems = savedItems;
-    int? indexOfItemToDelete;
-    for (var i = 0; i < allItems.length; i++) {
-      if (allItems[i].id == clothItem.id) {
-        indexOfItemToDelete = i;
-        break;
-      }
-    }
-    return indexOfItemToDelete;
+  void _registerHiveAdapters() {
+    Hive.registerAdapter(ClothItemAdapter());
+    Hive.registerAdapter(ClothItemTypeAdapter());
+    Hive.registerAdapter(ClothItemAttributeAdapter());
   }
 
   @override
   Future<void> saveClothItem(ClothItem clothItem) async {
-    final itemIndex = _findIndexOfItem(clothItem);
-    if (itemIndex == null) {
-      await _box.add(clothItem);
+    if (_itemIsAlreadySaved(clothItem)) {
+      await _overwriteExistingItemOfSameId(clothItem);
     } else {
-      await _box.putAt(itemIndex, clothItem);
+      await _saveNewItem(clothItem);
     }
   }
 
@@ -59,4 +43,27 @@ class HiveClothItemStorageAgent extends ClothItemStorageAgent {
 
   @override
   Future<void> deleteAll() async => await _box.clear();
+
+  @override
+  List<ClothItem> get savedItems => [
+        for (int i = 0; i < _box.length; i++)
+          if (_box.getAt(i) != null) _box.getAt(i)!
+      ];
+
+  Future<void> _saveNewItem(ClothItem clothItem) async {
+    await _box.add(clothItem);
+  }
+
+  Future<void> _overwriteExistingItemOfSameId(ClothItem clothItem) async {
+    final index = _findIndexOfItem(clothItem)!;
+    await _box.putAt(index, clothItem);
+  }
+
+  bool _itemIsAlreadySaved(ClothItem clothItem) =>
+      _findIndexOfItem(clothItem) != null;
+
+  int? _findIndexOfItem(ClothItem clothItem) {
+    int itemIndex = savedItems.indexWhere(clothItem.hasSameIdAs);
+    return itemIndex.isNegative ? null : itemIndex;
+  }
 }

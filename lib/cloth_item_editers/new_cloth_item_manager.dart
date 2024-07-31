@@ -1,9 +1,8 @@
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 
-class NewClothItemManager extends ChangeNotifier {
+class NewClothItemManager {
   late final DateTime dateCreated;
   final bool isFavourite;
   String? id;
