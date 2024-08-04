@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animations/animations.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item_views/cloth_item_detail_screen.dart';
 import 'cloth_item_views_utils.dart';
@@ -15,35 +16,44 @@ class ClothItemListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final itemCount = clothItems.length;
-    separatorBuilder(_, __) => const Divider();
-    itemBuilder(_, int i) => ClothItemListTile(clothItems[i]);
-
     if (sliver) {
       return SliverList.separated(
-        itemCount: itemCount,
+        itemCount: _itemCount,
         separatorBuilder: separatorBuilder,
         itemBuilder: itemBuilder,
       );
     } else {
       return ListView.separated(
-        itemCount: itemCount,
+        itemCount: _itemCount,
         separatorBuilder: separatorBuilder,
         itemBuilder: itemBuilder,
       );
     }
   }
+
+  Widget separatorBuilder(_, __) => const Divider();
+  Widget itemBuilder(_, int i) => _ListTile(clothItems[i]);
+
+  int get _itemCount => clothItems.length;
 }
 
-class ClothItemListTile extends StatelessWidget {
+class _ListTile extends StatelessWidget {
   final ClothItem clothItem;
 
-  const ClothItemListTile(this.clothItem, {super.key});
+  const _ListTile(this.clothItem, {super.key});
 
   @override
   Widget build(BuildContext context) {
+    return OpenContainer(
+      closedElevation: 0,
+      closedColor: Theme.of(context).colorScheme.surface,
+      closedBuilder: (_, __) => _minimisedListTile(),
+      openBuilder: (_, __) => _maximisedDetailScreen(),
+    );
+  }
+
+  Widget _minimisedListTile() {
     return ListTile(
-      onTap: () => _navigateToDetailsPage(context),
       title: Text(clothItem.name),
       subtitle: Text(clothTypeTextMap[clothItem.type] ?? ""),
       trailing: SizedBox(
@@ -56,11 +66,7 @@ class ClothItemListTile extends StatelessWidget {
     );
   }
 
-  void _navigateToDetailsPage(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ClothItemDetailScreen(clothItem.id),
-      ),
-    );
+  Widget _maximisedDetailScreen() {
+    return ClothItemDetailScreen(clothItem.id);
   }
 }

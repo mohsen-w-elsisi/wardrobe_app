@@ -12,7 +12,7 @@ class ClothItemGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final clothItemCards = clothItems.map((e) => ClothItemGridCard(e)).toList();
+    final clothItemCards = clothItems.map((e) => _GridCard(e)).toList();
 
     return sliver
         ? SliverGrid.count(
@@ -32,10 +32,10 @@ class ClothItemGridView extends StatelessWidget {
   }
 }
 
-class ClothItemGridCard extends StatelessWidget {
+class _GridCard extends StatelessWidget {
   final ClothItem clothItem;
 
-  const ClothItemGridCard(this.clothItem, {super.key});
+  const _GridCard(this.clothItem, {super.key});
 
   @override
   Widget build(BuildContext context) {
