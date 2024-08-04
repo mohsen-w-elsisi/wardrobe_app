@@ -12,8 +12,13 @@ import 'package:wardrobe_app/cloth_item_views/cloth_item_views_utils.dart';
 class ClothItemDetailScreen extends StatelessWidget {
   final clothItemManager = GetIt.I.get<ClothItemManager>();
   final String clothItemId;
+  final bool enableHeroImage;
 
-  ClothItemDetailScreen(this.clothItemId, {super.key});
+  ClothItemDetailScreen(
+    this.clothItemId, {
+    this.enableHeroImage = true,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,53 +26,55 @@ class ClothItemDetailScreen extends StatelessWidget {
       body: ListenableBuilder(
         listenable: clothItemManager,
         builder: (_, __) {
-          final clothItem = clothItemManager.getClothItemById(clothItemId);
-          if (clothItem == null) return Container();
-
           return CustomScrollView(
             slivers: <Widget>[
-              ClothItemDetailScreenAppBar(clothItem: clothItem),
-              ClothItemDetailScreenImage(clothItem: clothItem),
-              ClothItemDetailScreenAttributeChips(clothItem: clothItem),
-              ClothItemDetailScreenMatchingItemList(clothItem: clothItem),
+              _AppBar(clothItem: clothItem),
+              _Image(clothItem: clothItem, enableHeroImage: enableHeroImage),
+              _AttributeChips(clothItem: clothItem),
+              _MatchingItemList(clothItem: clothItem),
             ],
           );
         },
       ),
     );
   }
+
+  ClothItem get clothItem => clothItemManager.getClothItemById(clothItemId)!;
 }
 
-class ClothItemDetailScreenImage extends StatelessWidget {
-  const ClothItemDetailScreenImage({
+class _Image extends StatelessWidget {
+  final ClothItem clothItem;
+  final bool enableHeroImage;
+
+  const _Image({
     super.key,
     required this.clothItem,
+    required this.enableHeroImage,
   });
-
-  final ClothItem clothItem;
 
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 8.0,
-          vertical: 8,
-        ),
-        child: Hero(
-          tag: clothItem.name,
-          child: ClothItemImage(image: clothItem.image),
-        ),
+        padding: const EdgeInsets.all(8),
+        child: enableHeroImage ? _heroClothItemImage : _clothItemImage,
       ),
     );
   }
+
+  Widget get _heroClothItemImage => Hero(
+        tag: clothItem.id,
+        child: _clothItemImage,
+      );
+
+  Widget get _clothItemImage => ClothItemImage(image: clothItem.image);
 }
 
-class ClothItemDetailScreenMatchingItemList extends StatelessWidget {
+class _MatchingItemList extends StatelessWidget {
   final _clothItemManager = GetIt.I.get<ClothItemManager>();
   final ClothItem clothItem;
 
-  ClothItemDetailScreenMatchingItemList({
+  _MatchingItemList({
     super.key,
     required this.clothItem,
   });
@@ -81,10 +88,10 @@ class ClothItemDetailScreenMatchingItemList extends StatelessWidget {
   }
 }
 
-class ClothItemDetailScreenAttributeChips extends StatelessWidget {
+class _AttributeChips extends StatelessWidget {
   final ClothItem clothItem;
 
-  const ClothItemDetailScreenAttributeChips({
+  const _AttributeChips({
     super.key,
     required this.clothItem,
   });
@@ -111,11 +118,11 @@ class ClothItemDetailScreenAttributeChips extends StatelessWidget {
   }
 }
 
-class ClothItemDetailScreenAppBar extends StatelessWidget {
+class _AppBar extends StatelessWidget {
   final clothItemManager = GetIt.I.get<ClothItemManager>();
   final ClothItem clothItem;
 
-  ClothItemDetailScreenAppBar({
+  _AppBar({
     super.key,
     required this.clothItem,
   });
@@ -133,18 +140,15 @@ class ClothItemDetailScreenAppBar extends StatelessWidget {
           ),
         ),
         IconButton(
-          onPressed: () => showDialog(
-            context: context,
-            builder: (context) {
-              final newClothItemManager = NewClothItemManager.from(clothItem);
-              return ClothItemMatchingDialog(
-                newClothItemManager: newClothItemManager,
-                onDismiss: (context) => clothItemManager.saveItem(
-                  newClothItemManager.clothItem,
-                ),
-              );
-            },
-          ),
+          onPressed: () {
+            final newClothItemManager = NewClothItemManager.from(clothItem);
+            ClothItemMatchingDialog(
+              newClothItemManager: newClothItemManager,
+              onDismiss: (context) => clothItemManager.saveItem(
+                newClothItemManager.clothItem,
+              ),
+            ).show(context);
+          },
           icon: const Icon(Icons.join_full_outlined),
         ),
         IconButton(

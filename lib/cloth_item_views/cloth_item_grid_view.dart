@@ -49,7 +49,7 @@ class ClothItemGridCard extends StatelessWidget {
         child: Column(
           children: [
             Hero(
-              tag: clothItem.name,
+              tag: clothItem.id,
               child: ClothItemImage(image: clothItem.image),
             ),
             ListTile(

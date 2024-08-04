@@ -19,11 +19,20 @@ class ClothItemImage extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         clipBehavior: Clip.antiAlias,
-        child: Image.memory(
-          image,
-          fit: BoxFit.cover,
-        ),
+        child: _image(),
       ),
     );
+  }
+
+  Widget _image() {
+    try {
+      return Image.memory(
+        image,
+        fit: BoxFit.cover,
+      );
+    } on Exception catch (e) {
+      print(e);
+      return Container();
+    }
   }
 }

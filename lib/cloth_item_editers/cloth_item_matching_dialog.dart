@@ -15,6 +15,10 @@ class ClothItemMatchingDialog extends StatelessWidget {
     super.key,
   });
 
+  void show(BuildContext context) {
+    showDialog(context: context, builder: (context) => this);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog.fullscreen(

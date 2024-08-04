@@ -30,13 +30,12 @@ class NewClothItemScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
-            NewClothItemPhotoSelector(newClothItemManager: newClothItemManager),
-            NewClothItemNameField(newClothItemManager: newClothItemManager),
-            NewClothItemTypeSelector(newClothItemManager: newClothItemManager),
-            NewClothItemAttributeSelector(
-                newClothItemManager: newClothItemManager),
+            _PhotoSelector(newClothItemManager: newClothItemManager),
+            _NameField(newClothItemManager: newClothItemManager),
+            _TypeSelector(newClothItemManager: newClothItemManager),
+            _AttributeSelector(newClothItemManager: newClothItemManager),
             const Spacer(),
-            NewClothItemNextStepButton(
+            _NextStepButton(
               newClothItemManager: newClothItemManager,
               showMatchingsDialog: showMatchingsDialog,
             )
@@ -47,10 +46,10 @@ class NewClothItemScreen extends StatelessWidget {
   }
 }
 
-class NewClothItemPhotoSelector extends StatelessWidget {
+class _PhotoSelector extends StatelessWidget {
   final NewClothItemManager newClothItemManager;
 
-  const NewClothItemPhotoSelector({
+  const _PhotoSelector({
     required this.newClothItemManager,
     super.key,
   });
@@ -113,14 +112,20 @@ class NewClothItemPhotoSelector extends StatelessWidget {
   }
 }
 
-class NewClothItemNextStepButton extends StatelessWidget {
-  final clothItemManager = GetIt.I.get<ClothItemManager>();
+class _NameField extends StatefulWidget {
   final NewClothItemManager newClothItemManager;
-  final bool showMatchingsDialog;
 
-  NewClothItemNextStepButton({
+  const _NameField({required this.newClothItemManager, super.key});
+
+  @override
+  State<_NameField> createState() => _NameFieldState();
+}
+
+class _TypeSelector extends StatelessWidget {
+  final NewClothItemManager newClothItemManager;
+
+  const _TypeSelector({
     required this.newClothItemManager,
-    this.showMatchingsDialog = true,
     super.key,
   });
 
@@ -128,34 +133,28 @@ class NewClothItemNextStepButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 8),
-      child: FilledButton(
-        onPressed: () => (showMatchingsDialog
-            ? _showItemMatchingDialog
-            : _saveItem)(context),
-        child: const Text("next"),
+      margin: const EdgeInsets.only(top: 8),
+      child: StatefulBuilder(
+        builder: (context, setState) => SegmentedButton(
+          selected: {newClothItemManager.type},
+          onSelectionChanged: (p0) => setState(
+            () => newClothItemManager.type = p0.single,
+          ),
+          segments: [
+            for (final type in ClothItemType.values)
+              ButtonSegment(
+                value: type,
+                label: Text(clothTypeTextMap[type]!),
+              )
+          ],
+        ),
       ),
     );
-  }
-
-  void _showItemMatchingDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => ClothItemMatchingDialog(
-        newClothItemManager: newClothItemManager,
-        onDismiss: _saveItem,
-      ),
-    );
-  }
-
-  void _saveItem(BuildContext context) {
-    clothItemManager.saveItem(newClothItemManager.clothItem);
-    Navigator.pop(context);
   }
 }
 
-class NewClothItemAttributeSelector extends StatelessWidget {
-  const NewClothItemAttributeSelector({
+class _AttributeSelector extends StatelessWidget {
+  const _AttributeSelector({
     super.key,
     required this.newClothItemManager,
   });
@@ -189,48 +188,7 @@ class NewClothItemAttributeSelector extends StatelessWidget {
   }
 }
 
-class NewClothItemTypeSelector extends StatelessWidget {
-  final NewClothItemManager newClothItemManager;
-
-  const NewClothItemTypeSelector({
-    required this.newClothItemManager,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(top: 8),
-      child: StatefulBuilder(
-        builder: (context, setState) => SegmentedButton(
-          selected: {newClothItemManager.type},
-          onSelectionChanged: (p0) => setState(
-            () => newClothItemManager.type = p0.single,
-          ),
-          segments: [
-            for (final type in ClothItemType.values)
-              ButtonSegment(
-                value: type,
-                label: Text(clothTypeTextMap[type]!),
-              )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class NewClothItemNameField extends StatefulWidget {
-  final NewClothItemManager newClothItemManager;
-
-  const NewClothItemNameField({required this.newClothItemManager, super.key});
-
-  @override
-  State<NewClothItemNameField> createState() => _NewClothItemNameFieldState();
-}
-
-class _NewClothItemNameFieldState extends State<NewClothItemNameField> {
+class _NameFieldState extends State<_NameField> {
   late final TextEditingController _controller;
 
   @override
@@ -251,5 +209,43 @@ class _NewClothItemNameFieldState extends State<NewClothItemNameField> {
       controller: _controller,
       onChanged: (text) => widget.newClothItemManager.name = text,
     );
+  }
+}
+
+class _NextStepButton extends StatelessWidget {
+  final clothItemManager = GetIt.I.get<ClothItemManager>();
+  final NewClothItemManager newClothItemManager;
+  final bool showMatchingsDialog;
+
+  _NextStepButton({
+    required this.newClothItemManager,
+    this.showMatchingsDialog = true,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 8),
+      child: FilledButton(
+        onPressed: () => (showMatchingsDialog
+            ? _showItemMatchingDialog
+            : _saveItem)(context),
+        child: const Text("next"),
+      ),
+    );
+  }
+
+  void _showItemMatchingDialog(BuildContext context) {
+    ClothItemMatchingDialog(
+      newClothItemManager: newClothItemManager,
+      onDismiss: _saveItem,
+    ).show(context);
+  }
+
+  void _saveItem(BuildContext context) {
+    clothItemManager.saveItem(newClothItemManager.clothItem);
+    Navigator.pop(context);
   }
 }
