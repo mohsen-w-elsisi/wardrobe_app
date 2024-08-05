@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item_organiser.dart';
+import 'package:wardrobe_app/cloth_item_views/cloth_item_type_display_options.dart';
 
 class ClothItemGroupedList extends StatelessWidget {
   final List<ClothItem> clothItems;
@@ -55,7 +56,7 @@ class _TypedListSection extends StatelessWidget {
   Widget _header(BuildContext context) => Align(
         alignment: Alignment.centerLeft,
         child: Text(
-          type.name,
+          clothItemTypeDisplayOptions[type]!.text,
           style: Theme.of(context).textTheme.titleMedium,
         ),
       );

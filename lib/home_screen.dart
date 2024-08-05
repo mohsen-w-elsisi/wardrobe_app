@@ -50,22 +50,27 @@ class HomeScreenDrawer extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         child: ClothItemGroupedList(
           clothItems: clothItemManager.clothItems,
-          onTap: (clothItem) =>
-              _openDetailScreenforClothItem(context, clothItem),
+          onTap: (clothItem) => _onItemTileTap(context, clothItem),
         ),
       ),
     );
+  }
+
+  void _onItemTileTap(BuildContext context, ClothItem clothItem) {
+    _closeDrawer(context);
+    _openDetailScreenforClothItem(context, clothItem);
   }
 
   void _openDetailScreenforClothItem(
       BuildContext context, ClothItem clothItem) {
     _navigateTo(
       context,
-      ClothItemDetailScreen(
-        clothItem.id,
-        enableHeroImage: false,
-      ),
+      ClothItemDetailScreen(clothItem.id, enableHeroImage: false),
     );
+  }
+
+  void _closeDrawer(BuildContext context) {
+    Scaffold.of(context).closeDrawer();
   }
 }
 
