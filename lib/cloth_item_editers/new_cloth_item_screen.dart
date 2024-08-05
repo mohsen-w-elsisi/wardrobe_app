@@ -7,6 +7,7 @@ import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
 import 'package:wardrobe_app/cloth_item_editers/cloth_item_matching_dialog.dart';
 import 'package:wardrobe_app/cloth_item_views/cloth_item_image.dart';
+import 'package:wardrobe_app/cloth_item_views/cloth_item_type_display_options.dart';
 import 'package:wardrobe_app/cloth_item_views/cloth_item_views_utils.dart';
 import 'new_cloth_item_manager.dart';
 
@@ -144,7 +145,7 @@ class _TypeSelector extends StatelessWidget {
             for (final type in ClothItemType.values)
               ButtonSegment(
                 value: type,
-                label: Text(clothTypeTextMap[type]!),
+                label: Text(clothItemTypeDisplayOptions[type]!.text),
               )
           ],
         ),

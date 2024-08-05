@@ -84,8 +84,7 @@ class _Stepper extends StatelessWidget {
   }
 
   List<ClothItem> _itemsOfType(ClothItemType type) =>
-      ClothItemOrganiser(_clothItemManager.clothItems)
-          .filterClothItemBytype(type);
+      ClothItemOrganiser(_clothItemManager.clothItems).filterBytype(type);
 }
 
 class _ItemChoiceTile extends StatelessWidget {

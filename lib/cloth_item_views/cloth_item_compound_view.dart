@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
+import 'package:wardrobe_app/cloth_item/cloth_item_organiser.dart';
 
 import 'cloth_item_grid_view.dart';
 import 'cloth_item_list_view.dart';
@@ -21,7 +22,8 @@ class ClothItemCompoundView extends StatelessWidget {
       builder: (_, __) => CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
-              child: ClothItemCompoundViewControlBar(settingsController)),
+            child: ClothItemCompoundViewControlBar(settingsController),
+          ),
           _currentLayout,
         ],
       ),
@@ -30,8 +32,14 @@ class ClothItemCompoundView extends StatelessWidget {
 
   Widget get _currentLayout =>
       settingsController.layoutIs(ClothItemCompoundViewLayout.grid)
-          ? ClothItemGridView(clothItems)
-          : ClothItemListView(clothItems);
+          ? ClothItemGridView(_sortedClothItems)
+          : ClothItemListView(_sortedClothItems);
+
+  List<ClothItem> get _sortedClothItems {
+    final clothItemOrganiser = ClothItemOrganiser(clothItems);
+    final sortMode = settingsController.settings.sortMode;
+    return clothItemOrganiser.sort(sortMode);
+  }
 }
 
 class ClothItemCompoundViewControlBar extends StatelessWidget {

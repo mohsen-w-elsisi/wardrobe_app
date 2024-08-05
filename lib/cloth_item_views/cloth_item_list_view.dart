@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item_views/cloth_item_detail_screen.dart';
+import 'package:wardrobe_app/cloth_item_views/cloth_item_type_display_options.dart';
 import 'cloth_item_views_utils.dart';
 
 class ClothItemListView extends StatelessWidget {
@@ -54,7 +55,7 @@ class _ListTile extends StatelessWidget {
   Widget _minimisedListTile() {
     return ListTile(
       title: Text(clothItem.name),
-      subtitle: Text(clothTypeTextMap[clothItem.type] ?? ""),
+      subtitle: Text(clothItemTypeDisplayOptions[clothItem.type]!.text),
       trailing: SizedBox(
         width: 100,
         child: ClothItemAttributeIconRow(

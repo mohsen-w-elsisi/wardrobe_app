@@ -61,7 +61,7 @@ class _TypedListSection extends StatelessWidget {
       );
 
   List<Widget> get _listTiles => [
-        for (final item in _clothItemOrganiser.filterClothItemBytype(type))
+        for (final item in _clothItemOrganiser.filterBytype(type))
           _ListTile(
             item: item,
             onTap: onTap != null ? () => onTap!(item) : null,

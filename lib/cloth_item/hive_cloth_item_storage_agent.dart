@@ -3,7 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'cloth_item.dart';
 import 'cloth_item_manager.dart';
 
-class HiveClothItemStorageAgent extends ClothItemStorageAgent {
+class HiveClothItemStorageAgent implements ClothItemStorageAgent {
   static const boxName = "cloth items";
 
   late final Box<ClothItem> _box;
@@ -49,6 +49,11 @@ class HiveClothItemStorageAgent extends ClothItemStorageAgent {
         for (int i = 0; i < _box.length; i++)
           if (_box.getAt(i) != null) _box.getAt(i)!
       ];
+
+  @override
+  set savedItems(List<ClothItem> items) {
+    throw Exception("cannot set saved items");
+  }
 
   Future<void> _saveNewItem(ClothItem clothItem) async {
     await _box.add(clothItem);
