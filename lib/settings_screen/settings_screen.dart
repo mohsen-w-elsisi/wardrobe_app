@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
 import 'package:wardrobe_app/theme/theme_settings_controller.dart';
 import 'package:wardrobe_app/theme/utils.dart';
+
+import 'settings_screen_clear_wardrobe_tile.dart';
 
 class SettingsScreen extends StatelessWidget {
   final themeSettingsController = GetIt.I.get<ThemeSettingsController>();
@@ -24,8 +25,8 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 SliverList.list(
                   children: [
-                    ColorSchemeDropDownSettingsTile(),
-                    ColorSchemeClearWardrobeTile(),
+                    _ColorSchemeDropDownSettingsTile(),
+                    const SettingsScreenClearWardrobeTile(),
                   ],
                 )
               ],
@@ -35,52 +36,10 @@ class SettingsScreen extends StatelessWidget {
   }
 }
 
-class ColorSchemeClearWardrobeTile extends StatelessWidget {
-  final clothItemManager = GetIt.I.get<ClothItemManager>();
-
-  ColorSchemeClearWardrobeTile({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(
-        "clear wardobe",
-        style: TextStyle(
-          color: Theme.of(context).colorScheme.error,
-        ),
-      ),
-      onTap: () => _askToDeleteAllWardrobe(context),
-    );
-  }
-
-  void _askToDeleteAllWardrobe(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Are you sure you want to delete everything?"),
-        content: const Text("deleted data cannot be recovered."),
-        actions: [
-          TextButton(
-            onPressed: Navigator.of(context).pop,
-            child: const Text("cancel"),
-          ),
-          FilledButton(
-            onPressed: () {
-              Navigator.pop(context);
-              clothItemManager.deleteAllItems();
-            },
-            child: const Text("delete"),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ColorSchemeDropDownSettingsTile extends StatelessWidget {
+class _ColorSchemeDropDownSettingsTile extends StatelessWidget {
   final themeSettingsController = GetIt.I.get<ThemeSettingsController>();
 
-  ColorSchemeDropDownSettingsTile({super.key});
+  _ColorSchemeDropDownSettingsTile({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -25,21 +25,23 @@ class ClothItemDetailScreen extends StatelessWidget {
     return Scaffold(
       body: ListenableBuilder(
         listenable: clothItemManager,
-        builder: (_, __) {
-          return CustomScrollView(
-            slivers: <Widget>[
-              _AppBar(clothItem: clothItem),
-              _Image(clothItem: clothItem, enableHeroImage: enableHeroImage),
-              _AttributeChips(clothItem: clothItem),
-              _MatchingItemList(clothItem: clothItem),
-            ],
-          );
-        },
+        builder: (_, __) => _itemExists
+            ? CustomScrollView(slivers: _componentSlivers)
+            : Container(),
       ),
     );
   }
 
-  ClothItem get clothItem => clothItemManager.getClothItemById(clothItemId)!;
+  List<Widget> get _componentSlivers => [
+        _AppBar(clothItem: _clothItem!),
+        _Image(clothItem: _clothItem!, enableHeroImage: enableHeroImage),
+        _AttributeChips(clothItem: _clothItem!),
+        _MatchingItemList(clothItem: _clothItem!),
+      ];
+
+  bool get _itemExists => _clothItem != null;
+
+  ClothItem? get _clothItem => clothItemManager.getClothItemById(clothItemId);
 }
 
 class _Image extends StatelessWidget {
@@ -133,43 +135,66 @@ class _AppBar extends StatelessWidget {
       title: Text(clothItem.name),
       actions: [
         IconButton(
-          onPressed: () => clothItemManager.toggleFavouriteForItem(clothItem),
-          icon: Icon(
-            clothItem.isFavourite ? Icons.favorite : Icons.favorite_outline,
-            color: Colors.red,
-          ),
+          onPressed: _toggleItemFavourite,
+          icon: _favouriteIcon,
         ),
         IconButton(
-          onPressed: () {
-            final newClothItemManager = NewClothItemManager.from(clothItem);
-            ClothItemMatchingDialog(
-              newClothItemManager: newClothItemManager,
-              onDismiss: (context) => clothItemManager.saveItem(
-                newClothItemManager.clothItem,
-              ),
-            ).show(context);
-          },
+          onPressed: () => _showMatchingItemsDialoG(context),
           icon: const Icon(Icons.join_full_outlined),
         ),
         IconButton(
+          onPressed: () => _openEditScreen(context),
           icon: const Icon(Icons.edit_outlined),
-          onPressed: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => NewClothItemScreen(
-                newClothItemManager: NewClothItemManager.from(clothItem),
-                showMatchingsDialog: false,
-              ),
-            ),
-          ),
         ),
         IconButton(
+          onPressed: () => _deleteItem(context),
           icon: const Icon(Icons.delete_outline),
-          onPressed: () {
-            clothItemManager.deleteItem(clothItem);
-            Navigator.pop(context);
-          },
         ),
       ],
     );
   }
+
+  Widget get _favouriteIcon => Icon(
+        clothItem.isFavourite ? Icons.favorite : Icons.favorite_outline,
+        color: clothItem.isFavourite ? Colors.red : null,
+      );
+
+  void _showMatchingItemsDialoG(BuildContext context) {
+    final newClothItemManager = NewClothItemManager.from(clothItem);
+    ClothItemMatchingDialog(
+      newClothItemManager: newClothItemManager,
+      onDismiss: (context) => clothItemManager.saveItem(
+        newClothItemManager.clothItem,
+      ),
+    ).show(context);
+  }
+
+  void _openEditScreen(BuildContext context) {
+    final newClothItemManager = NewClothItemManager.from(clothItem);
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => NewClothItemScreen(
+          newClothItemManager: newClothItemManager,
+          showMatchingsDialog: false,
+        ),
+      ),
+    );
+  }
+
+  void _deleteItem(BuildContext context) {
+    clothItemManager.deleteItem(clothItem);
+    Navigator.pop(context);
+    _showDeletionSnackBar(context);
+  }
+
+  void _showDeletionSnackBar(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("${clothItem.name} deleted"),
+      ),
+    );
+  }
+
+  void _toggleItemFavourite() =>
+      clothItemManager.toggleFavouriteForItem(clothItem);
 }

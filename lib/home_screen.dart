@@ -6,7 +6,7 @@ import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_manager.dart';
 import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_screen.dart';
 import 'package:wardrobe_app/cloth_item_grouped_list.dart';
 import 'package:wardrobe_app/outfiting/outfit_maker_screen.dart';
-import 'package:wardrobe_app/settings_screen.dart';
+import 'package:wardrobe_app/settings_screen/settings_screen.dart';
 import 'cloth_item_views/cloth_item_views.dart';
 
 class HomeScreen extends StatelessWidget {
