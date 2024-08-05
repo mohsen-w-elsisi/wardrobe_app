@@ -10,25 +10,24 @@ class ClothItemListView extends StatelessWidget {
 
   const ClothItemListView(
     this.clothItems, {
-    this.sliver = false,
+    this.sliver = true,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (sliver) {
-      return SliverList.separated(
-        itemCount: _itemCount,
-        separatorBuilder: separatorBuilder,
-        itemBuilder: itemBuilder,
-      );
-    } else {
-      return ListView.separated(
-        itemCount: _itemCount,
-        separatorBuilder: separatorBuilder,
-        itemBuilder: itemBuilder,
-      );
-    }
+    return sliver
+        ? SliverList.separated(
+            itemCount: _itemCount,
+            separatorBuilder: separatorBuilder,
+            itemBuilder: itemBuilder,
+          )
+        : ListView.separated(
+            itemCount: _itemCount,
+            separatorBuilder: separatorBuilder,
+            shrinkWrap: true,
+            itemBuilder: itemBuilder,
+          );
   }
 
   Widget separatorBuilder(_, __) => const Divider();

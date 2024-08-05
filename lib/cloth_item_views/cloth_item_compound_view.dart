@@ -18,18 +18,20 @@ class ClothItemCompoundView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListenableBuilder(
       listenable: settingsController,
-      builder: (_, __) => Column(
-        children: [
-          ClothItemCompoundViewControlBar(settingsController),
-          Expanded(
-            child: settingsController.layoutIs(ClothItemCompoundViewLayout.grid)
-                ? ClothItemGridView(clothItems)
-                : ClothItemListView(clothItems),
-          ),
+      builder: (_, __) => CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+              child: ClothItemCompoundViewControlBar(settingsController)),
+          _currentLayout,
         ],
       ),
     );
   }
+
+  Widget get _currentLayout =>
+      settingsController.layoutIs(ClothItemCompoundViewLayout.grid)
+          ? ClothItemGridView(clothItems)
+          : ClothItemListView(clothItems);
 }
 
 class ClothItemCompoundViewControlBar extends StatelessWidget {

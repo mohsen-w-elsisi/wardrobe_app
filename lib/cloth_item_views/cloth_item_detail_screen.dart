@@ -5,9 +5,9 @@ import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
 import 'package:wardrobe_app/cloth_item_editers/cloth_item_matching_dialog.dart';
 import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_manager.dart';
 import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_screen.dart';
-import 'package:wardrobe_app/cloth_item_views/cloth_item_image.dart';
-import 'package:wardrobe_app/cloth_item_views/cloth_item_views.dart';
-import 'package:wardrobe_app/cloth_item_views/cloth_item_views_utils.dart';
+import './cloth_item_image.dart';
+import './cloth_item_views.dart';
+import './cloth_item_views_utils.dart';
 
 class ClothItemDetailScreen extends StatelessWidget {
   final clothItemManager = GetIt.I.get<ClothItemManager>();
@@ -85,7 +85,6 @@ class _MatchingItemList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClothItemListView(
       _clothItemManager.getMatchingItems(clothItem),
-      sliver: true,
     );
   }
 }

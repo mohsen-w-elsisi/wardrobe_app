@@ -8,7 +8,7 @@ class ClothItemGridView extends StatelessWidget {
   final List<ClothItem> clothItems;
   final bool sliver;
 
-  const ClothItemGridView(this.clothItems, {this.sliver = false, super.key});
+  const ClothItemGridView(this.clothItems, {this.sliver = true, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +27,7 @@ class ClothItemGridView extends StatelessWidget {
             mainAxisSpacing: 2,
             crossAxisCount: 2,
             childAspectRatio: 7 / 10,
+            shrinkWrap: true,
             children: clothItemCards,
           );
   }
