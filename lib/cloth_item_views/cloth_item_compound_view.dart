@@ -38,7 +38,7 @@ class ClothItemCompoundView extends StatelessWidget {
   List<ClothItem> get _sortedClothItems {
     final clothItemOrganiser = ClothItemOrganiser(clothItems);
     final sortMode = settingsController.settings.sortMode;
-    return clothItemOrganiser.sort(sortMode);
+    return clothItemOrganiser.sortFavouritesFirst(sortMode);
   }
 }
 

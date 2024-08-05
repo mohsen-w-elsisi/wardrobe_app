@@ -19,6 +19,16 @@ class ClothItemOrganiser {
     ];
   }
 
+  List<ClothItem> sortFavouritesFirst(ClothItemSortMode sortMode) {
+    final sortedFavouriteItems = ClothItemOrganiser(_favourites).sort(sortMode);
+    final sortedNonFavouriteItems =
+        ClothItemOrganiser(_nonFavourites).sort(sortMode);
+    return [
+      ...sortedFavouriteItems,
+      ...sortedNonFavouriteItems,
+    ];
+  }
+
   List<ClothItem> sort(ClothItemSortMode sortMode) {
     final sortingFuncion = _sortingFunctionOfMode(sortMode);
     final copiedList = _copyList();
@@ -30,4 +40,14 @@ class ClothItemOrganiser {
       clothItemSortModeDisplayOption[sortMode]!.sortingFunction;
 
   List<ClothItem> _copyList() => [...clothItems];
+
+  List<ClothItem> get _favourites => [
+        for (final item in clothItems)
+          if (item.isFavourite) item
+      ];
+
+  List<ClothItem> get _nonFavourites => [
+        for (final item in clothItems)
+          if (!(item.isFavourite)) item
+      ];
 }
