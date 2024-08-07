@@ -64,17 +64,11 @@ class _PhotoSelector extends StatelessWidget {
     );
   }
 
-  Future<dynamic> _showImageSourceOptions(
-    BuildContext context,
-    StateSetter setState,
-  ) {
-    return showModalBottomSheet(
-      context: context,
-      builder: (_) => ImageSelectorModal(
-        newClothItemManager: newClothItemManager,
-        onSelect: () => setState(() {}),
-      ),
-    );
+  void _showImageSourceOptions(BuildContext context, StateSetter setState) {
+    ImageSelectorModal(
+      newClothItemManager: newClothItemManager,
+      onSelect: () => setState(() {}),
+    ).show(context);
   }
 
   Widget _blankImageSelector(BuildContext context) {

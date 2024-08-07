@@ -15,6 +15,10 @@ class ImageSelectorModal extends StatelessWidget {
     super.key,
   });
 
+  void show(BuildContext context) {
+    showModalBottomSheet(context: context, builder: (_) => this);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
