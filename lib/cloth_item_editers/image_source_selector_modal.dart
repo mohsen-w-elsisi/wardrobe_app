@@ -23,14 +23,29 @@ class ImageSelectorModal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        _title(context),
+        ..._imageSourceTiles,
+      ],
+    );
+  }
+
+  Padding _title(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16, bottom: 12),
+      child: Text(
+        "take image from",
+        style: Theme.of(context).textTheme.headlineMedium,
+      ),
+    );
+  }
+
+  List<Widget> get _imageSourceTiles => [
         for (final source in ImageSource.values)
           ListTile(
             onTap: () => _onSourceSelect(context, source),
             title: Text(source.name),
           )
-      ],
-    );
-  }
+      ];
 
   Future<void> _onSourceSelect(BuildContext context, ImageSource source) async {
     Navigator.pop(context);

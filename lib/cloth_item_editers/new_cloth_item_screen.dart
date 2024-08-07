@@ -24,24 +24,39 @@ class NewClothItemScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("new item"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            _PhotoSelector(newClothItemManager: newClothItemManager),
-            _NameField(newClothItemManager: newClothItemManager),
-            _TypeSelector(newClothItemManager: newClothItemManager),
-            _AttributeSelector(newClothItemManager: newClothItemManager),
-            const Spacer(),
-            _NextStepButton(
-              newClothItemManager: newClothItemManager,
-              showMatchingsDialog: showMatchingsDialog,
-            )
-          ],
-        ),
-      ),
+      body: Builder(builder: (context) {
+        return SingleChildScrollView(
+          child: SizedBox(
+            height: _bodyHeight(context),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: _editingComponents,
+              ),
+            ),
+          ),
+        );
+      }),
     );
   }
+
+  double _bodyHeight(BuildContext context) {
+    final screenHieght = MediaQuery.of(context).size.height;
+    final appBarHeight = Scaffold.of(context).appBarMaxHeight ?? 0;
+    return screenHieght - appBarHeight;
+  }
+
+  List<Widget> get _editingComponents => [
+        _PhotoSelector(newClothItemManager: newClothItemManager),
+        _NameField(newClothItemManager: newClothItemManager),
+        _TypeSelector(newClothItemManager: newClothItemManager),
+        _AttributeSelector(newClothItemManager: newClothItemManager),
+        const Spacer(),
+        _NextStepButton(
+          newClothItemManager: newClothItemManager,
+          showMatchingsDialog: showMatchingsDialog,
+        ),
+      ];
 }
 
 class _PhotoSelector extends StatelessWidget {
