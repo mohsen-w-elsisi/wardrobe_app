@@ -261,6 +261,7 @@ class _NextStepButton extends StatelessWidget {
     ClothItemMatchingDialog(
       newClothItemManager: newClothItemManager,
       onDismiss: _saveItem,
+      clothItem: newClothItemManager.clothItem,
     ).show(context);
   }
 

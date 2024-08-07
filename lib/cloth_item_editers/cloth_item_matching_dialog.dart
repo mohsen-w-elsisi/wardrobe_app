@@ -2,42 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
+import 'package:wardrobe_app/cloth_item/cloth_item_organiser.dart';
 import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_manager.dart';
 
 class ClothItemMatchingDialog extends StatelessWidget {
-  final clothItemManager = GetIt.I.get<ClothItemManager>();
   final NewClothItemManager newClothItemManager;
   final void Function(BuildContext) onDismiss;
+  final ClothItem clothItem;
 
-  ClothItemMatchingDialog({
+  const ClothItemMatchingDialog({
     required this.newClothItemManager,
     required this.onDismiss,
+    required this.clothItem,
     super.key,
   });
 
   void show(BuildContext context) {
-    showDialog(context: context, builder: (context) => this);
+    showModalBottomSheet(context: context, builder: (context) => this);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Dialog.fullscreen(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-        child: Stack(children: [
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+      child: Stack(
+        children: [
           Column(
             children: [
               _dialogTitle(context),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 8.0),
-                  child: _listBody(),
+                  child: _ListBody(
+                    newClothItemManager: newClothItemManager,
+                    clothItem: clothItem,
+                  ),
                 ),
               ),
             ],
           ),
           _saveButton(context),
-        ]),
+        ],
       ),
     );
   }
@@ -64,27 +69,52 @@ class ClothItemMatchingDialog extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _listBody() {
+class _ListBody extends StatelessWidget {
+  final clothItemManager = GetIt.I.get<ClothItemManager>();
+  final NewClothItemManager newClothItemManager;
+  final ClothItem clothItem;
+  late final ClothItemOrganiser clothItemOrganiser;
+
+  _ListBody({
+    super.key,
+    required this.newClothItemManager,
+    required this.clothItem,
+  }) {
+    clothItemOrganiser = ClothItemOrganiser(clothItemManager.clothItems);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return StatefulBuilder(
-      builder: (context, setState) => ListView(
-        children: [
-          for (final clothItem in clothItemManager.clothItems)
-            ListTile(
-              dense: true,
-              horizontalTitleGap: 0,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-              selected: _itemIsSelected(clothItem),
-              onTap: () => setState(() => _toggleSelectionStatus(clothItem)),
-              leading: Checkbox(
-                value: _itemIsSelected(clothItem),
-                shape: const CircleBorder(),
-                onChanged: (value) {},
-              ),
-              title: Text(clothItem.name),
-            )
-        ],
+      builder: (context, setState) {
+        return ListView(
+          children: [
+            for (final type in ClothItemType.values)
+              if (type != clothItem.type)
+                for (final item in clothItemOrganiser.filterBytype(type))
+                  _listTile(item, setState)
+          ],
+        );
+      },
+    );
+  }
+
+  ListTile _listTile(ClothItem item, StateSetter setState) {
+    return ListTile(
+      dense: true,
+      horizontalTitleGap: 0,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+      selected: _itemIsSelected(item),
+      onTap: () => setState(() => _toggleSelectionStatus(item)),
+      leading: Checkbox(
+        value: _itemIsSelected(item),
+        shape: const CircleBorder(),
+        onChanged: (value) {},
       ),
+      title: Text(item.name),
+      trailing: null, //TODO: add icon here
     );
   }
 
