@@ -225,11 +225,35 @@ class _NextStepButton extends StatelessWidget {
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 8),
       child: FilledButton(
-        onPressed: () => (showMatchingsDialog
-            ? _showItemMatchingDialog
-            : _saveItem)(context),
+        onPressed: () => _onTap(context),
         child: const Text("next"),
       ),
+    );
+  }
+
+  Function get _onTap => showMatchingsDialog
+      ? _showItemMatchingDialogOrMissingInputSnacknbar
+      : _saveItemOrShowMissingInputDialog;
+
+  void _showItemMatchingDialogOrMissingInputSnacknbar(BuildContext context) {
+    if (newClothItemManager.requiredFieldsSet) {
+      _showItemMatchingDialog(context);
+    } else {
+      _showMissingInputSnackbar(context);
+    }
+  }
+
+  void _saveItemOrShowMissingInputDialog(BuildContext context) {
+    if (newClothItemManager.requiredFieldsSet) {
+      _saveItem(context);
+    } else {
+      _showMissingInputSnackbar(context);
+    }
+  }
+
+  void _showMissingInputSnackbar(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("you must enter a name and a photo")),
     );
   }
 

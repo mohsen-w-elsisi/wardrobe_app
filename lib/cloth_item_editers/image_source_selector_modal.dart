@@ -24,7 +24,7 @@ class ImageSelectorModal extends StatelessWidget {
     return Column(
       children: [
         _title(context),
-        ..._imageSourceTiles,
+        ..._imageSourceTiles(context),
       ],
     );
   }
@@ -39,7 +39,7 @@ class ImageSelectorModal extends StatelessWidget {
     );
   }
 
-  List<Widget> get _imageSourceTiles => [
+  List<Widget> _imageSourceTiles(BuildContext context) => [
         for (final source in ImageSource.values)
           ListTile(
             onTap: () => _onSourceSelect(context, source),

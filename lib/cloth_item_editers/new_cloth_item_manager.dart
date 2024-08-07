@@ -41,4 +41,6 @@ class NewClothItemManager {
         matchingItems: matchingItems,
         image: image,
       );
+
+  bool get requiredFieldsSet => name != "" && image.isNotEmpty;
 }
