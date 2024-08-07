@@ -1,14 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
 import 'package:wardrobe_app/cloth_item_editers/cloth_item_matching_dialog.dart';
+import 'package:wardrobe_app/cloth_item_editers/image_source_selector_modal.dart';
 import 'package:wardrobe_app/cloth_item_views/cloth_item_image.dart';
 import 'package:wardrobe_app/cloth_item_views/cloth_item_type_display_options.dart';
-import 'package:wardrobe_app/cloth_item_views/cloth_item_views_utils.dart';
 import 'new_cloth_item_manager.dart';
 
 class NewClothItemScreen extends StatelessWidget {
@@ -62,7 +59,7 @@ class _PhotoSelector extends StatelessWidget {
         onTap: () => _showImageSourceOptions(context, setState),
         child: newClothItemManager.image.isEmpty
             ? _blankImageSelector(context)
-            : ClothItemImage(image: newClothItemManager.image),
+            : _filledImageSelector(),
       ),
     );
   }
@@ -73,18 +70,9 @@ class _PhotoSelector extends StatelessWidget {
   ) {
     return showModalBottomSheet(
       context: context,
-      builder: (_) => Column(
-        children: [
-          for (final source in ImageSource.values)
-            ListTile(
-              onTap: () async {
-                Navigator.pop(context);
-                await _pickImage(source);
-                setState(() {});
-              },
-              title: Text(source.name),
-            )
-        ],
+      builder: (_) => ImageSelectorModal(
+        newClothItemManager: newClothItemManager,
+        onSelect: () => setState(() {}),
       ),
     );
   }
@@ -105,12 +93,10 @@ class _PhotoSelector extends StatelessWidget {
     );
   }
 
-  Future<void> _pickImage(ImageSource imageSource) async {
-    final imageXFile = await ImagePicker().pickImage(source: imageSource);
-    if (imageXFile == null) return;
-    final imageBytes = await File(imageXFile.path).readAsBytes();
-    newClothItemManager.image = imageBytes;
-  }
+  Widget _filledImageSelector() => Hero(
+        tag: newClothItemManager.id ?? "",
+        child: ClothItemImage(image: newClothItemManager.image),
+      );
 }
 
 class _NameField extends StatefulWidget {
