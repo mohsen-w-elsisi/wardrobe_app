@@ -22,7 +22,7 @@ class ClothItemCompoundView extends StatelessWidget {
       builder: (_, __) => CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
-            child: ClothItemCompoundViewControlBar(settingsController),
+            child: _ControlBar(settingsController),
           ),
           _currentLayout,
         ],
@@ -42,10 +42,10 @@ class ClothItemCompoundView extends StatelessWidget {
   }
 }
 
-class ClothItemCompoundViewControlBar extends StatelessWidget {
+class _ControlBar extends StatelessWidget {
   final ClothItemCompoundViewSettingsController settingsController;
 
-  const ClothItemCompoundViewControlBar(this.settingsController, {super.key});
+  const _ControlBar(this.settingsController, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -68,10 +68,8 @@ class ClothItemCompoundViewControlBar extends StatelessWidget {
   IconButton _layoutToggleButton() {
     return IconButton(
       onPressed: toggleLayout,
-      icon: Icon(
-        settingsController.layoutIs(ClothItemCompoundViewLayout.list)
-            ? Icons.grid_view
-            : Icons.list,
+      icon: _LayoutToggleIcon(
+        layout: settingsController.settings.layout,
       ),
     );
   }
@@ -96,6 +94,53 @@ class ClothItemCompoundViewControlBar extends StatelessWidget {
             ? ClothItemCompoundViewLayout.list
             : ClothItemCompoundViewLayout.grid,
       );
+}
+
+class _LayoutToggleIcon extends StatefulWidget {
+  final ClothItemCompoundViewLayout layout;
+
+  const _LayoutToggleIcon({super.key, required this.layout});
+
+  @override
+  State<_LayoutToggleIcon> createState() => _LayoutToggleIconState();
+}
+
+class _LayoutToggleIconState extends State<_LayoutToggleIcon>
+    with TickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 250),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _updateAnimationProgress();
+    return AnimatedIcon(
+      icon: AnimatedIcons.view_list,
+      progress: _controller,
+    );
+  }
+
+  void _updateAnimationProgress() {
+    switch (widget.layout) {
+      case ClothItemCompoundViewLayout.list:
+        _controller.forward();
+      case ClothItemCompoundViewLayout.grid:
+        _controller.reverse();
+    }
+  }
 }
 
 class ClothItemCompoundViewSettingsController extends ChangeNotifier {
