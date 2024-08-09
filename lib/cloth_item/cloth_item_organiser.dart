@@ -8,9 +8,51 @@ class ClothItemOrganiser {
 
   const ClothItemOrganiser(this.clothItems);
 
-  List<ClothItem> get tops => filterBytype(ClothItemType.top);
-  List<ClothItem> get bottoms => filterBytype(ClothItemType.bottom);
-  List<ClothItem> get jackets => filterBytype(ClothItemType.jacket);
+  List<ClothItem> itemsMatchingWithBaseitemsOfType(
+      List<ClothItem> baseItems, ClothItemType type) {
+    final clothItemsOfType = filterBytype(type);
+    final baseItemNotOfType = ClothItemOrganiser(baseItems).filterOutType(type);
+
+    if (baseItemNotOfType.isEmpty) return clothItemsOfType;
+
+    final itemsMatchingBase = typedMatchingItemsMatrix(baseItemNotOfType, type);
+
+    return _resolveMatchingItemsMatrix(itemsMatchingBase);
+  }
+
+  List<ClothItem> _resolveMatchingItemsMatrix(List<List<ClothItem>> matrix) {
+    return matrix.length == 1
+        ? matrix.first
+        : _commonItemsFromLists(matrix)
+  } 
+
+  List<List<ClothItem>> typedMatchingItemsMatrix(
+      List<ClothItem> baseItems, ClothItemType type) {
+    final scopedOrganiser = scopeOrganiserToType(type);
+    final itemMatrix = scopedOrganiser.matchingItemsMatrix(baseItems);
+    return itemMatrix;
+  }
+
+  List<List<ClothItem>> matchingItemsMatrix(List<ClothItem> baseItems) {
+    return [for (final baseItem in baseItems) itemsMatchingWith(baseItem)];
+  }
+
+  List<ClothItem> itemsMatchingWith(ClothItem item) {
+    return clothItems.where(item.isMatchingItem).toList();
+  }
+
+  ClothItemOrganiser scopeOrganiserToType(ClothItemType type) {
+    final itemsOfType = filterBytype(type);
+    final scopedOrganiser = ClothItemOrganiser(itemsOfType);
+    return scopedOrganiser;
+  }
+
+  List<ClothItem> filterOutType(ClothItemType type) {
+    return [
+      for (final item in clothItems)
+        if (item.type != type) item
+    ];
+  }
 
   List<ClothItem> filterBytype(ClothItemType type) {
     return [
@@ -49,5 +91,12 @@ class ClothItemOrganiser {
   List<ClothItem> get _nonFavourites => [
         for (final item in clothItems)
           if (!(item.isFavourite)) item
-      ];
+      ]; 
+
+  List<T> _commonItemsFromLists<T>(List<List<T>> lists) {
+    return lists
+        .map((e) => e.toSet())
+        .reduce((a, b) => a.intersection(b))
+        .toList();
+  }
 }

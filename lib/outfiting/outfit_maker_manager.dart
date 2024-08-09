@@ -1,7 +1,12 @@
 import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
+import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
+import 'package:wardrobe_app/cloth_item/cloth_item_organiser.dart';
 
 class OutfitMakerManager extends ChangeNotifier {
+  final _clothItemManager = GetIt.I.get<ClothItemManager>();
+
   int _currentStep = 0;
 
   final Map<ClothItemType, ClothItem?> _selectedItems = {
@@ -11,6 +16,27 @@ class OutfitMakerManager extends ChangeNotifier {
   Function()? onLastStepDone;
 
   OutfitMakerManager({this.onLastStepDone});
+
+  void nextStep() {
+    if (isOnLastStep) {
+      if (onLastStepDone != null) onLastStepDone!();
+    } else {
+      currentStep++;
+    }
+  }
+
+  void previousStep() {
+    if (isOnLastStep) {
+      return;
+    } else {
+      currentStep -= 1;
+    }
+  }
+
+  List<ClothItem> validItemsOfType(ClothItemType type) {
+    return ClothItemOrganiser(_clothItemManager.clothItems)
+        .itemsMatchingWithBaseitemsOfType(selectedItemsAsList, type);
+  }
 
   int get currentStep => _currentStep;
 
@@ -30,19 +56,11 @@ class OutfitMakerManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void nextStep() {
-    if (isOnLastStep) {
-      if (onLastStepDone != null) onLastStepDone!();
-    } else {
-      currentStep++;
-    }
+  void clearSelectedItemOfType(ClothItemType type) {
+    _selectedItems[type] = null;
+    notifyListeners();
   }
 
-  void previousStep() {
-    if (isOnLastStep) {
-      return;
-    } else {
-      currentStep -= 1;
-    }
-  }
+  List<ClothItem> get selectedItemsAsList =>
+      selectedItems.values.nonNulls.toList();
 }

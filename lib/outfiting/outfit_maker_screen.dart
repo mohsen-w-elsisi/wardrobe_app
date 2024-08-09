@@ -39,21 +39,28 @@ class _Stepper extends StatelessWidget {
 
     return ListenableBuilder(
       listenable: outfitMakerManager,
-      builder: (context, _) => Stepper(
+      builder: (_, __) => Stepper(
         currentStep: outfitMakerManager.currentStep,
         onStepContinue: outfitMakerManager.nextStep,
         onStepCancel: outfitMakerManager.previousStep,
         onStepTapped: (value) => outfitMakerManager.currentStep = value,
-        controlsBuilder: (context, details) {
-          return Align(
-            alignment: Alignment.centerLeft,
-            child: OutlinedButton(
-              onPressed: details.onStepContinue,
-              child: const Text("skip"),
-            ),
+        controlsBuilder: (_, details) => _skipButton(details),
+        steps: [for (final type in ClothItemType.values) _step(type)],
+      ),
+    );
+  }
+
+  Widget _skipButton(ControlsDetails details) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: OutlinedButton(
+        onPressed: () {
+          outfitMakerManager.nextStep();
+          outfitMakerManager.clearSelectedItemOfType(
+            ClothItemType.values[details.currentStep],
           );
         },
-        steps: [for (final type in ClothItemType.values) _step(type)],
+        child: const Text("skip"),
       ),
     );
   }
@@ -63,7 +70,7 @@ class _Stepper extends StatelessWidget {
       title: Text(_stepLabel(type)),
       content: Column(
         children: [
-          for (final item in _itemsOfType(type))
+          for (final item in outfitMakerManager.validItemsOfType(type))
             _ItemChoiceTile(outfitMakerManager: outfitMakerManager, item: item)
         ],
       ),
@@ -77,14 +84,11 @@ class _Stepper extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => OutfitPresenterScreen(
-          outfitMakerManager.selectedItems.values.nonNulls.toList(),
+          outfitMakerManager.selectedItemsAsList,
         ),
       ),
     );
   }
-
-  List<ClothItem> _itemsOfType(ClothItemType type) =>
-      ClothItemOrganiser(_clothItemManager.clothItems).filterBytype(type);
 }
 
 class _ItemChoiceTile extends StatelessWidget {
