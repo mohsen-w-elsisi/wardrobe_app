@@ -5,32 +5,46 @@ import 'cloth_item_image.dart';
 import 'cloth_item_views_utils.dart';
 
 class ClothItemGridView extends StatelessWidget {
+  static const _cardAspectRation = 7 / 10;
+
   final List<ClothItem> clothItems;
   final bool sliver;
+  final bool nonScrollable;
 
-  const ClothItemGridView(this.clothItems, {this.sliver = true, super.key});
+  const ClothItemGridView(
+    this.clothItems, {
+    this.sliver = false,
+    this.nonScrollable = false,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final clothItemCards = clothItems.map((e) => _GridCard(e)).toList();
-
     return sliver
         ? SliverGrid.count(
             crossAxisSpacing: 1,
             mainAxisSpacing: 2,
             crossAxisCount: 2,
-            childAspectRatio: 7 / 10,
-            children: clothItemCards,
+            childAspectRatio: _cardAspectRation,
+            children: _clothItemCards,
           )
         : GridView.count(
             crossAxisSpacing: 1,
             mainAxisSpacing: 2,
             crossAxisCount: 2,
-            childAspectRatio: 7 / 10,
-            shrinkWrap: true,
-            children: clothItemCards,
+            childAspectRatio: _cardAspectRation,
+            shrinkWrap: nonScrollable,
+            physics: _scrollPhysics,
+            children: _clothItemCards,
           );
   }
+
+  List<_GridCard> get _clothItemCards =>
+      clothItems.map((e) => _GridCard(e)).toList();
+
+  ScrollPhysics get _scrollPhysics => nonScrollable
+      ? const NeverScrollableScrollPhysics()
+      : const AlwaysScrollableScrollPhysics();
 }
 
 class _GridCard extends StatelessWidget {

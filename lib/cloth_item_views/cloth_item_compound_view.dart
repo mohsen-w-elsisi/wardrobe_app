@@ -19,11 +19,9 @@ class ClothItemCompoundView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListenableBuilder(
       listenable: settingsController,
-      builder: (_, __) => CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: _ControlBar(settingsController),
-          ),
+      builder: (_, __) => ListView(
+        children: [
+          _ControlBar(settingsController),
           _currentLayout,
         ],
       ),
@@ -32,8 +30,8 @@ class ClothItemCompoundView extends StatelessWidget {
 
   Widget get _currentLayout =>
       settingsController.layoutIs(ClothItemCompoundViewLayout.grid)
-          ? ClothItemGridView(_sortedClothItems)
-          : ClothItemListView(_sortedClothItems);
+          ? ClothItemGridView(_sortedClothItems, nonScrollable: true)
+          : ClothItemListView(_sortedClothItems, nonScrollable: true);
 
   List<ClothItem> get _sortedClothItems {
     final clothItemOrganiser = ClothItemOrganiser(clothItems);
@@ -51,13 +49,7 @@ class _ControlBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: Text(
-            "sort by ",
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-        ),
+        _sortByLabel(context),
         _sortModeDropDown(),
         const Spacer(),
         _layoutToggleButton()
@@ -65,7 +57,17 @@ class _ControlBar extends StatelessWidget {
     );
   }
 
-  IconButton _layoutToggleButton() {
+  Widget _sortByLabel(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0),
+      child: Text(
+        "sort by ",
+        style: Theme.of(context).textTheme.labelLarge,
+      ),
+    );
+  }
+
+  Widget _layoutToggleButton() {
     return IconButton(
       onPressed: toggleLayout,
       icon: _LayoutToggleIcon(

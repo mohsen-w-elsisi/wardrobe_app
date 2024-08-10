@@ -8,10 +8,12 @@ import 'cloth_item_views_utils.dart';
 class ClothItemListView extends StatelessWidget {
   final List<ClothItem> clothItems;
   final bool sliver;
+  final bool nonScrollable;
 
   const ClothItemListView(
     this.clothItems, {
-    this.sliver = true,
+    this.sliver = false,
+    this.nonScrollable = false,
     super.key,
   });
 
@@ -26,7 +28,8 @@ class ClothItemListView extends StatelessWidget {
         : ListView.separated(
             itemCount: _itemCount,
             separatorBuilder: separatorBuilder,
-            shrinkWrap: true,
+            shrinkWrap: nonScrollable,
+            physics: _scrollPhysics,
             itemBuilder: itemBuilder,
           );
   }
@@ -35,6 +38,10 @@ class ClothItemListView extends StatelessWidget {
   Widget itemBuilder(_, int i) => _ListTile(clothItems[i]);
 
   int get _itemCount => clothItems.length;
+
+  ScrollPhysics get _scrollPhysics => nonScrollable
+      ? const NeverScrollableScrollPhysics()
+      : const AlwaysScrollableScrollPhysics();
 }
 
 class _ListTile extends StatelessWidget {

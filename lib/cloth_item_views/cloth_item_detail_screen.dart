@@ -89,6 +89,7 @@ class _MatchingItemList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClothItemListView(
       _clothItemManager.getMatchingItems(clothItem),
+      sliver: true,
     );
   }
 }
