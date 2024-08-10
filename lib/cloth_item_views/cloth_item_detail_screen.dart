@@ -28,7 +28,7 @@ class ClothItemDetailScreen extends StatelessWidget {
         listenable: clothItemManager,
         builder: (_, __) => Scaffold(
           body: CustomScrollView(slivers: _componentSlivers),
-          floatingActionButton: _StartOutfitFAB(clothItem: _clothItem),
+          floatingActionButton: _StartOutfitFAB(clothItem: _clothItem!),
         ),
       );
     } else {

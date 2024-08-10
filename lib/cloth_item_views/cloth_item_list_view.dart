@@ -54,7 +54,7 @@ class _ListTile extends StatelessWidget {
 
   Widget _minimisedListTile() {
     return ListTile(
-      title: Text(clothItem.name),
+      title: Text(clothItem.name, overflow: TextOverflow.ellipsis),
       subtitle: Text(clothItemTypeDisplayOptions[clothItem.type]!.text),
       trailing: SizedBox(
         width: 100,
