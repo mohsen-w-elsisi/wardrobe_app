@@ -204,6 +204,7 @@ class _NameFieldState extends State<_NameField> {
     return TextField(
       controller: _controller,
       onChanged: (text) => widget.newClothItemManager.name = text,
+      decoration: const InputDecoration(labelText: "name"),
     );
   }
 }

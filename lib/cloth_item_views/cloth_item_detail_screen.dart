@@ -5,6 +5,7 @@ import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
 import 'package:wardrobe_app/cloth_item_editers/cloth_item_matching_dialog.dart';
 import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_manager.dart';
 import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_screen.dart';
+import 'package:wardrobe_app/outfiting/outfit_maker_screen.dart';
 import './cloth_item_image.dart';
 import './cloth_item_views.dart';
 import './cloth_item_views_utils.dart';
@@ -22,14 +23,17 @@ class ClothItemDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListenableBuilder(
+    if (_itemExists) {
+      return ListenableBuilder(
         listenable: clothItemManager,
-        builder: (_, __) => _itemExists
-            ? CustomScrollView(slivers: _componentSlivers)
-            : Container(),
-      ),
-    );
+        builder: (_, __) => Scaffold(
+          body: CustomScrollView(slivers: _componentSlivers),
+          floatingActionButton: _StartOutfitFAB(clothItem: _clothItem),
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
 
   List<Widget> get _componentSlivers => [
@@ -131,7 +135,7 @@ class _AppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar.medium(
-      title: Text(clothItem.name),
+      title: Text(clothItem.name, overflow: TextOverflow.ellipsis),
       actions: [
         IconButton(
           onPressed: _toggleItemFavourite,
@@ -197,4 +201,31 @@ class _AppBar extends StatelessWidget {
 
   void _toggleItemFavourite() =>
       clothItemManager.toggleFavouriteForItem(clothItem);
+}
+
+class _StartOutfitFAB extends StatelessWidget {
+  final ClothItem clothItem;
+
+  const _StartOutfitFAB({
+    required this.clothItem,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () => _openDetailsScreen(context),
+      child: const Icon(Icons.checkroom_outlined),
+    );
+  }
+
+  void _openDetailsScreen(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => OutfitMakerScreen(
+          preSelectedItems: [clothItem],
+        ),
+      ),
+    );
+  }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
-import 'package:wardrobe_app/cloth_item/cloth_item_organiser.dart';
 import 'package:wardrobe_app/cloth_item_views/cloth_item_views_utils.dart';
 import 'package:wardrobe_app/outfiting/outfit_maker_manager.dart';
 
@@ -10,8 +9,9 @@ import 'outfit_presenter_screen.dart';
 
 class OutfitMakerScreen extends StatelessWidget {
   final ClothItemManager _clothItemManager = GetIt.I.get<ClothItemManager>();
+  final List<ClothItem>? preSelectedItems;
 
-  OutfitMakerScreen({super.key});
+  OutfitMakerScreen({this.preSelectedItems, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +21,20 @@ class OutfitMakerScreen extends StatelessWidget {
       ),
       body: ListenableBuilder(
         listenable: _clothItemManager,
-        builder: (context, _) => _Stepper(),
+        builder: (_, __) => _Stepper(preSelectedItems: preSelectedItems),
       ),
     );
   }
 }
 
 class _Stepper extends StatelessWidget {
-  final _clothItemManager = GetIt.I.get<ClothItemManager>();
   final outfitMakerManager = OutfitMakerManager();
 
-  _Stepper({super.key});
+  _Stepper({List<ClothItem>? preSelectedItems, super.key}) {
+    if (preSelectedItems != null) {
+      preSelectedItems.forEach(outfitMakerManager.setSelectedItem);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +108,7 @@ class _ItemChoiceTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        outfitMakerManager.setSelectedItem(item.type, item);
+        outfitMakerManager.setSelectedItem(item);
         outfitMakerManager.nextStep();
       },
       title: Text(item.name),

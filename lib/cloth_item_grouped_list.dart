@@ -83,7 +83,7 @@ class _ListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
-      contentPadding: const EdgeInsets.all(0),
+      contentPadding: const EdgeInsets.only(left: 8),
       title: Text(item.name),
       dense: true,
       titleTextStyle: Theme.of(context).textTheme.labelSmall,

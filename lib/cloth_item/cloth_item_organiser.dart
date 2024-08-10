@@ -21,10 +21,8 @@ class ClothItemOrganiser {
   }
 
   List<ClothItem> _resolveMatchingItemsMatrix(List<List<ClothItem>> matrix) {
-    return matrix.length == 1
-        ? matrix.first
-        : _commonItemsFromLists(matrix)
-  } 
+    return matrix.length == 1 ? matrix.first : _commonItemsFromLists(matrix);
+  }
 
   List<List<ClothItem>> typedMatchingItemsMatrix(
       List<ClothItem> baseItems, ClothItemType type) {
@@ -91,7 +89,7 @@ class ClothItemOrganiser {
   List<ClothItem> get _nonFavourites => [
         for (final item in clothItems)
           if (!(item.isFavourite)) item
-      ]; 
+      ];
 
   List<T> _commonItemsFromLists<T>(List<List<T>> lists) {
     return lists

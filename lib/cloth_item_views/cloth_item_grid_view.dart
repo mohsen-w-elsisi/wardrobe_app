@@ -54,7 +54,7 @@ class _GridCard extends StatelessWidget {
               child: ClothItemImage(image: clothItem.image),
             ),
             ListTile(
-              title: Text(clothItem.name),
+              title: Text(clothItem.name, overflow: TextOverflow.ellipsis),
               subtitle: ClothItemAttributeIconRow(clothItem.attributes),
             )
           ],

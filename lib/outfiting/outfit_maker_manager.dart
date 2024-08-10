@@ -51,8 +51,8 @@ class OutfitMakerManager extends ChangeNotifier {
   Map<ClothItemType, ClothItem?> get selectedItems =>
       Map.unmodifiable(_selectedItems);
 
-  void setSelectedItem(ClothItemType type, ClothItem item) {
-    _selectedItems[type] = item;
+  void setSelectedItem(ClothItem item) {
+    _selectedItems[item.type] = item;
     notifyListeners();
   }
 
