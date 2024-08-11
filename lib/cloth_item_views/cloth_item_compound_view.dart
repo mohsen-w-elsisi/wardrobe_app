@@ -54,16 +54,62 @@ class _LayoutSwitcher extends StatefulWidget {
 
 class _LayoutSwitcherState extends State<_LayoutSwitcher>
     with SingleTickerProviderStateMixin {
-  static const _animationDuration = Duration(milliseconds: 300);
+  static const _animationDuration = Duration(milliseconds: 400);
 
   late final AnimationController _controller;
+  late final Animation<double> _toListAnimation;
+  late final Animation<double> _toGridAnimation;
+
+  bool _showGrid = true;
+  bool _showList = true;
 
   @override
   void initState() {
     super.initState();
+    _initController();
+    _initLayoutVisibilatyUpdates();
+    _initCurvedAnimations();
+  }
+
+  void _initController() {
     _controller = AnimationController(
       vsync: this,
       duration: _animationDuration,
+    );
+  }
+
+  void _initLayoutVisibilatyUpdates() {
+    _controller.addStatusListener(
+      (_) => _updateLayoutVisibilities(),
+    );
+  }
+
+  void _updateLayoutVisibilities() {
+    setState(() {
+      if (_controller.isAnimating) {
+        _showList = true;
+        _showGrid = true;
+      } else {
+        _showGrid = _layoutIsGrid;
+        _showList = !_layoutIsGrid;
+      }
+    });
+  }
+
+  void _initCurvedAnimations() {
+    _toGridAnimation = _curvedAnimation(Curves.easeInQuart);
+    _toListAnimation = _curvedAnimation(Curves.easeOutQuart);
+  }
+
+  Animation<double> _curvedAnimation(Curve curve) {
+    return Tween(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: curve,
+      ),
     );
   }
 
@@ -77,64 +123,59 @@ class _LayoutSwitcherState extends State<_LayoutSwitcher>
   Widget build(BuildContext context) {
     _runSwitchAnimation();
 
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) => Stack(
-        children: [
-          _animatedLayoutTemplate(
-            layout: _gridView,
-            xPosition: _gridPosition(),
-            opacity: 1 - _controller.value,
-          ),
-          _animatedLayoutTemplate(
-            layout: _listView,
-            xPosition: _listPosition(),
-            opacity: _controller.value,
-          ),
-        ],
-      ),
+    return Stack(
+      children: [
+        if (_showGrid) _gridAnimatedLayout,
+        if (_showList) _listAnimatedLayout,
+      ],
+    );
+  }
+
+  Widget get _listAnimatedLayout {
+    return _AnimatedLayout(
+      controller: _controller,
+      layout: _listView,
+      xPosition: _listPosition,
+      opacity: _listOpacity,
+    );
+  }
+
+  Widget get _gridAnimatedLayout {
+    return _AnimatedLayout(
+      controller: _controller,
+      layout: _gridView,
+      xPosition: _gridPosition,
+      opacity: _grdiOpacity,
     );
   }
 
   void _runSwitchAnimation() {
     if (_layoutIsGrid) {
-      _controller.forward();
-    } else {
       _controller.reverse();
+    } else {
+      _controller.forward();
     }
   }
 
-  Widget _animatedLayoutTemplate({
-    required Widget layout,
-    required double xPosition,
-    required double opacity,
-  }) {
-    return Transform.translate(
-      offset: Offset(xPosition, 0),
-      child: Opacity(
-        opacity: opacity,
-        child: layout,
-      ),
-    );
-  }
+  double _grdiOpacity() => 1 - _currentAnimation.value;
+  double _listOpacity() => _currentAnimation.value;
 
-  double _gridPosition() {
-    return -(_controller.value * _screenWidth);
-  }
+  double _gridPosition() => -(_currentAnimation.value * _screenWidth);
+  double _listPosition() =>
+      _screenWidth - (_currentAnimation.value * _screenWidth);
 
-  double _listPosition() {
-    return _screenWidth - (_controller.value * _screenWidth);
-  }
+  Animation<double> get _currentAnimation =>
+      _layoutIsGrid ? _toGridAnimation : _toListAnimation;
 
   double get _screenWidth => MediaQuery.of(context).size.width;
 
-  ClothItemGridView get _gridView => ClothItemGridView(
+  Widget get _gridView => ClothItemGridView(
         widget.clothItems,
         nonScrollable: true,
         key: const Key("grid layout"),
       );
 
-  ClothItemListView get _listView => ClothItemListView(
+  Widget get _listView => ClothItemListView(
         widget.clothItems,
         nonScrollable: true,
         key: const Key("list layout"),
@@ -142,6 +183,32 @@ class _LayoutSwitcherState extends State<_LayoutSwitcher>
 
   bool get _layoutIsGrid =>
       widget.currentLayout == ClothItemCompoundViewLayout.grid;
+}
+
+class _AnimatedLayout extends AnimatedWidget {
+  const _AnimatedLayout({
+    super.key,
+    required this.controller,
+    required this.layout,
+    required this.xPosition,
+    required this.opacity,
+  }) : super(listenable: controller);
+
+  final AnimationController controller;
+  final Widget layout;
+  final double Function() xPosition;
+  final double Function() opacity;
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.translate(
+      offset: Offset(xPosition(), 0),
+      child: Opacity(
+        opacity: opacity(),
+        child: layout,
+      ),
+    );
+  }
 }
 
 class _ControlBar extends StatelessWidget {
@@ -242,9 +309,9 @@ class _LayoutToggleIconState extends State<_LayoutToggleIcon>
   void _updateAnimationProgress() {
     switch (widget.layout) {
       case ClothItemCompoundViewLayout.list:
-        _controller.forward();
-      case ClothItemCompoundViewLayout.grid:
         _controller.reverse();
+      case ClothItemCompoundViewLayout.grid:
+        _controller.forward();
     }
   }
 }
