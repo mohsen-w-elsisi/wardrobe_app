@@ -22,22 +22,126 @@ class ClothItemCompoundView extends StatelessWidget {
       builder: (_, __) => ListView(
         children: [
           _ControlBar(settingsController),
-          _currentLayout,
+          _LayoutSwitcher(
+            clothItems: _sortedClothItems,
+            currentLayout: settingsController.settings.layout,
+          ),
         ],
       ),
     );
   }
-
-  Widget get _currentLayout =>
-      settingsController.layoutIs(ClothItemCompoundViewLayout.grid)
-          ? ClothItemGridView(_sortedClothItems, nonScrollable: true)
-          : ClothItemListView(_sortedClothItems, nonScrollable: true);
 
   List<ClothItem> get _sortedClothItems {
     final clothItemOrganiser = ClothItemOrganiser(clothItems);
     final sortMode = settingsController.settings.sortMode;
     return clothItemOrganiser.sortFavouritesFirst(sortMode);
   }
+}
+
+class _LayoutSwitcher extends StatefulWidget {
+  final List<ClothItem> clothItems;
+  final ClothItemCompoundViewLayout currentLayout;
+
+  const _LayoutSwitcher({
+    super.key,
+    required this.clothItems,
+    required this.currentLayout,
+  });
+
+  @override
+  State<_LayoutSwitcher> createState() => _LayoutSwitcherState();
+}
+
+class _LayoutSwitcherState extends State<_LayoutSwitcher>
+    with SingleTickerProviderStateMixin {
+  static const _animationDuration = Duration(milliseconds: 300);
+
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: _animationDuration,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _runSwitchAnimation();
+
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) => Stack(
+        children: [
+          _animatedLayoutTemplate(
+            layout: _gridView,
+            xPosition: _gridPosition(),
+            opacity: 1 - _controller.value,
+          ),
+          _animatedLayoutTemplate(
+            layout: _listView,
+            xPosition: _listPosition(),
+            opacity: _controller.value,
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _runSwitchAnimation() {
+    if (_layoutIsGrid) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
+  }
+
+  Widget _animatedLayoutTemplate({
+    required Widget layout,
+    required double xPosition,
+    required double opacity,
+  }) {
+    return Transform.translate(
+      offset: Offset(xPosition, 0),
+      child: Opacity(
+        opacity: opacity,
+        child: layout,
+      ),
+    );
+  }
+
+  double _gridPosition() {
+    return -(_controller.value * _screenWidth);
+  }
+
+  double _listPosition() {
+    return _screenWidth - (_controller.value * _screenWidth);
+  }
+
+  double get _screenWidth => MediaQuery.of(context).size.width;
+
+  ClothItemGridView get _gridView => ClothItemGridView(
+        widget.clothItems,
+        nonScrollable: true,
+        key: const Key("grid layout"),
+      );
+
+  ClothItemListView get _listView => ClothItemListView(
+        widget.clothItems,
+        nonScrollable: true,
+        key: const Key("list layout"),
+      );
+
+  bool get _layoutIsGrid =>
+      widget.currentLayout == ClothItemCompoundViewLayout.grid;
 }
 
 class _ControlBar extends StatelessWidget {
