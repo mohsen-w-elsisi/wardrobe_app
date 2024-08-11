@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
-import 'package:wardrobe_app/cloth_item_views/cloth_item_grid_view.dart';
+import 'package:wardrobe_app/cloth_item_views/grid_view.dart';
 
 class OutfitPresenterScreen extends StatelessWidget {
   final List<ClothItem> clothItems;

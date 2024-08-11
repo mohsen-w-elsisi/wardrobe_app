@@ -25,14 +25,9 @@ class ClothItemImage extends StatelessWidget {
   }
 
   Widget _image() {
-    try {
-      return Image.memory(
-        image,
-        fit: BoxFit.cover,
-      );
-    } on Exception catch (e) {
-      print(e);
-      return Container();
-    }
+    return Image.memory(
+      image,
+      fit: BoxFit.cover,
+    );
   }
 }

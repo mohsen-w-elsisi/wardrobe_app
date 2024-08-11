@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
-import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
+import 'package:wardrobe_app/cloth_item/manager.dart';
 import 'package:wardrobe_app/cloth_item_editers/cloth_item_matching_dialog.dart';
 import 'package:wardrobe_app/cloth_item_editers/image_source_selector_modal.dart';
-import 'package:wardrobe_app/cloth_item_views/cloth_item_image.dart';
-import 'package:wardrobe_app/cloth_item_views/cloth_item_type_display_options.dart';
+import 'package:wardrobe_app/cloth_item_views/dispay_options/attribute.dart';
+import 'package:wardrobe_app/cloth_item_views/image.dart';
+import 'package:wardrobe_app/cloth_item_views/dispay_options/type.dart';
 import 'new_cloth_item_manager.dart';
 
 class NewClothItemScreen extends StatelessWidget {
@@ -64,7 +65,6 @@ class _PhotoSelector extends StatelessWidget {
 
   const _PhotoSelector({
     required this.newClothItemManager,
-    super.key,
   });
 
   @override
@@ -111,7 +111,7 @@ class _PhotoSelector extends StatelessWidget {
 class _NameField extends StatefulWidget {
   final NewClothItemManager newClothItemManager;
 
-  const _NameField({required this.newClothItemManager, super.key});
+  const _NameField({required this.newClothItemManager});
 
   @override
   State<_NameField> createState() => _NameFieldState();
@@ -122,7 +122,6 @@ class _TypeSelector extends StatelessWidget {
 
   const _TypeSelector({
     required this.newClothItemManager,
-    super.key,
   });
 
   @override
@@ -151,7 +150,6 @@ class _TypeSelector extends StatelessWidget {
 
 class _AttributeSelector extends StatelessWidget {
   const _AttributeSelector({
-    super.key,
     required this.newClothItemManager,
   });
 
@@ -175,7 +173,7 @@ class _AttributeSelector extends StatelessWidget {
             for (final attribute in ClothItemAttribute.values)
               ButtonSegment(
                 value: attribute,
-                label: Text(attribute.name),
+                label: Text(clothItemAttributeDisplayOptions[attribute]!.name),
               )
           ],
         ),
@@ -217,7 +215,6 @@ class _NextStepButton extends StatelessWidget {
   _NextStepButton({
     required this.newClothItemManager,
     this.showMatchingsDialog = true,
-    super.key,
   });
 
   @override

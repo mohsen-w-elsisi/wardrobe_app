@@ -63,7 +63,6 @@ class ClothItemManager extends ChangeNotifier {
     await storageAgent.saveManyClothItems(_clothItems);
   }
 
-  // TODO: should I refactor this into a seperate class?
   void _filterDuplicates() {
     final clothItemIds = <String>[];
     for (final item in _clothItems) {

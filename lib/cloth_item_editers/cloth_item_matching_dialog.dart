@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
-import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
-import 'package:wardrobe_app/cloth_item/cloth_item_organiser.dart';
+import 'package:wardrobe_app/cloth_item/manager.dart';
+import 'package:wardrobe_app/cloth_item/organiser.dart';
 import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_manager.dart';
+import 'package:wardrobe_app/cloth_item_views/dispay_options/type.dart';
 
 class ClothItemMatchingDialog extends StatelessWidget {
   final NewClothItemManager newClothItemManager;
@@ -78,7 +79,6 @@ class _ListBody extends StatelessWidget {
   late final ClothItemOrganiser clothItemOrganiser;
 
   _ListBody({
-    super.key,
     required this.newClothItemManager,
     required this.clothItem,
   }) {
@@ -114,7 +114,9 @@ class _ListBody extends StatelessWidget {
         onChanged: (value) {},
       ),
       title: Text(item.name),
-      trailing: null, //TODO: add icon here
+      trailing: Icon(
+        clothItemTypeDisplayOptions[item.type]!.icon,
+      ),
     );
   }
 

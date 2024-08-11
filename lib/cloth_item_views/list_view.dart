@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
-import 'package:wardrobe_app/cloth_item_views/cloth_item_detail_screen.dart';
-import 'package:wardrobe_app/cloth_item_views/cloth_item_type_display_options.dart';
-import 'cloth_item_views_utils.dart';
+import 'package:wardrobe_app/cloth_item_views/details_screen.dart';
+import 'package:wardrobe_app/cloth_item_views/dispay_options/type.dart';
+import 'utils.dart';
 
 class ClothItemListView extends StatelessWidget {
   final List<ClothItem> clothItems;
@@ -47,7 +47,7 @@ class ClothItemListView extends StatelessWidget {
 class _ListTile extends StatelessWidget {
   final ClothItem clothItem;
 
-  const _ListTile(this.clothItem, {super.key});
+  const _ListTile(this.clothItem);
 
   @override
   Widget build(BuildContext context) {

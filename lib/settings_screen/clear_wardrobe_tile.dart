@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
+import 'package:wardrobe_app/cloth_item/manager.dart';
 
 class SettingsScreenClearWardrobeTile extends StatelessWidget {
   const SettingsScreenClearWardrobeTile({super.key});
@@ -27,7 +27,7 @@ class SettingsScreenClearWardrobeTile extends StatelessWidget {
 }
 
 class _Dialog extends StatelessWidget {
-  const _Dialog({super.key});
+  const _Dialog();
 
   @override
   Widget build(BuildContext context) {

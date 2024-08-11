@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
-import 'package:wardrobe_app/cloth_item/cloth_item_manager.dart';
+import 'package:wardrobe_app/cloth_item/manager.dart';
 import 'package:wardrobe_app/cloth_item_editers/cloth_item_matching_dialog.dart';
 import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_manager.dart';
 import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_screen.dart';
 import 'package:wardrobe_app/outfiting/outfit_maker_screen.dart';
-import './cloth_item_image.dart';
-import './cloth_item_views.dart';
-import './cloth_item_views_utils.dart';
+
+import 'dispay_options/attribute.dart';
+import 'image.dart';
+import 'list_view.dart';
 
 class ClothItemDetailScreen extends StatelessWidget {
   final clothItemManager = GetIt.I.get<ClothItemManager>();
@@ -23,17 +24,19 @@ class ClothItemDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (_itemExists) {
-      return ListenableBuilder(
-        listenable: clothItemManager,
-        builder: (_, __) => Scaffold(
-          body: CustomScrollView(slivers: _componentSlivers),
-          floatingActionButton: _StartOutfitFAB(clothItem: _clothItem!),
-        ),
-      );
-    } else {
-      return Container();
-    }
+    return ListenableBuilder(
+      listenable: clothItemManager,
+      builder: (_, __) {
+        if (_itemExists) {
+          return Scaffold(
+            body: CustomScrollView(slivers: _componentSlivers),
+            floatingActionButton: _StartOutfitFAB(clothItem: _clothItem!),
+          );
+        } else {
+          return Container();
+        }
+      },
+    );
   }
 
   List<Widget> get _componentSlivers => [
@@ -53,7 +56,6 @@ class _Image extends StatelessWidget {
   final bool enableHeroImage;
 
   const _Image({
-    super.key,
     required this.clothItem,
     required this.enableHeroImage,
   });
@@ -81,7 +83,6 @@ class _MatchingItemList extends StatelessWidget {
   final ClothItem clothItem;
 
   _MatchingItemList({
-    super.key,
     required this.clothItem,
   });
 
@@ -98,7 +99,6 @@ class _AttributeChips extends StatelessWidget {
   final ClothItem clothItem;
 
   const _AttributeChips({
-    super.key,
     required this.clothItem,
   });
 
@@ -108,19 +108,23 @@ class _AttributeChips extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Wrap(
-          children: [
-            for (final attribute in clothItem.attributes)
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: Chip(
-                  label: Text(attribute.name),
-                  avatar: Icon(clothAttributeIconMap[attribute]),
-                ),
-              )
-          ],
+          children: _chips,
         ),
       ),
     );
+  }
+
+  List<Widget> get _chips {
+    return [
+      for (final attribute in clothItem.attributes)
+        Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: Chip(
+            label: Text(clothItemAttributeDisplayOptions[attribute]!.name),
+            avatar: Icon(clothItemAttributeDisplayOptions[attribute]!.icon),
+          ),
+        )
+    ];
   }
 }
 
@@ -129,7 +133,6 @@ class _AppBar extends StatelessWidget {
   final ClothItem clothItem;
 
   _AppBar({
-    super.key,
     required this.clothItem,
   });
 
@@ -209,7 +212,6 @@ class _StartOutfitFAB extends StatelessWidget {
 
   const _StartOutfitFAB({
     required this.clothItem,
-    super.key,
   });
 
   @override

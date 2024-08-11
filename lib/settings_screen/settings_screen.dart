@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/theme/theme_settings_controller.dart';
 import 'package:wardrobe_app/theme/utils.dart';
 
-import 'settings_screen_clear_wardrobe_tile.dart';
+import 'clear_wardrobe_tile.dart';
 
 class SettingsScreen extends StatelessWidget {
   final themeSettingsController = GetIt.I.get<ThemeSettingsController>();
@@ -39,7 +39,7 @@ class SettingsScreen extends StatelessWidget {
 class _ColorSchemeDropDownSettingsTile extends StatelessWidget {
   final themeSettingsController = GetIt.I.get<ThemeSettingsController>();
 
-  _ColorSchemeDropDownSettingsTile({super.key});
+  _ColorSchemeDropDownSettingsTile();
 
   @override
   Widget build(BuildContext context) {

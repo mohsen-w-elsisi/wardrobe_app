@@ -1,31 +1,34 @@
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
-import 'package:wardrobe_app/cloth_item_views/cloth_item_views_utils.dart';
 
-final ClothItemSortModeDisplayOptions clothItemSortModeDisplayOption = {
+enum ClothItemSortMode { byName, byDateCreated }
+
+final ClothItemSortModeDisplayOptions clothItemSortModeDisplayOptions = {
   ClothItemSortMode.byName: ClothItemSortModeDisplayOption(
     text: "name",
-    sortingFunction: _sortItemsByName,
+    sortingFunction: _SortingFunctions.name,
   ),
   ClothItemSortMode.byDateCreated: ClothItemSortModeDisplayOption(
     text: "date created",
-    sortingFunction: _sortItemsByDateCreated,
+    sortingFunction: _SortingFunctions.dateCreated,
   ),
 };
 
 typedef ClothItemSortModeDisplayOptions
     = Map<ClothItemSortMode, ClothItemSortModeDisplayOption>;
 
-ClothItemSorter _sortItemsByName = (a, b) {
-  final nameOfA = a.name;
-  final nameOfB = b.name;
-  return nameOfA.compareTo(nameOfB);
-};
+abstract class _SortingFunctions {
+  static ClothItemSorter name = (a, b) {
+    final nameOfA = a.name;
+    final nameOfB = b.name;
+    return nameOfA.compareTo(nameOfB);
+  };
 
-ClothItemSorter _sortItemsByDateCreated = (a, b) {
-  final timeOfA = a.dateCreated.millisecondsSinceEpoch;
-  final timeOfB = b.dateCreated.millisecondsSinceEpoch;
-  return timeOfA.compareTo(timeOfB);
-};
+  static ClothItemSorter dateCreated = (a, b) {
+    final timeOfA = a.dateCreated.millisecondsSinceEpoch;
+    final timeOfB = b.dateCreated.millisecondsSinceEpoch;
+    return timeOfA.compareTo(timeOfB);
+  };
+}
 
 class ClothItemSortModeDisplayOption {
   final String text;

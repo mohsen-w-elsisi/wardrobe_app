@@ -1,7 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'cloth_item.dart';
-import 'cloth_item_manager.dart';
+import 'manager.dart';
 
 class HiveClothItemStorageAgent implements ClothItemStorageAgent {
   static const boxName = "cloth items";

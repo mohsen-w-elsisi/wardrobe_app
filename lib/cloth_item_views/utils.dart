@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'dispay_options/attribute.dart';
 
 class ClothItemAttributeIconRow extends StatelessWidget {
   final List<ClothItemAttribute> attributes;
@@ -24,7 +25,7 @@ class ClothItemAttributeIconRow extends StatelessWidget {
                 ? const EdgeInsets.only(left: 4)
                 : const EdgeInsets.only(right: 4),
             child: Icon(
-              clothAttributeIconMap[attribute],
+              clothItemAttributeDisplayOptions[attribute]!.icon,
               size: 20,
             ),
           )
@@ -32,22 +33,3 @@ class ClothItemAttributeIconRow extends StatelessWidget {
     );
   }
 }
-
-const Map<ClothItemSortMode, String> sortModeLabelMap = {
-  ClothItemSortMode.byDateCreated: "date created",
-  ClothItemSortMode.byName: "name",
-};
-
-enum ClothItemSortMode { byName, byDateCreated }
-
-const Map<ClothItemAttribute, IconData> clothAttributeIconMap = {
-  ClothItemAttribute.classic: FontAwesomeIcons.c,
-  ClothItemAttribute.onFasion: Icons.celebration_outlined,
-  ClothItemAttribute.sportive: Icons.sports_basketball
-};
-
-const Map<ClothItemType, String> clothTypeTextMap = {
-  ClothItemType.top: "top",
-  ClothItemType.bottom: "bottom",
-  ClothItemType.jacket: "jacket",
-};

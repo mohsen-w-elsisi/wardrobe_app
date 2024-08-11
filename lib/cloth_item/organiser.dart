@@ -1,5 +1,4 @@
-import 'package:wardrobe_app/cloth_item_views/cloth_item_sort_mode_display_options.dart';
-import 'package:wardrobe_app/cloth_item_views/cloth_item_views_utils.dart';
+import 'package:wardrobe_app/cloth_item_views/dispay_options/sort_mode.dart';
 
 import 'cloth_item.dart';
 
@@ -77,7 +76,7 @@ class ClothItemOrganiser {
   }
 
   ClothItemSorter _sortingFunctionOfMode(ClothItemSortMode sortMode) =>
-      clothItemSortModeDisplayOption[sortMode]!.sortingFunction;
+      clothItemSortModeDisplayOptions[sortMode]!.sortingFunction;
 
   List<ClothItem> _copyList() => [...clothItems];
 
