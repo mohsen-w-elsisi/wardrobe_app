@@ -144,18 +144,22 @@ class _AppBar extends StatelessWidget {
         IconButton(
           onPressed: _toggleItemFavourite,
           icon: _favouriteIcon,
+          tooltip: "favorite",
         ),
         IconButton(
           onPressed: () => _showMatchingItemsDialoG(context),
           icon: const Icon(Icons.join_full_outlined),
+          tooltip: "pair with items",
         ),
         IconButton(
           onPressed: () => _openEditScreen(context),
           icon: const Icon(Icons.edit_outlined),
+          tooltip: "edit",
         ),
         IconButton(
           onPressed: () => _deleteItem(context),
           icon: const Icon(Icons.delete_outline),
+          tooltip: "delete",
         ),
       ],
     );
@@ -217,6 +221,7 @@ class _StartOutfitFAB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      tooltip: "new outfit with this",
       onPressed: () => _openDetailsScreen(context),
       child: const Icon(Icons.checkroom_outlined),
     );

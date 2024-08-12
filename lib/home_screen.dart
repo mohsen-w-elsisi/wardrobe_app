@@ -31,6 +31,7 @@ class HomeScreen extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        tooltip: "new outfit",
         onPressed: () => _navigateTo(context, OutfitMakerScreen()),
         child: const Icon(Icons.checkroom_outlined),
       ),
@@ -87,10 +88,12 @@ class HomeScreenBottomAppBar extends StatelessWidget {
       child: Row(
         children: [
           IconButton(
+            tooltip: "settings",
             onPressed: () => _navigateTo(context, SettingsScreen()),
             icon: const Icon(Icons.settings_outlined),
           ),
           IconButton(
+            tooltip: "new item",
             onPressed: () => _navigateTo(
               context,
               NewClothItemScreen(

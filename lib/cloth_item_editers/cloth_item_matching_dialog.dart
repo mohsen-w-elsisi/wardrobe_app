@@ -20,7 +20,13 @@ class ClothItemMatchingDialog extends StatelessWidget {
   });
 
   void show(BuildContext context) {
-    showModalBottomSheet(context: context, builder: (context) => this);
+    final maxHeight = MediaQuery.of(context).size.height * 0.7;
+    showModalBottomSheet(
+      isScrollControlled: true,
+      constraints: BoxConstraints(maxHeight: maxHeight),
+      context: context,
+      builder: (context) => this,
+    );
   }
 
   @override
