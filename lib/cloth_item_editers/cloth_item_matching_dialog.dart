@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/manager.dart';
@@ -114,8 +115,9 @@ class _ListBody extends StatelessWidget {
         onChanged: (value) {},
       ),
       title: Text(item.name),
-      trailing: Icon(
+      trailing: SvgPicture.asset(
         clothItemTypeDisplayOptions[item.type]!.icon,
+        height: 20,
       ),
     );
   }
