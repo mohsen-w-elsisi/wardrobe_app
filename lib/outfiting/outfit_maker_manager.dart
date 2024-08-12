@@ -48,6 +48,8 @@ class OutfitMakerManager extends ChangeNotifier {
   bool get isOnLastStep => currentStep == ClothItemType.values.length - 1;
   bool get isOnFirstStep => currentStep == 0;
 
+  bool itemOfTypeIsSelected(ClothItemType type) => selectedItems[type] != null;
+
   Map<ClothItemType, ClothItem?> get selectedItems =>
       Map.unmodifiable(_selectedItems);
 
@@ -60,6 +62,8 @@ class OutfitMakerManager extends ChangeNotifier {
     _selectedItems[type] = null;
     notifyListeners();
   }
+
+  ClothItemType get typeOfCurrentStep => ClothItemType.values[currentStep];
 
   List<ClothItem> get selectedItemsAsList =>
       selectedItems.values.nonNulls.toList();

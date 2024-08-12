@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/manager.dart';
-import 'package:wardrobe_app/cloth_item_views/dispay_options/type.dart';
-import 'package:wardrobe_app/cloth_item_views/utils.dart';
 import 'package:wardrobe_app/outfiting/outfit_maker_manager.dart';
 
-import 'outfit_presenter_screen.dart';
+import 'outfit_maker_stepper.dart';
 
 class OutfitMakerScreen extends StatelessWidget {
-  final ClothItemManager _clothItemManager = GetIt.I.get<ClothItemManager>();
-  final List<ClothItem>? preSelectedItems;
+  final _clothItemManager = GetIt.I.get<ClothItemManager>();
+  final _outfitMakerManager = OutfitMakerManager();
 
-  OutfitMakerScreen({this.preSelectedItems, super.key});
+  OutfitMakerScreen({List<ClothItem>? preSelectedItems, super.key}) {
+    if (preSelectedItems != null) {
+      preSelectedItems.forEach(_outfitMakerManager.setSelectedItem);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,116 +24,8 @@ class OutfitMakerScreen extends StatelessWidget {
       ),
       body: ListenableBuilder(
         listenable: _clothItemManager,
-        builder: (_, __) => _Stepper(preSelectedItems: preSelectedItems),
-      ),
-    );
-  }
-}
-
-class _Stepper extends StatelessWidget {
-  final outfitMakerManager = OutfitMakerManager();
-
-  _Stepper({List<ClothItem>? preSelectedItems}) {
-    if (preSelectedItems != null) {
-      preSelectedItems.forEach(outfitMakerManager.setSelectedItem);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    outfitMakerManager.onLastStepDone = () => _presentOutfit(context);
-
-    return ListenableBuilder(
-      listenable: outfitMakerManager,
-      builder: (_, __) => Stepper(
-        currentStep: outfitMakerManager.currentStep,
-        onStepContinue: outfitMakerManager.nextStep,
-        onStepCancel: outfitMakerManager.previousStep,
-        onStepTapped: (value) => outfitMakerManager.currentStep = value,
-        controlsBuilder: (_, details) => _skipButton(details),
-        stepIconBuilder: (stepIndex, _) => _stepIcon(context, stepIndex),
-        steps: [for (final type in ClothItemType.values) _step(type)],
-      ),
-    );
-  }
-
-  Widget _stepIcon(BuildContext context, int stepIndex) {
-    final type = ClothItemType.values[stepIndex];
-    final typeDiplayOptions = clothItemTypeDisplayOptions[type]!;
-    return CircleAvatar(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      child: Center(
-        child: SvgPicture.asset(
-          height: 20,
-          typeDiplayOptions.icon,
-        ),
-      ),
-    );
-  }
-
-  Widget _skipButton(ControlsDetails details) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: OutlinedButton(
-        onPressed: () {
-          outfitMakerManager.nextStep();
-          outfitMakerManager.clearSelectedItemOfType(
-            ClothItemType.values[details.currentStep],
-          );
-        },
-        child: const Text("skip"),
-      ),
-    );
-  }
-
-  Step _step(ClothItemType type) {
-    return Step(
-      title: Text(_stepLabel(type)),
-      content: Column(
-        children: [
-          for (final item in outfitMakerManager.validItemsOfType(type))
-            _ItemChoiceTile(outfitMakerManager: outfitMakerManager, item: item)
-        ],
-      ),
-    );
-  }
-
-  String _stepLabel(ClothItemType type) =>
-      "${type.name}: ${outfitMakerManager.selectedItems[type]?.name ?? ""}";
-
-  void _presentOutfit(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => OutfitPresenterScreen(
-          outfitMakerManager.selectedItemsAsList,
-        ),
-      ),
-    );
-  }
-}
-
-class _ItemChoiceTile extends StatelessWidget {
-  final OutfitMakerManager outfitMakerManager;
-  final ClothItem item;
-
-  const _ItemChoiceTile({
-    required this.outfitMakerManager,
-    required this.item,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () {
-        outfitMakerManager.setSelectedItem(item);
-        outfitMakerManager.nextStep();
-      },
-      title: Text(item.name),
-      trailing: SizedBox(
-        width: 100,
-        child: ClothItemAttributeIconRow(
-          item.attributes,
-          alignEnd: true,
+        builder: (_, __) => OutfitMakerStepper(
+          outfitMakerManager: _outfitMakerManager,
         ),
       ),
     );
