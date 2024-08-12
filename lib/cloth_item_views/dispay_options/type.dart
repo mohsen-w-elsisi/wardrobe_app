@@ -1,6 +1,10 @@
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 
 const ClothItemTypeDisplayOptions clothItemTypeDisplayOptions = {
+  ClothItemType.headWear: ClothItemTypeDisplayOption(
+    text: "head wear",
+    icon: "$_typeIconsPathPrefix/hat.svg",
+  ),
   ClothItemType.top: ClothItemTypeDisplayOption(
     text: "top",
     icon: "$_typeIconsPathPrefix/top.svg",
@@ -12,6 +16,10 @@ const ClothItemTypeDisplayOptions clothItemTypeDisplayOptions = {
   ClothItemType.jacket: ClothItemTypeDisplayOption(
     text: "jacket",
     icon: "$_typeIconsPathPrefix/jacket.svg",
+  ),
+  ClothItemType.shoe: ClothItemTypeDisplayOption(
+    text: "shoe",
+    icon: "$_typeIconsPathPrefix/shoe.svg",
   ),
 };
 

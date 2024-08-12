@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/manager.dart';
+import 'package:wardrobe_app/cloth_item_views/dispay_options/type.dart';
 import 'package:wardrobe_app/cloth_item_views/utils.dart';
 import 'package:wardrobe_app/outfiting/outfit_maker_manager.dart';
 
@@ -48,7 +50,22 @@ class _Stepper extends StatelessWidget {
         onStepCancel: outfitMakerManager.previousStep,
         onStepTapped: (value) => outfitMakerManager.currentStep = value,
         controlsBuilder: (_, details) => _skipButton(details),
+        stepIconBuilder: (stepIndex, _) => _stepIcon(context, stepIndex),
         steps: [for (final type in ClothItemType.values) _step(type)],
+      ),
+    );
+  }
+
+  Widget _stepIcon(BuildContext context, int stepIndex) {
+    final type = ClothItemType.values[stepIndex];
+    final typeDiplayOptions = clothItemTypeDisplayOptions[type]!;
+    return CircleAvatar(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      child: Center(
+        child: SvgPicture.asset(
+          height: 20,
+          typeDiplayOptions.icon,
+        ),
       ),
     );
   }

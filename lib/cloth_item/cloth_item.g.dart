@@ -74,6 +74,10 @@ class ClothItemTypeAdapter extends TypeAdapter<ClothItemType> {
         return ClothItemType.bottom;
       case 2:
         return ClothItemType.jacket;
+      case 3:
+        return ClothItemType.headWear;
+      case 4:
+        return ClothItemType.shoe;
       default:
         return ClothItemType.top;
     }
@@ -90,6 +94,12 @@ class ClothItemTypeAdapter extends TypeAdapter<ClothItemType> {
         break;
       case ClothItemType.jacket:
         writer.writeByte(2);
+        break;
+      case ClothItemType.headWear:
+        writer.writeByte(3);
+        break;
+      case ClothItemType.shoe:
+        writer.writeByte(4);
         break;
     }
   }

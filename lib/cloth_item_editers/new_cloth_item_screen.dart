@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/manager.dart';
@@ -126,24 +127,42 @@ class _TypeSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(top: 8),
-      child: StatefulBuilder(
-        builder: (context, setState) => SegmentedButton(
-          selected: {newClothItemManager.type},
-          onSelectionChanged: (p0) => setState(
-            () => newClothItemManager.type = p0.single,
-          ),
-          segments: [
-            for (final type in ClothItemType.values)
-              ButtonSegment(
-                value: type,
-                label: Text(clothItemTypeDisplayOptions[type]!.text),
-              )
-          ],
+    return Row(
+      children: [
+        Text(
+          "type: ",
+          style: Theme.of(context).textTheme.labelLarge,
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: StatefulBuilder(
+            builder: (context, setState) => DropdownButton(
+              value: newClothItemManager.type,
+              onChanged: (value) => setState(
+                () => newClothItemManager.type = value!,
+              ),
+              items: [
+                for (final type in ClothItemType.values)
+                  DropdownMenuItem(
+                    value: type,
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          clothItemTypeDisplayOptions[type]!.icon,
+                          height: 16,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(clothItemTypeDisplayOptions[type]!.text),
+                        ),
+                      ],
+                    ),
+                  )
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

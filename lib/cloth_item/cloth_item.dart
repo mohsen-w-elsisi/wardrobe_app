@@ -91,12 +91,16 @@ class ClothItem {
 
 @HiveType(typeId: 2)
 enum ClothItemType {
+  @HiveField(3)
+  headWear,
   @HiveField(0)
   top,
   @HiveField(1)
   bottom,
   @HiveField(2)
-  jacket
+  jacket,
+  @HiveField(4)
+  shoe
 }
 
 @HiveType(typeId: 3)
