@@ -19,32 +19,40 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("wardrobe"),
-        centerTitle: true,
-      ),
-      drawer: HomeScreenDrawer(),
-      body: ListenableBuilder(
-        listenable: clothItemManager,
-        builder: (context, _) {
-          return ClothItemCompoundView(clothItemManager.clothItems);
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: "new outfit",
-        onPressed: () => _navigateTo(context, OutfitMakerScreen()),
-        child: const Icon(Icons.checkroom_outlined),
-      ),
-      bottomNavigationBar: HomeScreenBottomAppBar(),
+      appBar: _appBar(),
+      drawer: _Drawer(),
+      body: _mainBody(),
+      floatingActionButton: _floatingActionButton(context),
+      bottomNavigationBar: _BottomAppBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
+    );
+  }
+
+  AppBar _appBar() {
+    return AppBar(
+      title: const Text("wardrobe"),
+      centerTitle: true,
+    );
+  }
+
+  Widget _mainBody() {
+    return ListenableBuilder(
+      listenable: clothItemManager,
+      builder: (_, __) => ClothItemCompoundView(clothItemManager.clothItems),
+    );
+  }
+
+  Widget _floatingActionButton(BuildContext context) {
+    return FloatingActionButton(
+      tooltip: "new outfit",
+      onPressed: () => _navigateTo(context, OutfitMakerScreen()),
+      child: const Icon(Icons.checkroom_outlined),
     );
   }
 }
 
-class HomeScreenDrawer extends StatelessWidget {
+class _Drawer extends StatelessWidget {
   final clothItemManager = GetIt.I.get<ClothItemManager>();
-
-  HomeScreenDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -77,10 +85,8 @@ class HomeScreenDrawer extends StatelessWidget {
   }
 }
 
-class HomeScreenBottomAppBar extends StatelessWidget {
+class _BottomAppBar extends StatelessWidget {
   final clothItemManager = GetIt.I.get<ClothItemManager>();
-
-  HomeScreenBottomAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item_views/details_screen.dart';
 import 'package:wardrobe_app/cloth_item_views/dispay_options/type.dart';
