@@ -32,6 +32,7 @@ class ClothItemCompoundViewControlBar extends StatelessWidget {
 
   Widget _layoutToggleButton() {
     return IconButton(
+      tooltip: "switch layout",
       onPressed: toggleLayout,
       icon: _LayoutToggleIcon(
         layout: settingsController.settings.layout,

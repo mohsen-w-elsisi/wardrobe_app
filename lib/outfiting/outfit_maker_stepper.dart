@@ -99,11 +99,15 @@ class _SkipButton extends StatelessWidget {
 class _Step {
   final OutfitMakerManager outfitMakerManager;
   final ClothItemType type;
+  late final List<ClothItem> validItems;
 
-  const _Step(this.outfitMakerManager, this.type);
+  _Step(this.outfitMakerManager, this.type) {
+    validItems = outfitMakerManager.validItemsOfType(type);
+  }
 
   Step get step {
     return Step(
+      state: validItems.isEmpty ? StepState.disabled : StepState.indexed,
       title: Text(_stepLabel),
       content: Column(
         children: _itemChoiceTilesForValidItems,
@@ -119,7 +123,6 @@ class _Step {
   }
 
   List<Widget> get _itemChoiceTilesForValidItems {
-    final validItems = outfitMakerManager.validItemsOfType(type);
     return [
       for (final item in validItems)
         _ItemChoiceTile(outfitMakerManager: outfitMakerManager, item: item)
