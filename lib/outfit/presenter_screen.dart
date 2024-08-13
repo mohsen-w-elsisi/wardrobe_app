@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:wardrobe_app/cloth_item_views/grid_view.dart';
+import 'package:wardrobe_app/outfit/manager.dart';
 import 'package:wardrobe_app/outfit/outfit.dart';
 
 class OutfitPresenterScreen extends StatelessWidget {
@@ -24,13 +26,13 @@ class OutfitPresenterScreen extends StatelessWidget {
 class _AppBar extends StatelessWidget {
   final Outfit outfit;
 
-  _AppBar({required this.outfit});
+  const _AppBar({required this.outfit});
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar.medium(
       actions: _actions,
-      title: Text(outfit.name ?? "new outfit"),
+      title: Text(outfit.isEphemiral ? "new outfit" : outfit.name),
     );
   }
 
@@ -57,8 +59,18 @@ class _AppBar extends StatelessWidget {
   IconButton get _saveButton {
     return IconButton(
       tooltip: "save",
-      onPressed: () {},
+      onPressed: _save,
       icon: const Icon(Icons.save_alt),
     );
+  }
+
+  void _save() {
+    final outfitManager = GetIt.I.get<OutfitManager>();
+    final newOutfit = Outfit(
+      items: outfit.items,
+      name: "new oufit",
+      id: DateTime.now().toIso8601String(),
+    );
+    outfitManager.saveOutfit(newOutfit);
   }
 }

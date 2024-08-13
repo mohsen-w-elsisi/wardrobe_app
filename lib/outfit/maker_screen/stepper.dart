@@ -46,7 +46,7 @@ class OutfitMakerStepper extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => OutfitPresenterScreen(
-          Outfit(
+          Outfit.ephemiral(
             items: outfitMakerManager.selectedItemsAsList,
           ),
         ),
