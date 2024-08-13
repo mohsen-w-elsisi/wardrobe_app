@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/manager.dart';
-import 'package:wardrobe_app/outfiting/outfit_maker_manager.dart';
+import 'package:wardrobe_app/outfit/maker_screen/manager.dart';
 
 import 'attribute_filter_chips.dart';
-import 'outfit_maker_stepper.dart';
+import 'stepper.dart';
 
 class OutfitMakerScreen extends StatelessWidget {
   final _clothItemManager = GetIt.I.get<ClothItemManager>();

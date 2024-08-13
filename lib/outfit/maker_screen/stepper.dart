@@ -6,9 +6,10 @@ import 'package:wardrobe_app/cloth_item_views/details_screen.dart';
 import 'package:wardrobe_app/cloth_item_views/dispay_options/sort_mode.dart';
 import 'package:wardrobe_app/cloth_item_views/dispay_options/type.dart';
 import 'package:wardrobe_app/cloth_item_views/utils.dart';
+import 'package:wardrobe_app/outfit/outfit.dart';
 
-import 'outfit_maker_manager.dart';
-import 'outfit_presenter_screen.dart';
+import 'manager.dart';
+import '../presenter_screen.dart';
 
 class OutfitMakerStepper extends StatelessWidget {
   final OutfitMakerManager outfitMakerManager;
@@ -45,7 +46,9 @@ class OutfitMakerStepper extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => OutfitPresenterScreen(
-          outfitMakerManager.selectedItemsAsList,
+          Outfit(
+            items: outfitMakerManager.selectedItemsAsList,
+          ),
         ),
       ),
     );
