@@ -1,11 +1,9 @@
 import 'package:flutter/foundation.dart';
-import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
-import 'package:wardrobe_app/cloth_item/manager.dart';
 import 'package:wardrobe_app/cloth_item/organiser.dart';
 
 class OutfitMakerManager extends ChangeNotifier {
-  final _clothItemManager = GetIt.I.get<ClothItemManager>();
+  List<ClothItem> _avaliableItems;
 
   int _currentStep = 0;
 
@@ -15,7 +13,23 @@ class OutfitMakerManager extends ChangeNotifier {
 
   Function()? onLastStepDone;
 
-  OutfitMakerManager({this.onLastStepDone});
+  OutfitMakerManager({
+    required List<ClothItem> avaliableItems,
+    this.onLastStepDone,
+  }) : _avaliableItems = avaliableItems;
+
+  void setAvailableItems(List<ClothItem> newAvailableItems) {
+    _avaliableItems = newAvailableItems;
+    currentStep = 0;
+    clearAllSelectedItems();
+    notifyListeners();
+  }
+
+  void clearAllSelectedItems() {
+    for (final item in selectedItemsAsList) {
+      clearSelectedItemOfType(item.type);
+    }
+  }
 
   void nextStep() {
     if (isOnLastStep) {
@@ -34,7 +48,7 @@ class OutfitMakerManager extends ChangeNotifier {
   }
 
   List<ClothItem> validItemsOfType(ClothItemType type) {
-    return ClothItemOrganiser(_clothItemManager.clothItems)
+    return ClothItemOrganiser(_avaliableItems)
         .itemsMatchingWithBaseitemsOfType(selectedItemsAsList, type);
   }
 

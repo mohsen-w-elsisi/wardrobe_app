@@ -20,6 +20,7 @@ class OutfitMakerStepper extends StatelessWidget {
     return ListenableBuilder(
       listenable: outfitMakerManager,
       builder: (_, __) => Stepper(
+        physics: const NeverScrollableScrollPhysics(),
         currentStep: outfitMakerManager.currentStep,
         onStepContinue: outfitMakerManager.nextStep,
         onStepCancel: outfitMakerManager.previousStep,
