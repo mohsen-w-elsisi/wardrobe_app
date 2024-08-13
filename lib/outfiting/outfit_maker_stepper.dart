@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
+import 'package:wardrobe_app/cloth_item/organiser.dart';
 import 'package:wardrobe_app/cloth_item_views/details_screen.dart';
+import 'package:wardrobe_app/cloth_item_views/dispay_options/sort_mode.dart';
 import 'package:wardrobe_app/cloth_item_views/dispay_options/type.dart';
 import 'package:wardrobe_app/cloth_item_views/utils.dart';
 
@@ -123,8 +125,10 @@ class _Step {
   }
 
   List<Widget> get _itemChoiceTilesForValidItems {
+    final sortedValidItems = ClothItemOrganiser(validItems)
+        .sortFavouritesFirst(ClothItemSortMode.byName);
     return [
-      for (final item in validItems)
+      for (final item in sortedValidItems)
         _ItemChoiceTile(outfitMakerManager: outfitMakerManager, item: item)
     ];
   }
