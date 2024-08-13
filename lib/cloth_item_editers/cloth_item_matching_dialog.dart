@@ -5,6 +5,7 @@ import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/manager.dart';
 import 'package:wardrobe_app/cloth_item/organiser.dart';
 import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_manager.dart';
+import 'package:wardrobe_app/cloth_item_views/details_screen.dart';
 import 'package:wardrobe_app/cloth_item_views/dispay_options/type.dart';
 
 class ClothItemMatchingDialog extends StatelessWidget {
@@ -97,47 +98,87 @@ class _ListBody extends StatelessWidget {
     return StatefulBuilder(
       builder: (context, setState) {
         return ListView(
-          children: [
-            for (final type in ClothItemType.values)
-              if (type != clothItem.type)
-                for (final item in clothItemOrganiser.filterBytype(type))
-                  _listTile(item, setState)
-          ],
+          children: _itemTiles(setState),
         );
       },
     );
   }
 
-  ListTile _listTile(ClothItem item, StateSetter setState) {
+  List<Widget> _itemTiles(StateSetter setState) {
+    return [
+      for (final type in ClothItemType.values)
+        if (type != clothItem.type)
+          for (final item in clothItemOrganiser.filterBytype(type))
+            _ListTile(
+              newClothItemManager: newClothItemManager,
+              setState: setState,
+              item: item,
+            )
+    ];
+  }
+}
+
+class _ListTile extends StatelessWidget {
+  final NewClothItemManager newClothItemManager;
+  final ClothItem item;
+  final StateSetter setState;
+
+  const _ListTile({
+    required this.item,
+    required this.setState,
+    required this.newClothItemManager,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return ListTile(
       dense: true,
       horizontalTitleGap: 0,
       contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-      selected: _itemIsSelected(item),
-      onTap: () => setState(() => _toggleSelectionStatus(item)),
-      leading: Checkbox(
-        value: _itemIsSelected(item),
-        shape: const CircleBorder(),
-        onChanged: (value) {},
-      ),
+      selected: _itemIsSelected,
+      onTap: _toggleSelectionStatus,
+      onLongPress: () => _openDetailsScreen(context),
+      leading: _checkbox,
       title: Text(item.name),
-      trailing: SvgPicture.asset(
-        clothItemTypeDisplayOptions[item.type]!.icon,
-        height: 20,
-      ),
+      trailing: _itemTypeIcon,
     );
   }
 
-  void _toggleSelectionStatus(ClothItem clothItem) {
-    if (_itemIsSelected(clothItem)) {
-      newClothItemManager.matchingItems.removeWhere(
-        (testId) => testId == clothItem.id,
-      );
-    } else {
-      newClothItemManager.matchingItems.add(clothItem.id);
-    }
+  Widget get _checkbox {
+    return Checkbox(
+      value: _itemIsSelected,
+      shape: const CircleBorder(),
+      onChanged: (value) {},
+    );
   }
 
-  bool _itemIsSelected(ClothItem clothItem) =>
-      newClothItemManager.matchingItems.contains(clothItem.id);
+  Widget get _itemTypeIcon {
+    return SvgPicture.asset(
+      clothItemTypeDisplayOptions[item.type]!.icon,
+      height: 20,
+    );
+  }
+
+  void _toggleSelectionStatus() {
+    setState(() {
+      if (_itemIsSelected) {
+        newClothItemManager.matchingItems.removeWhere(
+          (testId) => testId == item.id,
+        );
+      } else {
+        newClothItemManager.matchingItems.add(item.id);
+      }
+    });
+  }
+
+  bool get _itemIsSelected =>
+      newClothItemManager.matchingItems.contains(item.id);
+
+  void _openDetailsScreen(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ClothItemDetailScreen(item.id),
+      ),
+    );
+  }
 }
