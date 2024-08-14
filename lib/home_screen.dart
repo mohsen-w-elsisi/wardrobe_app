@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:wardrobe_app/outfit/liist_screen.dart';
 
 import 'cloth_item/cloth_item.dart';
 import 'cloth_item/manager.dart';
@@ -99,6 +100,10 @@ class _BottomAppBar extends StatelessWidget {
             icon: const Icon(Icons.settings_outlined),
           ),
           IconButton(
+            onPressed: () => _navigateTo(context, OutfitListScreen()),
+            icon: const Icon(Icons.bookmark_outline),
+          ),
+          IconButton(
             tooltip: "new item",
             onPressed: () => _navigateTo(
               context,
@@ -107,7 +112,7 @@ class _BottomAppBar extends StatelessWidget {
               ),
             ),
             icon: const Icon(Icons.add),
-          )
+          ),
         ],
       ),
     );

@@ -25,4 +25,10 @@ class Outfit {
 
   // since this cannot be saved without and id nor a name
   bool get isEphemiral => name == '' || id == '';
+
+  Outfit copyWith({List<ClothItem>? items, String? name, String? id}) => Outfit(
+        id: id ?? this.id,
+        items: items ?? this.items,
+        name: name ?? this.name,
+      );
 }

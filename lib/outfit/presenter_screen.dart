@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:wardrobe_app/cloth_item_views/grid_view.dart';
-import 'package:wardrobe_app/outfit/manager.dart';
 import 'package:wardrobe_app/outfit/outfit.dart';
+
+import 'saving_modal.dart';
 
 class OutfitPresenterScreen extends StatelessWidget {
   final Outfit outfit;
@@ -31,15 +31,15 @@ class _AppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar.medium(
-      actions: _actions,
+      actions: _actions(context),
       title: Text(outfit.isEphemiral ? "new outfit" : outfit.name),
     );
   }
 
-  List<Widget> get _actions {
+  List<Widget> _actions(BuildContext context) {
     return [
       _shareButton,
-      _saveButton,
+      _saveButton(context),
     ];
   }
 
@@ -56,21 +56,15 @@ class _AppBar extends StatelessWidget {
     Share.shareXFiles(files, text: "what do you think of this outfit");
   }
 
-  IconButton get _saveButton {
+  IconButton _saveButton(BuildContext context) {
     return IconButton(
       tooltip: "save",
-      onPressed: _save,
-      icon: const Icon(Icons.save_alt),
+      onPressed: () => _showSavingModal(context),
+      icon: const Icon(Icons.bookmark_add_outlined),
     );
   }
 
-  void _save() {
-    final outfitManager = GetIt.I.get<OutfitManager>();
-    final newOutfit = Outfit(
-      items: outfit.items,
-      name: "new oufit",
-      id: DateTime.now().toIso8601String(),
-    );
-    outfitManager.saveOutfit(newOutfit);
+  void _showSavingModal(BuildContext context) {
+    OutfitSavingDialog(outfit: outfit).show(context);
   }
 }
