@@ -22,7 +22,7 @@ class OutfitManager with ChangeNotifier {
 
   void saveOutfit(Outfit outfit) {
     assertNotEphemiral(outfit);
-    if (_outfitIsSaved(outfit)) {
+    if (outfitIsSaved(outfit)) {
       _overwriteExistingOutfit(outfit);
     } else {
       _saveNewOufit(outfit);
@@ -60,7 +60,7 @@ class OutfitManager with ChangeNotifier {
     assert(!(outfit.isEphemiral));
   }
 
-  bool _outfitIsSaved(Outfit outfit) => _indexOfOutfit(outfit) != null;
+  bool outfitIsSaved(Outfit outfit) => _indexOfOutfit(outfit) != null;
 
   int? _indexOfOutfit(Outfit outfit) {
     final index = _outfits.indexWhere(outfit.hasSameId);

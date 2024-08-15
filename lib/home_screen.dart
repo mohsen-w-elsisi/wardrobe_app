@@ -100,7 +100,7 @@ class _BottomAppBar extends StatelessWidget {
             icon: const Icon(Icons.settings_outlined),
           ),
           IconButton(
-            onPressed: () => _navigateTo(context, OutfitListScreen()),
+            onPressed: () => _navigateTo(context, const OutfitListScreen()),
             icon: const Icon(Icons.bookmark_outline),
           ),
           IconButton(

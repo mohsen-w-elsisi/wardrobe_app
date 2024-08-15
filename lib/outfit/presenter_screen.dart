@@ -4,6 +4,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/manager.dart';
 import 'package:wardrobe_app/cloth_item_views/grid_view.dart';
+import 'package:wardrobe_app/outfit/manager.dart';
 import 'package:wardrobe_app/outfit/outfit.dart';
 
 import 'saving_modal.dart';
@@ -35,22 +36,22 @@ class OutfitPresenterScreen extends StatelessWidget {
 }
 
 class _AppBar extends StatelessWidget {
-  final Outfit outfit;
+  final Outfit _outfit;
 
-  const _AppBar({required this.outfit});
+  const _AppBar({required Outfit outfit}) : _outfit = outfit;
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar.medium(
       actions: _actions(context),
-      title: Text(outfit.isEphemiral ? "new outfit" : outfit.name),
+      title: Text(_outfit.isEphemiral ? "new outfit" : _outfit.name),
     );
   }
 
   List<Widget> _actions(BuildContext context) {
     return [
       _shareButton,
-      _saveButton(context),
+      _SaveButton(outfit: _outfit),
     ];
   }
 
@@ -69,13 +70,32 @@ class _AppBar extends StatelessWidget {
 
   List<ClothItem> get _clothItems {
     final clothitemManager = GetIt.I.get<ClothItemManager>();
-    return outfit.items
+    return _outfit.items
         .map(clothitemManager.getClothItemById)
         .nonNulls
         .toList();
   }
+}
 
-  IconButton _saveButton(BuildContext context) {
+class _SaveButton extends StatelessWidget {
+  final _outfitManager = GetIt.I.get<OutfitManager>();
+  final Outfit _outfit;
+
+  _SaveButton({required Outfit outfit}) : _outfit = outfit;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: _outfitManager,
+      builder: (context, _) {
+        return _outfitManager.outfitIsSaved(_outfit)
+            ? _unsaveButton()
+            : _saveButton(context);
+      },
+    );
+  }
+
+  Widget _saveButton(BuildContext context) {
     return IconButton(
       tooltip: "save",
       onPressed: () => _showSavingModal(context),
@@ -84,6 +104,19 @@ class _AppBar extends StatelessWidget {
   }
 
   void _showSavingModal(BuildContext context) {
-    OutfitSavingDialog(outfit: outfit).show(context);
+    OutfitSavingDialog(outfit: _outfit).show(context);
+  }
+
+  Widget _unsaveButton() {
+    return IconButton(
+      tooltip: "remove from saved",
+      onPressed: _unsave,
+      icon: const Icon(Icons.bookmark_added_outlined),
+    );
+  }
+
+  void _unsave() {
+    final outfitManager = GetIt.I.get<OutfitManager>();
+    outfitManager.deleteOutfit(_outfit);
   }
 }

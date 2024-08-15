@@ -26,16 +26,19 @@ class OutfitListScreen extends StatelessWidget {
     );
   }
 
-  SliverList get _list {
-    return SliverList.separated(
-      itemCount: _outfits.length,
-      itemBuilder: (_, index) => OutfitTile(_outfits[index]),
-      separatorBuilder: (_, __) => const Divider(),
-    );
+  Widget get _list {
+    return ListenableBuilder(
+        listenable: _outfitManager,
+        builder: (_, __) {
+          return SliverList.separated(
+            itemCount: _outfits.length,
+            itemBuilder: (_, index) => OutfitTile(_outfits[index]),
+            separatorBuilder: (_, __) => const Divider(),
+          );
+        });
   }
 
-  List<Outfit> get _outfits {
-    final outfitManager = GetIt.I.get<OutfitManager>();
-    return outfitManager.outfits;
-  }
+  List<Outfit> get _outfits => _outfitManager.outfits;
+
+  OutfitManager get _outfitManager => GetIt.I.get<OutfitManager>();
 }
