@@ -1,30 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+
+import 'outfit.dart';
+import 'tile.dart';
 import 'manager.dart';
 
 class OutfitListScreen extends StatelessWidget {
-  final outfitManager = GetIt.I.get<OutfitManager>();
-
-  OutfitListScreen({super.key});
+  const OutfitListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
-        slivers: <Widget>[
-          const SliverAppBar.medium(
-            title: Text("saved outfits"),
-          ),
-          SliverList.list(
-            children: [
-              for (final outfit in outfitManager.outfits)
-                ListTile(
-                  title: Text(outfit.name),
-                )
-            ],
-          )
+        slivers: [
+          _appBar,
+          _list,
         ],
       ),
     );
+  }
+
+  SliverAppBar get _appBar {
+    return const SliverAppBar.medium(
+      title: Text("saved outfits"),
+    );
+  }
+
+  SliverList get _list {
+    return SliverList.separated(
+      itemCount: _outfits.length,
+      itemBuilder: (_, index) => OutfitTile(_outfits[index]),
+      separatorBuilder: (_, __) => const Divider(),
+    );
+  }
+
+  List<Outfit> get _outfits {
+    final outfitManager = GetIt.I.get<OutfitManager>();
+    return outfitManager.outfits;
   }
 }

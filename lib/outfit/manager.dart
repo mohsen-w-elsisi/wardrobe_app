@@ -14,6 +14,12 @@ class OutfitManager with ChangeNotifier {
 
   List<Outfit> get outfits => _outfits;
 
+  Outfit getOutfitById(String id) {
+    return _outfits.firstWhere(
+      (outfit) => outfit.id == id,
+    );
+  }
+
   void saveOutfit(Outfit outfit) {
     assertNotEphemiral(outfit);
     if (_outfitIsSaved(outfit)) {

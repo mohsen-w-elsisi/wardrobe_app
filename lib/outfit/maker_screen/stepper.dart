@@ -46,13 +46,17 @@ class OutfitMakerStepper extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => OutfitPresenterScreen(
-          Outfit.ephemiral(
-            items: outfitMakerManager.selectedItemsAsList,
-          ),
+          _outfit,
         ),
       ),
     );
   }
+
+  Outfit get _outfit => Outfit.ephemiral(
+        items: [
+          for (final item in outfitMakerManager.selectedItemsAsList) item.id
+        ],
+      );
 }
 
 class _StepIcon extends StatelessWidget {

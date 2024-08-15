@@ -4,7 +4,7 @@ import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'dispay_options/attribute.dart';
 
 class ClothItemAttributeIconRow extends StatelessWidget {
-  final List<ClothItemAttribute> attributes;
+  final Iterable<ClothItemAttribute> attributes;
   final bool alignEnd;
 
   const ClothItemAttributeIconRow(
