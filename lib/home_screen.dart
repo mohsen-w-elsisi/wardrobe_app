@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/outfit/liist_screen.dart';
+import 'package:wardrobe_app/outfit/list_screen.dart';
 
 import 'cloth_item/cloth_item.dart';
 import 'cloth_item/manager.dart';
