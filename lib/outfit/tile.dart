@@ -27,7 +27,7 @@ class OutfitTile extends StatelessWidget {
   Widget _closedBuilder(_, __) {
     return ListTile(
       title: Text(_outfit.name),
-      subtitle: Text(_itemNames),
+      subtitle: Text(_itemNames, overflow: TextOverflow.ellipsis),
       trailing: _attributesRow,
     );
   }
