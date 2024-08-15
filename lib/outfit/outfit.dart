@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
+part 'outfit.g.dart';
+
+@HiveType(typeId: 4)
 @immutable
 class Outfit {
+  @HiveField(0)
   final String id;
-  final List<String> _items;
+  @HiveField(1)
+  final Iterable<String> items;
+  @HiveField(2)
   final String name;
 
   const Outfit({
-    required List<String> items,
+    required this.items,
     required this.id,
     required this.name,
-  }) : _items = items;
+  });
 
   const Outfit.ephemiral({
-    required List<String> items,
-  })  : _items = items,
-        id = '',
+    required this.items,
+  })  : id = '',
         name = '';
-
-  List<String> get items => List.unmodifiable(_items);
 
   bool hasSameId(Outfit outfit) => id == outfit.id;
 

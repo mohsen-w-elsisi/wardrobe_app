@@ -68,24 +68,27 @@ class ClothItemTypeAdapter extends TypeAdapter<ClothItemType> {
   @override
   ClothItemType read(BinaryReader reader) {
     switch (reader.readByte()) {
+      case 3:
+        return ClothItemType.headWear;
       case 0:
         return ClothItemType.top;
       case 1:
         return ClothItemType.bottom;
       case 2:
         return ClothItemType.jacket;
-      case 3:
-        return ClothItemType.headWear;
       case 4:
         return ClothItemType.shoe;
       default:
-        return ClothItemType.top;
+        return ClothItemType.headWear;
     }
   }
 
   @override
   void write(BinaryWriter writer, ClothItemType obj) {
     switch (obj) {
+      case ClothItemType.headWear:
+        writer.writeByte(3);
+        break;
       case ClothItemType.top:
         writer.writeByte(0);
         break;
@@ -94,9 +97,6 @@ class ClothItemTypeAdapter extends TypeAdapter<ClothItemType> {
         break;
       case ClothItemType.jacket:
         writer.writeByte(2);
-        break;
-      case ClothItemType.headWear:
-        writer.writeByte(3);
         break;
       case ClothItemType.shoe:
         writer.writeByte(4);
