@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item_views/dispay_options/attribute.dart';
 import 'package:wardrobe_app/subbmitable_bottom_sheet.dart';
+import '../../utils/cloth_item_attribute_selection_manager.dart';
 import 'settings.dart';
 
 class ClothItemCompoundViewAttributeFilterModal extends StatelessWidget {
   final ClothItemCompoundViewSettingsController settingsController;
-  late final _FilteredAttributeModalManager _filteredAttributeManager;
+  late final ClothItemAttributeSelectionManager _filteredAttributeManager;
 
   ClothItemCompoundViewAttributeFilterModal({
     super.key,
     required this.settingsController,
   }) {
-    _filteredAttributeManager = _FilteredAttributeModalManager(
+    _filteredAttributeManager = ClothItemAttributeSelectionManager(
       settingsController.settings.filteredAttributes,
     );
   }
@@ -49,14 +50,14 @@ class ClothItemCompoundViewAttributeFilterModal extends StatelessWidget {
 
   void _saveSelectionToSettingsController() {
     settingsController.setFilteredAttributes(
-      _filteredAttributeManager.set,
+      _filteredAttributeManager.selectedAttributes,
     );
   }
 }
 
 class _AttributeLabeledCheckBox extends StatelessWidget {
   final ClothItemAttribute attribute;
-  final _FilteredAttributeModalManager filteredAttributeModalManager;
+  final ClothItemAttributeSelectionManager filteredAttributeModalManager;
 
   const _AttributeLabeledCheckBox({
     required this.attribute,
@@ -78,36 +79,12 @@ class _AttributeLabeledCheckBox extends StatelessWidget {
 
   void updateAttributeSelectionState(isSelected) {
     if (isSelected ?? false) {
-      filteredAttributeModalManager.addAttribute(attribute);
+      filteredAttributeModalManager.selectAttribute(attribute);
     } else {
-      filteredAttributeModalManager.removeAttribute(attribute);
+      filteredAttributeModalManager.unselectAttribute(attribute);
     }
   }
 
   String get _attributeName =>
       clothItemAttributeDisplayOptions[attribute]!.name;
-}
-
-class _FilteredAttributeModalManager with ChangeNotifier {
-  late final Set<ClothItemAttribute> _selectedAttributes;
-
-  _FilteredAttributeModalManager(Set<ClothItemAttribute> selectedAttributes) {
-    _selectedAttributes = selectedAttributes.toSet();
-  }
-
-  void addAttribute(ClothItemAttribute attribute) {
-    _selectedAttributes.add(attribute);
-    notifyListeners();
-  }
-
-  void removeAttribute(ClothItemAttribute attribute) {
-    _selectedAttributes.remove(attribute);
-    notifyListeners();
-  }
-
-  bool attributeIsSelected(ClothItemAttribute attribute) {
-    return _selectedAttributes.contains(attribute);
-  }
-
-  Set<ClothItemAttribute> get set => Set.unmodifiable(_selectedAttributes);
 }

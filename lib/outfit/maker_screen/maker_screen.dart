@@ -4,13 +4,14 @@ import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/manager.dart';
 import 'package:wardrobe_app/cloth_item/organiser.dart';
 import 'package:wardrobe_app/outfit/maker_screen/manager.dart';
+import 'package:wardrobe_app/utils/cloth_item_attribute_selection_manager.dart';
 
 import 'attribute_filter_chips.dart';
 import 'stepper.dart';
 
 class OutfitMakerScreen extends StatelessWidget {
   final _clothItemManager = GetIt.I.get<ClothItemManager>();
-  final _attributeFilterManager = AttributeFIlterManager();
+  final _attributeFilterationManager = ClothItemAttributeSelectionManager({});
   late final OutfitMakerManager _outfitMakerManager;
 
   OutfitMakerScreen({List<ClothItem>? preSelectedItems, super.key}) {
@@ -33,12 +34,12 @@ class OutfitMakerScreen extends StatelessWidget {
   }
 
   void _listenToChangesInFilteredAttributesAndUpdateAvailableItems() {
-    _attributeFilterManager.addListener(_updateAvailableItems);
+    _attributeFilterationManager.addListener(_updateAvailableItems);
   }
 
   void _updateAvailableItems() {
     final availableItems = _getItemsFilteredBySelectedAttributes();
-    if (_attributeFilterManager.selectedAttributes.isNotEmpty) {
+    if (_attributeFilterationManager.selectedAttributes.isNotEmpty) {
       _outfitMakerManager.setAvailableItems(availableItems);
     } else {
       _outfitMakerManager.setAvailableItems(_allSavedItems);
@@ -47,7 +48,7 @@ class OutfitMakerScreen extends StatelessWidget {
 
   List<ClothItem> _getItemsFilteredBySelectedAttributes() {
     final organiser = ClothItemOrganiser(_allSavedItems);
-    final filterAttributes = _attributeFilterManager.selectedAttributes;
+    final filterAttributes = _attributeFilterationManager.selectedAttributes;
     return organiser.filterUsingAttributes(filterAttributes);
   }
 
@@ -83,7 +84,7 @@ class OutfitMakerScreen extends StatelessWidget {
 
   Widget get _attributeFilterChips {
     return OutfitMakerAtributeFilterChips(
-      attributeFIlterManager: _attributeFilterManager,
+      selectionManager: _attributeFilterationManager,
     );
   }
 }

@@ -4,7 +4,7 @@ import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/manager.dart';
 import 'package:wardrobe_app/cloth_item_editers/cloth_item_matching_dialog.dart';
 import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_manager.dart';
-import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_screen.dart';
+import 'package:wardrobe_app/cloth_item_editers/new_screen/new_cloth_item_screen.dart';
 import 'package:wardrobe_app/outfit/maker_screen/maker_screen.dart';
 
 import 'dispay_options/attribute.dart';

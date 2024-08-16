@@ -5,7 +5,7 @@ import 'package:wardrobe_app/outfit/list_screen.dart';
 import 'cloth_item/cloth_item.dart';
 import 'cloth_item/manager.dart';
 import 'cloth_item_editers/new_cloth_item_manager.dart';
-import 'cloth_item_editers/new_cloth_item_screen.dart';
+import 'cloth_item_editers/new_screen/new_cloth_item_screen.dart';
 import 'cloth_item_views/grouped_list_view.dart';
 import 'outfit/maker_screen/maker_screen.dart';
 import 'settings_screen/settings_screen.dart';
