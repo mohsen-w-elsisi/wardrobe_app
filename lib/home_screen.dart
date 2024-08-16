@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/outfit/list_screen.dart';
+import 'package:wardrobe_app/outfit/views/list_screen.dart';
 
-import 'cloth_item/cloth_item.dart';
-import 'cloth_item/manager.dart';
-import 'cloth_item_editers/new_cloth_item_manager.dart';
-import 'cloth_item_editers/new_screen/new_cloth_item_screen.dart';
-import 'cloth_item_views/grouped_list_view.dart';
-import 'outfit/maker_screen/maker_screen.dart';
+import 'cloth_item/backend/cloth_item.dart';
+import 'cloth_item/backend/manager.dart';
+import 'cloth_item/backend/new_item_manager.dart';
+import 'cloth_item/views/editing_screen/new_screen/editing_screen.dart';
+import 'cloth_item/views/grouped_list_view.dart';
+import 'outfit/views/maker_screen/maker_screen.dart';
 import 'settings_screen/settings_screen.dart';
-import 'cloth_item_views/compound_view/cloth_item_compound_view.dart';
-import 'cloth_item_views/details_screen.dart';
+import 'cloth_item/views/compound_view/compound_view.dart';
+import 'cloth_item/views/details_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final clothItemManager = GetIt.I.get<ClothItemManager>();

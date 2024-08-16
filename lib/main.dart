@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/cloth_item/manager.dart';
-import 'package:wardrobe_app/cloth_item/hive_storage_agent.dart';
+import 'package:wardrobe_app/cloth_item/backend/manager.dart';
+import 'package:wardrobe_app/cloth_item/backend/hive_storage_agent.dart';
 import 'package:wardrobe_app/home_screen.dart';
-import 'package:wardrobe_app/outfit/hive_storage_agent.dart';
-import 'package:wardrobe_app/outfit/manager.dart';
+import 'package:wardrobe_app/outfit/backend/hive_storage_agent.dart';
+import 'package:wardrobe_app/outfit/backend/manager.dart';
 import 'package:wardrobe_app/theme/shared_preferences_theme_storage_agent.dart';
 import 'package:wardrobe_app/theme/theme_settings_controller.dart';
 import 'package:hive_flutter/hive_flutter.dart';
