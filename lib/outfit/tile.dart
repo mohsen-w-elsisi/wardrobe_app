@@ -115,9 +115,13 @@ class _OutfitAttributeCalculator {
   }
 
   void _collapseMatrixToList() {
-    _attributes = _attributeMatrix
-        .map((e) => e.toSet())
-        .reduce((a, b) => a.intersection(b))
-        .toSet();
+    if (_attributeMatrix.isEmpty) {
+      _attributes = [];
+    } else {
+      _attributes = _attributeMatrix
+          .map((e) => e.toSet())
+          .reduce((a, b) => a.intersection(b))
+          .toSet();
+    }
   }
 }

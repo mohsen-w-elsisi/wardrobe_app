@@ -19,15 +19,25 @@ class ClothItemCompoundView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListenableBuilder(
       listenable: settingsController,
-      builder: (_, __) => ListView(
-        children: [
-          ClothItemCompoundViewControlBar(settingsController),
-          ClothItemCompoundViewLayoutSwitcher(
-            clothItems: _sortedFilteredClothItems,
-            currentLayout: settingsController.settings.layout,
-          ),
-        ],
-      ),
+      builder: (_, __) => clothItems.isNotEmpty ? _mainView : _noItemsMessage,
+    );
+  }
+
+  Widget get _noItemsMessage {
+    return const Center(
+      child: Text("no items saved yet"),
+    );
+  }
+
+  Widget get _mainView {
+    return ListView(
+      children: [
+        ClothItemCompoundViewControlBar(settingsController),
+        ClothItemCompoundViewLayoutSwitcher(
+          clothItems: _sortedFilteredClothItems,
+          currentLayout: settingsController.settings.layout,
+        ),
+      ],
     );
   }
 

@@ -14,8 +14,19 @@ class OutfitListScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           _appBar,
-          _list,
+          _listOrEmptyMessage,
         ],
+      ),
+    );
+  }
+
+  Widget get _listOrEmptyMessage =>
+      _outfits.isNotEmpty ? _list : _noOutfitsMessage;
+
+  Widget get _noOutfitsMessage {
+    return const SliverFillRemaining(
+      child: Center(
+        child: Text("no outfits saved yet"),
       ),
     );
   }
@@ -28,14 +39,15 @@ class OutfitListScreen extends StatelessWidget {
 
   Widget get _list {
     return ListenableBuilder(
-        listenable: _outfitManager,
-        builder: (_, __) {
-          return SliverList.separated(
-            itemCount: _outfits.length,
-            itemBuilder: (_, index) => OutfitTile(_outfits[index]),
-            separatorBuilder: (_, __) => const Divider(),
-          );
-        });
+      listenable: _outfitManager,
+      builder: (_, __) {
+        return SliverList.separated(
+          itemCount: _outfits.length,
+          itemBuilder: (_, index) => OutfitTile(_outfits[index]),
+          separatorBuilder: (_, __) => const Divider(),
+        );
+      },
+    );
   }
 
   List<Outfit> get _outfits => _outfitManager.outfits;
