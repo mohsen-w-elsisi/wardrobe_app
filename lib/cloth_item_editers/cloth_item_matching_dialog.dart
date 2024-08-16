@@ -7,6 +7,7 @@ import 'package:wardrobe_app/cloth_item/organiser.dart';
 import 'package:wardrobe_app/cloth_item_editers/new_cloth_item_manager.dart';
 import 'package:wardrobe_app/cloth_item_views/details_screen.dart';
 import 'package:wardrobe_app/cloth_item_views/dispay_options/type.dart';
+import 'package:wardrobe_app/subbmitable_bottom_sheet.dart';
 
 class ClothItemMatchingDialog extends StatelessWidget {
   final NewClothItemManager newClothItemManager;
@@ -32,49 +33,14 @@ class ClothItemMatchingDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-      child: Stack(
-        children: [
-          Column(
-            children: [
-              _dialogTitle(context),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: _ListBody(
-                    newClothItemManager: newClothItemManager,
-                    clothItem: clothItem,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          _saveButton(context),
-        ],
-      ),
-    );
-  }
-
-  Widget _dialogTitle(BuildContext context) {
-    return Text(
-      "Select matching items",
-      style: Theme.of(context).textTheme.titleLarge,
-    );
-  }
-
-  Widget _saveButton(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: SizedBox(
-        width: double.infinity,
-        child: FilledButton(
-          onPressed: () {
-            Navigator.pop(context);
-            onDismiss(context);
-          },
-          child: const Text("save"),
-        ),
+    return SubbmitableBottomSheet(
+      context: context,
+      title: "Select matching items",
+      submitButtonText: "save",
+      onSubmit: () => onDismiss(context),
+      builder: (_) => _ListBody(
+        newClothItemManager: newClothItemManager,
+        clothItem: clothItem,
       ),
     );
   }

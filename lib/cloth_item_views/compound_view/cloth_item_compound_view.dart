@@ -10,7 +10,7 @@ class ClothItemCompoundView extends StatelessWidget {
   final List<ClothItem> clothItems;
 
   final settingsController = ClothItemCompoundViewSettingsController(
-    ClothItemCompoundViewSettings.defaultSettings(),
+    const ClothItemCompoundViewSettings(),
   );
 
   ClothItemCompoundView(this.clothItems, {super.key});

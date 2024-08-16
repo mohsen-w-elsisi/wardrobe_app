@@ -1,42 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item_views/dispay_options/sort_mode.dart';
+
+part 'settings.freezed.dart';
 
 const layoutSwitchAnimationDuration = Duration(milliseconds: 400);
 
 class ClothItemCompoundViewSettingsController extends ChangeNotifier {
-  final ClothItemCompoundViewSettings settings;
+  ClothItemCompoundViewSettings _settings;
 
-  ClothItemCompoundViewSettingsController(this.settings);
+  ClothItemCompoundViewSettingsController(this._settings);
+
+  ClothItemCompoundViewSettings get settings => _settings;
 
   void setLayout(ClothItemCompoundViewLayout layout) {
-    settings.layout = layout;
+    _settings = _settings.copyWith(layout: layout);
     notifyListeners();
   }
 
   void setSortMode(ClothItemSortMode sortMode) {
-    settings.sortMode = sortMode;
+    _settings = _settings.copyWith(sortMode: sortMode);
+    notifyListeners();
+  }
+
+  void setFilteredAttributes(Set<ClothItemAttribute> attributes) {
+    _settings = _settings.copyWith(filteredAttributes: attributes);
     notifyListeners();
   }
 
   bool layoutIs(ClothItemCompoundViewLayout testLayout) =>
-      testLayout == settings.layout;
+      testLayout == _settings.layout;
 
   bool sortModeIs(ClothItemSortMode testSortMode) =>
-      testSortMode == settings.sortMode;
+      testSortMode == _settings.sortMode;
 }
 
-class ClothItemCompoundViewSettings {
-  ClothItemCompoundViewLayout layout;
-  ClothItemSortMode sortMode;
-
-  ClothItemCompoundViewSettings({
-    required this.layout,
-    required this.sortMode,
-  });
-
-  ClothItemCompoundViewSettings.defaultSettings()
-      : layout = ClothItemCompoundViewLayout.grid,
-        sortMode = ClothItemSortMode.byName;
+@freezed
+class ClothItemCompoundViewSettings with _$ClothItemCompoundViewSettings {
+  const factory ClothItemCompoundViewSettings({
+    @Default(ClothItemCompoundViewLayout.grid)
+    ClothItemCompoundViewLayout layout,
+    @Default(ClothItemSortMode.byName) ClothItemSortMode sortMode,
+    @Default({}) Set<ClothItemAttribute> filteredAttributes,
+  }) = _ClothItemCompoundViewSettings;
 }
 
 enum ClothItemCompoundViewLayout { list, grid }

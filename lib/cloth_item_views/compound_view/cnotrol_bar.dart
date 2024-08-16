@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wardrobe_app/cloth_item_views/compound_view/attribute_filter_modal.dart';
 import 'package:wardrobe_app/cloth_item_views/dispay_options/sort_mode.dart';
 
 import 'settings.dart';
@@ -12,6 +13,7 @@ class ClothItemCompoundViewControlBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        _filterAttributesButton(context),
         _sortByLabel(context),
         _sortModeDropDown(),
         const Spacer(),
@@ -61,6 +63,20 @@ class ClothItemCompoundViewControlBar extends StatelessWidget {
           ? ClothItemCompoundViewLayout.list
           : ClothItemCompoundViewLayout.grid,
     );
+  }
+
+  Widget _filterAttributesButton(BuildContext context) {
+    return IconButton(
+      tooltip: "filter",
+      onPressed: () => _openAttributeFilterModal(context),
+      icon: const Icon(Icons.tune),
+    );
+  }
+
+  void _openAttributeFilterModal(BuildContext context) {
+    ClothItemCompoundViewAttributeFilterModal(
+      settingsController: settingsController,
+    ).show(context);
   }
 }
 
