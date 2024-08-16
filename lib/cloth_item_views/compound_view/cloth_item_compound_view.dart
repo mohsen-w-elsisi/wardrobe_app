@@ -23,7 +23,7 @@ class ClothItemCompoundView extends StatelessWidget {
         children: [
           ClothItemCompoundViewControlBar(settingsController),
           ClothItemCompoundViewLayoutSwitcher(
-            clothItems: _sortedClothItems,
+            clothItems: _sortedFilteredClothItems,
             currentLayout: settingsController.settings.layout,
           ),
         ],
@@ -31,9 +31,15 @@ class ClothItemCompoundView extends StatelessWidget {
     );
   }
 
-  List<ClothItem> get _sortedClothItems {
-    final clothItemOrganiser = ClothItemOrganiser(clothItems);
+  List<ClothItem> get _sortedFilteredClothItems {
+    final clothItemOrganiser = ClothItemOrganiser(_filteredClothItems);
     final sortMode = settingsController.settings.sortMode;
     return clothItemOrganiser.sortFavouritesFirst(sortMode);
+  }
+
+  List<ClothItem> get _filteredClothItems {
+    final filterAttributes = settingsController.settings.filteredAttributes;
+    final clothItemOrganiser = ClothItemOrganiser(clothItems);
+    return clothItemOrganiser.filterUsingAttributes(filterAttributes);
   }
 }

@@ -7,6 +7,20 @@ class ClothItemOrganiser {
 
   const ClothItemOrganiser(this.clothItems);
 
+  List<ClothItem> filterUsingAttributes(Set<ClothItemAttribute> attributes) {
+    if (attributes.isEmpty) return clothItems;
+    final availableItems = <ClothItem>[];
+    for (final item in clothItems) {
+      for (final attribute in item.attributes) {
+        if (attributes.contains(attribute)) {
+          availableItems.add(item);
+          break;
+        }
+      }
+    }
+    return availableItems;
+  }
+
   List<ClothItem> itemsMatchingWithBaseitemsOfType(
       List<ClothItem> baseItems, ClothItemType type) {
     final clothItemsOfType = filterBytype(type);

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/manager.dart';
+import 'package:wardrobe_app/cloth_item/organiser.dart';
 import 'package:wardrobe_app/outfit/maker_screen/manager.dart';
 
 import 'attribute_filter_chips.dart';
@@ -36,25 +37,18 @@ class OutfitMakerScreen extends StatelessWidget {
   }
 
   void _updateAvailableItems() {
+    final availableItems = _getItemsFilteredBySelectedAttributes();
     if (_attributeFilterManager.selectedAttributes.isNotEmpty) {
-      final availableItems = _getAvailableItemForAllowedAttributes();
       _outfitMakerManager.setAvailableItems(availableItems);
     } else {
       _outfitMakerManager.setAvailableItems(_allSavedItems);
     }
   }
 
-  List<ClothItem> _getAvailableItemForAllowedAttributes() {
-    final availableItems = <ClothItem>[];
-    for (final item in _allSavedItems) {
-      for (final attribute in item.attributes) {
-        if (_attributeFilterManager.selectedAttributes.contains(attribute)) {
-          availableItems.add(item);
-          break;
-        }
-      }
-    }
-    return availableItems;
+  List<ClothItem> _getItemsFilteredBySelectedAttributes() {
+    final organiser = ClothItemOrganiser(_allSavedItems);
+    final filterAttributes = _attributeFilterManager.selectedAttributes;
+    return organiser.filterUsingAttributes(filterAttributes);
   }
 
   List<ClothItem> get _allSavedItems => _clothItemManager.clothItems;
