@@ -20,11 +20,17 @@ class OutfitPresenterScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: <Widget>[
           _AppBar(outfit: outfit),
+          if (_itemsWereDeleted)
+            const SliverToBoxAdapter(
+              child: _MissingClothItemsMessage(),
+            ),
           ClothItemGridView(_clothItems, sliver: true),
         ],
       ),
     );
   }
+
+  bool get _itemsWereDeleted => _clothItems.length != outfit.items.length;
 
   List<ClothItem> get _clothItems {
     final clothItemManager = GetIt.I.get<ClothItemManager>();
@@ -32,6 +38,37 @@ class OutfitPresenterScreen extends StatelessWidget {
         .map(clothItemManager.getClothItemById)
         .nonNulls
         .toList();
+  }
+}
+
+class _MissingClothItemsMessage extends StatelessWidget {
+  static const _borderRadius = BorderRadius.all(Radius.circular(12));
+  static const _margin = EdgeInsets.symmetric(horizontal: 4, vertical: 4);
+  static const _padding = EdgeInsets.all(18);
+  static const _messageText =
+      "one or more items included in the outfit have been deleted since the outfit was saved!";
+
+  const _MissingClothItemsMessage();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.errorContainer,
+        borderRadius: _borderRadius,
+      ),
+      margin: _margin,
+      padding: _padding,
+      child: Text(_messageText, style: _textStyle(context)),
+    );
+  }
+
+  TextStyle _textStyle(BuildContext context) {
+    final color = Theme.of(context).colorScheme.onErrorContainer;
+    final baseStyle = Theme.of(context).textTheme.bodyMedium!;
+    return baseStyle.copyWith(
+      color: color,
+    );
   }
 }
 
