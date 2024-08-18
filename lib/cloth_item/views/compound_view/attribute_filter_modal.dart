@@ -26,7 +26,7 @@ class ClothItemCompoundViewAttributeFilterModal extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListenableBuilder(
       listenable: _filteredAttributeManager,
-      builder: (context, _) => SubbmitableBottomSheet(
+      builder: (context, _) => SubmitableBottomSheet(
         context: context,
         title: "filter by attribute",
         builder: _attributeCheckboxes,

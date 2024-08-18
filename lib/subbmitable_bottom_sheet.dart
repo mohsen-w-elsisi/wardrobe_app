@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class SubbmitableBottomSheet extends StatelessWidget {
+class SubmitableBottomSheet extends StatelessWidget {
   static const _titleBodySpacing = EdgeInsets.only(top: 8.0);
   static const _sheetPadding = EdgeInsets.symmetric(
     vertical: 16,
@@ -13,7 +13,7 @@ class SubbmitableBottomSheet extends StatelessWidget {
   final void Function() onSubmit;
   final Widget Function(BuildContext context) builder;
 
-  const SubbmitableBottomSheet({
+  const SubmitableBottomSheet({
     super.key,
     required this.title,
     required this.submitButtonText,

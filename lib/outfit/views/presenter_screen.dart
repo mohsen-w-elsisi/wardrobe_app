@@ -6,6 +6,8 @@ import 'package:wardrobe_app/cloth_item/backend/manager.dart';
 import 'package:wardrobe_app/cloth_item/views/grid_view.dart';
 import 'package:wardrobe_app/outfit/backend/manager.dart';
 import 'package:wardrobe_app/outfit/backend/outfit.dart';
+import 'package:wardrobe_app/outfit/backend/outfit_saver.dart';
+import 'package:wardrobe_app/outfit/views/outfit_was_saved_snackbar.dart';
 
 import 'saving_modal.dart';
 
@@ -141,7 +143,13 @@ class _SaveButton extends StatelessWidget {
   }
 
   void _showSavingModal(BuildContext context) {
-    OutfitSavingDialog(outfit: _outfit).show(context);
+    final outfitSaver = OutfitSaver(outfit: _outfit);
+    OutfitSavingDialog(
+      outfitSaver: outfitSaver,
+      onSubmit: () {
+        OutfitWasSavedSnackbar(outfit: outfitSaver.outfit).show(context);
+      },
+    ).show(context);
   }
 
   Widget _unsaveButton() {

@@ -33,7 +33,7 @@ class ClothItemMatchingDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SubbmitableBottomSheet(
+    return SubmitableBottomSheet(
       context: context,
       title: "Select matching items",
       submitButtonText: "save",
