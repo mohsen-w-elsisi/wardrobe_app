@@ -56,18 +56,20 @@ class OutfitMakerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _appBar,
-      body: ListenableBuilder(
-        listenable: _clothItemManager,
-        builder: (_, __) => ListView(
-          children: [
-            _attributeFilterChips,
-            _stepper,
-          ],
-        ),
-      ),
-    );
+    return ListenableBuilder(
+        listenable: _outfitMakerManager,
+        builder: (_, __) {
+          return Scaffold(
+            appBar: _appBar,
+            body: ListView(
+              children: [
+                _attributeFilterChips,
+                _stepper,
+              ],
+            ),
+            floatingActionButton: _skipToPreviewButton,
+          );
+        });
   }
 
   AppBar get _appBar {
@@ -85,6 +87,17 @@ class OutfitMakerScreen extends StatelessWidget {
   Widget get _attributeFilterChips {
     return OutfitMakerAtributeFilterChips(
       selectionManager: _attributeFilterationManager,
+    );
+  }
+
+  Widget get _skipToPreviewButton {
+    return Visibility(
+      visible: !(_outfitMakerManager.notEnoughItemsSelected),
+      child: FloatingActionButton(
+        tooltip: "preview outfit",
+        onPressed: () => _outfitMakerManager.onLastStepDone!(),
+        child: const Icon(Icons.arrow_forward),
+      ),
     );
   }
 }

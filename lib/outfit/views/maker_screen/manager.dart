@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:wardrobe_app/cloth_item/backend/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/backend/organiser.dart';
 
-class OutfitMakerManager extends ChangeNotifier {
+class OutfitMakerManager with ChangeNotifier {
   List<ClothItem> _avaliableItems;
 
   int _currentStep = 0;
@@ -78,6 +78,8 @@ class OutfitMakerManager extends ChangeNotifier {
   }
 
   ClothItemType get typeOfCurrentStep => ClothItemType.values[currentStep];
+
+  bool get notEnoughItemsSelected => selectedItemsAsList.length < 2;
 
   List<ClothItem> get selectedItemsAsList =>
       selectedItems.values.nonNulls.toList();

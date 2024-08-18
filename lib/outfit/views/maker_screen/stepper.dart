@@ -18,7 +18,9 @@ class OutfitMakerStepper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    outfitMakerManager.onLastStepDone = () => _presentOutfit(context);
+    outfitMakerManager.onLastStepDone = () {
+      _presentOutfitOrShowMissingItemsSnackbar(context);
+    };
 
     return ListenableBuilder(
       listenable: outfitMakerManager,
@@ -42,12 +44,28 @@ class OutfitMakerStepper extends StatelessWidget {
     return _Step(outfitMakerManager, type).step;
   }
 
+  void _presentOutfitOrShowMissingItemsSnackbar(BuildContext context) {
+    if (outfitMakerManager.notEnoughItemsSelected) {
+      _showMissingItemsSnackbar(context);
+    } else {
+      _presentOutfit(context);
+    }
+  }
+
   void _presentOutfit(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => OutfitPresenterScreen(
           _outfit,
         ),
+      ),
+    );
+  }
+
+  void _showMissingItemsSnackbar(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("select atleast two items to make an outfit"),
       ),
     );
   }
