@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wardrobe_app/settings_screen/about_app_tile.dart';
 import 'package:wardrobe_app/settings_screen/import_export_tile.dart';
 
 import 'clear_wardrobe_tile.dart';
@@ -10,6 +11,7 @@ class SettingsScreen extends StatelessWidget {
     SettingsScreenImportTile(),
     SettingsScreenExportTile(),
     SettingsScreenClearWardrobeTile(),
+    AboutAppTile(),
   ];
 
   const SettingsScreen({super.key});
