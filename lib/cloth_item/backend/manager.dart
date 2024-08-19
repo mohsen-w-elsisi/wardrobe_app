@@ -4,13 +4,28 @@ import 'cloth_item.dart';
 class ClothItemManager extends ChangeNotifier {
   late List<ClothItem> _clothItems;
   final ClothItemStorageAgent storageAgent;
+  final ClothItemImporter importer;
+  final ClothItemExporter exporter;
 
-  ClothItemManager({required this.storageAgent}) {
+  ClothItemManager({
+    required this.storageAgent,
+    required this.importer,
+    required this.exporter,
+  }) {
     _clothItems = storageAgent.savedItems;
     _filterDuplicates();
   }
 
-  List<ClothItem> get clothItems => _clothItems;
+  void import(String json) {
+    final importedItems = importer.import(json);
+    importedItems.forEach(saveItem);
+  }
+
+  String export() {
+    return exporter.export(clothItems);
+  }
+
+  List<ClothItem> get clothItems => List.unmodifiable(_clothItems);
 
   void saveItem(ClothItem clothItem) {
     if (_itemIsAlreadySaved(clothItem)) {
@@ -103,4 +118,12 @@ abstract class ClothItemStorageAgent {
   Future<void>? saveManyClothItems(List<ClothItem> clothItems);
   Future<void>? deleteClothItem(ClothItem clothItem);
   Future<void>? deleteAll();
+}
+
+abstract class ClothItemExporter {
+  String export(List<ClothItem> items);
+}
+
+abstract class ClothItemImporter {
+  List<ClothItem> import(String json);
 }

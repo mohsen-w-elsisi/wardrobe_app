@@ -1,66 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/theme/theme_settings_controller.dart';
-import 'package:wardrobe_app/theme/utils.dart';
+import 'package:wardrobe_app/settings_screen/import_export_tile.dart';
 
 import 'clear_wardrobe_tile.dart';
+import 'color_scheme.dart';
 
 class SettingsScreen extends StatelessWidget {
-  final themeSettingsController = GetIt.I.get<ThemeSettingsController>();
+  static const _settingsTiles = [
+    ColorSchemeDropDownSettingsTile(),
+    SettingsScreenImportTile(),
+    SettingsScreenExportTile(),
+    SettingsScreenClearWardrobeTile(),
+  ];
 
-  SettingsScreen({super.key});
+  const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListenableBuilder(
-          listenable: themeSettingsController,
-          builder: (context, _) {
-            return CustomScrollView(
-              slivers: <Widget>[
-                const SliverAppBar.medium(
-                  flexibleSpace: FlexibleSpaceBar(
-                    title: Text("settings"),
-                  ),
-                ),
-                SliverList.list(
-                  children: [
-                    _ColorSchemeDropDownSettingsTile(),
-                    const SettingsScreenClearWardrobeTile(),
-                  ],
-                )
-              ],
-            );
-          }),
+      body: CustomScrollView(
+        slivers: [
+          const _AppBar(),
+          SliverList.list(children: _settingsTiles),
+        ],
+      ),
     );
   }
 }
 
-class _ColorSchemeDropDownSettingsTile extends StatelessWidget {
-  final themeSettingsController = GetIt.I.get<ThemeSettingsController>();
-
-  _ColorSchemeDropDownSettingsTile();
+class _AppBar extends StatelessWidget {
+  const _AppBar();
 
   @override
   Widget build(BuildContext context) {
-    final items = [
-      for (final entry in colorSchemeSeedOptions.entries)
-        DropdownMenuItem(
-          value: entry.value.value,
-          child: Text(entry.key),
-        )
-    ];
-    return ListTile(
-      title: const Text("color scheme"),
-      trailing: DropdownButton(
-        value: themeSettingsController.colorSchemeSeed.value,
-        onChanged: (value) => _setColorSchemeSeed(value!),
-        items: items,
+    return const SliverAppBar.medium(
+      flexibleSpace: FlexibleSpaceBar(
+        title: Text("settings"),
       ),
     );
-  }
-
-  void _setColorSchemeSeed(int colorValue) {
-    themeSettingsController.colorSchemeSeed = Color(colorValue);
   }
 }
