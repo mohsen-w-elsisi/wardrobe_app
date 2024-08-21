@@ -1,5 +1,5 @@
 name: wardrobe_app
-description: "A new Flutter project."
+description: "An app to help you manage your wardrobe."
 publish_to: 'none'
 version: 0.1.0
 
@@ -27,8 +27,14 @@ dev_dependencies:
   hive_generator: ^2.0.1
   build_runner: ^2.4.11
   freezed: ^2.5.2
+  flutter_launcher_icons: ^0.13.1
+  rename_app: ^1.6.1
 
 flutter:
   uses-material-design: true
   assets:
     - assets/type_icons/
+
+flutter_launcher_icons:
+  image_path: "assets/app_icon.png"
+  android: true
