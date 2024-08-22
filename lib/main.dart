@@ -25,6 +25,7 @@ class App extends StatelessWidget {
             colorSchemeSeed: themeSettingsController.colorSchemeSeed,
           ),
           darkTheme: ThemeData(
+            brightness: Brightness.dark,
             useMaterial3: true,
             colorSchemeSeed: themeSettingsController.colorSchemeSeed,
           ),

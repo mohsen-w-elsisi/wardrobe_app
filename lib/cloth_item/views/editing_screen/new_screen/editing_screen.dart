@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/backend/manager.dart';
+import 'package:wardrobe_app/cloth_item/backend/organiser.dart';
 import 'package:wardrobe_app/cloth_item/views/matching_dialog.dart';
 import '../../../backend/new_item_manager.dart';
 import 'attribute_selector.dart';
@@ -83,9 +84,15 @@ class _NextStepButton extends StatelessWidget {
     );
   }
 
-  Function get _onTap => showMatchingsDialog
+  Function get _onTap => showMatchingsDialog && _thereAreParableItems
       ? _showItemMatchingDialogOrMissingInputSnacknbar
       : _saveItemOrShowMissingInputDialog;
+
+  bool get _thereAreParableItems {
+    final itemOrganiser = ClothItemOrganiser(clothItemManager.clothItems);
+    final parableItems = itemOrganiser.filterOutType(newClothItemManager.type);
+    return parableItems.isNotEmpty;
+  }
 
   void _showItemMatchingDialogOrMissingInputSnacknbar(BuildContext context) {
     if (newClothItemManager.requiredFieldsSet) {

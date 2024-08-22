@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:wardrobe_app/settings_screen/about_app_tile.dart';
-import 'package:wardrobe_app/settings_screen/import_export_tile.dart';
 
+import 'about_app_tile.dart';
 import 'clear_wardrobe_tile.dart';
 import 'color_scheme.dart';
 
 class SettingsScreen extends StatelessWidget {
   static const _settingsTiles = [
     ColorSchemeDropDownSettingsTile(),
-    SettingsScreenImportTile(),
-    SettingsScreenExportTile(),
     SettingsScreenClearWardrobeTile(),
     AboutAppTile(),
   ];

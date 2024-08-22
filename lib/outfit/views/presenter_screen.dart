@@ -7,6 +7,7 @@ import 'package:wardrobe_app/cloth_item/views/grid_view.dart';
 import 'package:wardrobe_app/outfit/backend/manager.dart';
 import 'package:wardrobe_app/outfit/backend/outfit.dart';
 import 'package:wardrobe_app/outfit/backend/outfit_saver.dart';
+import 'package:wardrobe_app/outfit/backend/sharer.dart';
 import 'package:wardrobe_app/outfit/views/outfit_was_saved_snackbar.dart';
 
 import 'saving_modal.dart';
@@ -103,8 +104,7 @@ class _AppBar extends StatelessWidget {
   }
 
   void _share() {
-    final files = [for (final item in _clothItems) XFile.fromData(item.image)];
-    Share.shareXFiles(files, text: "what do you think of this outfit");
+    OutfitSharer(_clothItems).share();
   }
 
   List<ClothItem> get _clothItems {
