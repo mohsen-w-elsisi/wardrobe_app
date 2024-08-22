@@ -88,14 +88,16 @@ class _StepIcon extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.surface,
       child: Center(
         child: SvgPicture.asset(
-          _iconAssetPath,
+          _iconAssetPath(context),
           height: 20,
         ),
       ),
     );
   }
 
-  String get _iconAssetPath => clothItemTypeDisplayOptions[type]!.icon;
+  String _iconAssetPath(BuildContext context) {
+    return ClothItemTypeIconQuerier(context, type).icon;
+  }
 }
 
 class _SkipButton extends StatelessWidget {

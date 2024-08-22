@@ -8,6 +8,7 @@ class NewClothItemScreenTypeSelector extends StatelessWidget {
   final NewClothItemManager newClothItemManager;
 
   const NewClothItemScreenTypeSelector({
+    super.key,
     required this.newClothItemManager,
   });
 
@@ -21,34 +22,79 @@ class NewClothItemScreenTypeSelector extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: StatefulBuilder(
-            builder: (context, setState) => DropdownButton(
-              value: newClothItemManager.type,
-              onChanged: (value) => setState(
-                () => newClothItemManager.type = value!,
-              ),
-              items: [
-                for (final type in ClothItemType.values)
-                  DropdownMenuItem(
-                    value: type,
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(
-                          clothItemTypeDisplayOptions[type]!.icon,
-                          height: 16,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(clothItemTypeDisplayOptions[type]!.text),
-                        ),
-                      ],
-                    ),
-                  )
-              ],
-            ),
-          ),
+          child: _DropDown(newClothItemManager: newClothItemManager),
         ),
       ],
     );
   }
+}
+
+class _DropDown extends StatefulWidget {
+  final NewClothItemManager newClothItemManager;
+
+  const _DropDown({
+    required this.newClothItemManager,
+  });
+
+  @override
+  State<_DropDown> createState() => _DropDownState();
+}
+
+class _DropDownState extends State<_DropDown> {
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton(
+      value: widget.newClothItemManager.type,
+      onChanged: _updateNewItemType,
+      items: menuItems(context),
+    );
+  }
+
+  void _updateNewItemType(ClothItemType? type) {
+    setState(
+      () => widget.newClothItemManager.type = type!,
+    );
+  }
+
+  List<DropdownMenuItem<ClothItemType>> menuItems(BuildContext context) {
+    return [
+      for (final type in ClothItemType.values)
+        _DropDownButtonBuilder(context, type).menuItem
+    ];
+  }
+}
+
+class _DropDownButtonBuilder {
+  final ClothItemType _type;
+  final BuildContext _context;
+
+  _DropDownButtonBuilder(this._context, this._type);
+
+  DropdownMenuItem<ClothItemType> get menuItem {
+    return DropdownMenuItem(
+      value: _type,
+      child: Row(
+        children: [
+          _icon,
+          _label,
+        ],
+      ),
+    );
+  }
+
+  Widget get _icon {
+    return SvgPicture.asset(
+      ClothItemTypeIconQuerier(_context, _type).icon,
+      height: 16,
+    );
+  }
+
+  Widget get _label {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(_typeName),
+    );
+  }
+
+  String get _typeName => clothItemTypeDisplayOptions[_type]!.text;
 }

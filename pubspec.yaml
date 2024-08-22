@@ -33,7 +33,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/type_icons/
+    - assets/type_icons/light_mode/
+    - assets/type_icons/dark_mode/
 
 flutter_launcher_icons:
   image_path: "assets/app_icon.png"

@@ -106,7 +106,7 @@ class _ListTile extends StatelessWidget {
       onLongPress: () => _openDetailsScreen(context),
       leading: _checkbox,
       title: Text(item.name),
-      trailing: _itemTypeIcon,
+      trailing: _itemTypeIcon(context),
     );
   }
 
@@ -118,9 +118,9 @@ class _ListTile extends StatelessWidget {
     );
   }
 
-  Widget get _itemTypeIcon {
+  Widget _itemTypeIcon(BuildContext context) {
     return SvgPicture.asset(
-      clothItemTypeDisplayOptions[item.type]!.icon,
+      ClothItemTypeIconQuerier(context, item.type).icon,
       height: 20,
     );
   }
