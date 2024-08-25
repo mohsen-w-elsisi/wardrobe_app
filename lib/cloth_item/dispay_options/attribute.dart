@@ -4,11 +4,11 @@ import 'package:wardrobe_app/cloth_item/backend/cloth_item.dart';
 const ClothItemAttributeDisplayOptions clothItemAttributeDisplayOptions = {
   ClothItemAttribute.classic: _ClothItemAttributeDisplayOption(
     name: "classic",
-    icon: Icons.abc,
+    icon: Icons.work_outline,
   ),
   ClothItemAttribute.onFasion: _ClothItemAttributeDisplayOption(
     name: "on fassion",
-    icon: Icons.celebration_outlined,
+    icon: Icons.star_border_sharp,
   ),
   ClothItemAttribute.sportive: _ClothItemAttributeDisplayOption(
     name: "sporty",
@@ -27,4 +27,14 @@ class _ClothItemAttributeDisplayOption {
     required this.name,
     required this.icon,
   });
+}
+
+class BowTieIcon {
+  BowTieIcon._();
+
+  static const _kFontFam = 'BowTieIcon';
+  static const String? _kFontPkg = null;
+
+  static const IconData icon =
+      IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
