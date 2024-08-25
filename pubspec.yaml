@@ -1,7 +1,7 @@
 name: wardrobe_app
 description: "An app to help you manage your wardrobe."
 publish_to: 'none'
-version: 0.1.0
+version: 1.0.0
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
@@ -35,6 +35,7 @@ flutter:
   assets:
     - assets/type_icons/light_mode/
     - assets/type_icons/dark_mode/
+    - assets/logo.png
 
 flutter_launcher_icons:
   image_path: "assets/logo.png"
