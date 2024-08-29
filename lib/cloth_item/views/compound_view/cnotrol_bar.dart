@@ -5,7 +5,7 @@ import 'package:wardrobe_app/cloth_item/dispay_options/sort_mode.dart';
 import 'settings.dart';
 
 class ClothItemCompoundViewControlBar extends StatelessWidget {
-  final ClothItemCompoundViewSettingsController settingsController;
+  final ClothItemCompoundViewManager settingsController;
 
   const ClothItemCompoundViewControlBar(this.settingsController, {super.key});
 

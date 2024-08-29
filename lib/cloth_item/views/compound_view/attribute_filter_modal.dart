@@ -6,7 +6,7 @@ import '../../backend/attribute_selection_manager.dart';
 import 'settings.dart';
 
 class ClothItemCompoundViewAttributeFilterModal extends StatelessWidget {
-  final ClothItemCompoundViewSettingsController settingsController;
+  final ClothItemCompoundViewManager settingsController;
   late final ClothItemAttributeSelectionManager _filteredAttributeManager;
 
   ClothItemCompoundViewAttributeFilterModal({

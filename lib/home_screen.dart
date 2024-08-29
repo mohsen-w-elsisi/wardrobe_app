@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:wardrobe_app/cloth_item/views/compound_view/settings.dart';
 import 'package:wardrobe_app/outfit/views/list_screen.dart';
 
 import 'cloth_item/backend/cloth_item.dart';
@@ -37,9 +38,10 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _mainBody() {
+    final compoundViewManager = GetIt.I.get<ClothItemCompoundViewManager>();
     return ListenableBuilder(
       listenable: clothItemManager,
-      builder: (_, __) => ClothItemCompoundView(clothItemManager.clothItems),
+      builder: (_, __) => ClothItemCompoundView(compoundViewManager),
     );
   }
 

@@ -7,19 +7,16 @@ import 'layout_switcher.dart';
 import 'settings.dart';
 
 class ClothItemCompoundView extends StatelessWidget {
-  final List<ClothItem> clothItems;
+  final ClothItemCompoundViewManager _settingsManager;
 
-  final settingsController = ClothItemCompoundViewSettingsController(
-    const ClothItemCompoundViewSettings(),
-  );
-
-  ClothItemCompoundView(this.clothItems, {super.key});
+  const ClothItemCompoundView(this._settingsManager, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: settingsController,
-      builder: (_, __) => clothItems.isNotEmpty ? _mainView : _noItemsMessage,
+      listenable: _settingsManager,
+      builder: (_, __) =>
+          _settingsManager.clothItems.isNotEmpty ? _mainView : _noItemsMessage,
     );
   }
 
@@ -32,10 +29,10 @@ class ClothItemCompoundView extends StatelessWidget {
   Widget get _mainView {
     return ListView(
       children: [
-        ClothItemCompoundViewControlBar(settingsController),
+        ClothItemCompoundViewControlBar(_settingsManager),
         ClothItemCompoundViewLayoutSwitcher(
           clothItems: _sortedFilteredClothItems,
-          currentLayout: settingsController.settings.layout,
+          currentLayout: _settingsManager.settings.layout,
         ),
       ],
     );
@@ -43,13 +40,13 @@ class ClothItemCompoundView extends StatelessWidget {
 
   List<ClothItem> get _sortedFilteredClothItems {
     final clothItemOrganiser = ClothItemOrganiser(_filteredClothItems);
-    final sortMode = settingsController.settings.sortMode;
+    final sortMode = _settingsManager.settings.sortMode;
     return clothItemOrganiser.sortFavouritesFirst(sortMode);
   }
 
   List<ClothItem> get _filteredClothItems {
-    final filterAttributes = settingsController.settings.filteredAttributes;
-    final clothItemOrganiser = ClothItemOrganiser(clothItems);
+    final filterAttributes = _settingsManager.settings.filteredAttributes;
+    final clothItemOrganiser = ClothItemOrganiser(_settingsManager.clothItems);
     return clothItemOrganiser.filterUsingAttributes(filterAttributes);
   }
 }

@@ -7,10 +7,22 @@ part 'settings.freezed.dart';
 
 const layoutSwitchAnimationDuration = Duration(milliseconds: 400);
 
-class ClothItemCompoundViewSettingsController extends ChangeNotifier {
+class ClothItemCompoundViewManager with ChangeNotifier {
+  List<ClothItem> _clothItems;
   ClothItemCompoundViewSettings _settings;
 
-  ClothItemCompoundViewSettingsController(this._settings);
+  ClothItemCompoundViewManager({
+    required List<ClothItem> clothItems,
+    required ClothItemCompoundViewSettings settings,
+  })  : _clothItems = clothItems,
+        _settings = settings;
+
+  List<ClothItem> get clothItems => List.unmodifiable(_clothItems);
+
+  set clothItems(List<ClothItem> newClothitems) {
+    _clothItems = newClothitems;
+    notifyListeners();
+  }
 
   ClothItemCompoundViewSettings get settings => _settings;
 
