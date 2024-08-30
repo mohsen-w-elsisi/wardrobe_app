@@ -20,6 +20,7 @@ mixin _$ClothItemCompoundViewSettings {
   ClothItemSortMode get sortMode => throw _privateConstructorUsedError;
   Set<ClothItemAttribute> get filteredAttributes =>
       throw _privateConstructorUsedError;
+  ClothItemType? get showOnlyType => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ClothItemCompoundViewSettingsCopyWith<ClothItemCompoundViewSettings>
@@ -37,7 +38,8 @@ abstract class $ClothItemCompoundViewSettingsCopyWith<$Res> {
   $Res call(
       {ClothItemCompoundViewLayout layout,
       ClothItemSortMode sortMode,
-      Set<ClothItemAttribute> filteredAttributes});
+      Set<ClothItemAttribute> filteredAttributes,
+      ClothItemType? showOnlyType});
 }
 
 /// @nodoc
@@ -57,6 +59,7 @@ class _$ClothItemCompoundViewSettingsCopyWithImpl<$Res,
     Object? layout = null,
     Object? sortMode = null,
     Object? filteredAttributes = null,
+    Object? showOnlyType = freezed,
   }) {
     return _then(_value.copyWith(
       layout: null == layout
@@ -71,6 +74,10 @@ class _$ClothItemCompoundViewSettingsCopyWithImpl<$Res,
           ? _value.filteredAttributes
           : filteredAttributes // ignore: cast_nullable_to_non_nullable
               as Set<ClothItemAttribute>,
+      showOnlyType: freezed == showOnlyType
+          ? _value.showOnlyType
+          : showOnlyType // ignore: cast_nullable_to_non_nullable
+              as ClothItemType?,
     ) as $Val);
   }
 }
@@ -87,7 +94,8 @@ abstract class _$$ClothItemCompoundViewSettingsImplCopyWith<$Res>
   $Res call(
       {ClothItemCompoundViewLayout layout,
       ClothItemSortMode sortMode,
-      Set<ClothItemAttribute> filteredAttributes});
+      Set<ClothItemAttribute> filteredAttributes,
+      ClothItemType? showOnlyType});
 }
 
 /// @nodoc
@@ -106,6 +114,7 @@ class __$$ClothItemCompoundViewSettingsImplCopyWithImpl<$Res>
     Object? layout = null,
     Object? sortMode = null,
     Object? filteredAttributes = null,
+    Object? showOnlyType = freezed,
   }) {
     return _then(_$ClothItemCompoundViewSettingsImpl(
       layout: null == layout
@@ -120,6 +129,10 @@ class __$$ClothItemCompoundViewSettingsImplCopyWithImpl<$Res>
           ? _value._filteredAttributes
           : filteredAttributes // ignore: cast_nullable_to_non_nullable
               as Set<ClothItemAttribute>,
+      showOnlyType: freezed == showOnlyType
+          ? _value.showOnlyType
+          : showOnlyType // ignore: cast_nullable_to_non_nullable
+              as ClothItemType?,
     ));
   }
 }
@@ -131,7 +144,8 @@ class _$ClothItemCompoundViewSettingsImpl
   const _$ClothItemCompoundViewSettingsImpl(
       {this.layout = ClothItemCompoundViewLayout.grid,
       this.sortMode = ClothItemSortMode.byName,
-      final Set<ClothItemAttribute> filteredAttributes = const {}})
+      final Set<ClothItemAttribute> filteredAttributes = const {},
+      this.showOnlyType})
       : _filteredAttributes = filteredAttributes;
 
   @override
@@ -151,8 +165,11 @@ class _$ClothItemCompoundViewSettingsImpl
   }
 
   @override
+  final ClothItemType? showOnlyType;
+
+  @override
   String toString() {
-    return 'ClothItemCompoundViewSettings(layout: $layout, sortMode: $sortMode, filteredAttributes: $filteredAttributes)';
+    return 'ClothItemCompoundViewSettings(layout: $layout, sortMode: $sortMode, filteredAttributes: $filteredAttributes, showOnlyType: $showOnlyType)';
   }
 
   @override
@@ -164,12 +181,14 @@ class _$ClothItemCompoundViewSettingsImpl
             (identical(other.sortMode, sortMode) ||
                 other.sortMode == sortMode) &&
             const DeepCollectionEquality()
-                .equals(other._filteredAttributes, _filteredAttributes));
+                .equals(other._filteredAttributes, _filteredAttributes) &&
+            (identical(other.showOnlyType, showOnlyType) ||
+                other.showOnlyType == showOnlyType));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, layout, sortMode,
-      const DeepCollectionEquality().hash(_filteredAttributes));
+      const DeepCollectionEquality().hash(_filteredAttributes), showOnlyType);
 
   @JsonKey(ignore: true)
   @override
@@ -183,10 +202,10 @@ class _$ClothItemCompoundViewSettingsImpl
 abstract class _ClothItemCompoundViewSettings
     implements ClothItemCompoundViewSettings {
   const factory _ClothItemCompoundViewSettings(
-          {final ClothItemCompoundViewLayout layout,
-          final ClothItemSortMode sortMode,
-          final Set<ClothItemAttribute> filteredAttributes}) =
-      _$ClothItemCompoundViewSettingsImpl;
+      {final ClothItemCompoundViewLayout layout,
+      final ClothItemSortMode sortMode,
+      final Set<ClothItemAttribute> filteredAttributes,
+      final ClothItemType? showOnlyType}) = _$ClothItemCompoundViewSettingsImpl;
 
   @override
   ClothItemCompoundViewLayout get layout;
@@ -194,6 +213,8 @@ abstract class _ClothItemCompoundViewSettings
   ClothItemSortMode get sortMode;
   @override
   Set<ClothItemAttribute> get filteredAttributes;
+  @override
+  ClothItemType? get showOnlyType;
   @override
   @JsonKey(ignore: true)
   _$$ClothItemCompoundViewSettingsImplCopyWith<

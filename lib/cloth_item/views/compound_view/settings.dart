@@ -36,9 +36,26 @@ class ClothItemCompoundViewManager with ChangeNotifier {
     notifyListeners();
   }
 
+  void onlyShowType(ClothItemType type) {
+    _settings = _settings.copyWith(showOnlyType: type);
+    notifyListeners();
+  }
+
+  void showAllTypes() {
+    _settings = _settings.copyWith(showOnlyType: null);
+    notifyListeners();
+  }
+
   void setFilteredAttributes(Set<ClothItemAttribute> attributes) {
     _settings = _settings.copyWith(filteredAttributes: attributes);
     notifyListeners();
+  }
+
+  void removeFilteredAttribute(ClothItemAttribute attribute) {
+    setFilteredAttributes({
+      for (final testAttribute in _settings.filteredAttributes)
+        if (attribute != testAttribute) testAttribute,
+    });
   }
 
   bool layoutIs(ClothItemCompoundViewLayout testLayout) =>
@@ -55,6 +72,7 @@ class ClothItemCompoundViewSettings with _$ClothItemCompoundViewSettings {
     ClothItemCompoundViewLayout layout,
     @Default(ClothItemSortMode.byName) ClothItemSortMode sortMode,
     @Default({}) Set<ClothItemAttribute> filteredAttributes,
+    ClothItemType? showOnlyType,
   }) = _ClothItemCompoundViewSettings;
 }
 

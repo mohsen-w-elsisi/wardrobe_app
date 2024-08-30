@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wardrobe_app/cloth_item/backend/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/backend/organiser.dart';
+import 'package:wardrobe_app/cloth_item/views/compound_view/filter_chips.dart';
 
 import 'cnotrol_bar.dart';
 import 'layout_switcher.dart';
@@ -30,23 +31,54 @@ class ClothItemCompoundView extends StatelessWidget {
     return ListView(
       children: [
         ClothItemCompoundViewControlBar(_settingsManager),
+        ClothItemCompoundViewFilterChips(viewManager: _settingsManager),
         ClothItemCompoundViewLayoutSwitcher(
-          clothItems: _sortedFilteredClothItems,
+          clothItems: _sortedFilteredItems,
           currentLayout: _settingsManager.settings.layout,
         ),
       ],
     );
   }
 
-  List<ClothItem> get _sortedFilteredClothItems {
-    final clothItemOrganiser = ClothItemOrganiser(_filteredClothItems);
-    final sortMode = _settingsManager.settings.sortMode;
-    return clothItemOrganiser.sortFavouritesFirst(sortMode);
+  List<ClothItem> get _sortedFilteredItems {
+    return _CompoundViewItemsFilterAndSorter(
+      _settingsManager.clothItems,
+      _settingsManager.settings,
+    ).items;
+  }
+}
+
+class _CompoundViewItemsFilterAndSorter {
+  List<ClothItem> _items;
+  final ClothItemCompoundViewSettings _viewSettings;
+
+  _CompoundViewItemsFilterAndSorter(
+    this._items,
+    this._viewSettings,
+  ) {
+    _filterByType();
+    _filterByAttribute();
+    _sort();
   }
 
-  List<ClothItem> get _filteredClothItems {
-    final filterAttributes = _settingsManager.settings.filteredAttributes;
-    final clothItemOrganiser = ClothItemOrganiser(_settingsManager.clothItems);
-    return clothItemOrganiser.filterUsingAttributes(filterAttributes);
+  List<ClothItem> get items => [..._items];
+
+  void _filterByType() {
+    final filterType = _viewSettings.showOnlyType;
+    if (filterType != null) {
+      _items = _itemsOrganiser().filterBytype(filterType);
+    }
   }
+
+  void _filterByAttribute() {
+    final filterAttributes = _viewSettings.filteredAttributes;
+    _items = _itemsOrganiser().filterUsingAttributes(filterAttributes);
+  }
+
+  void _sort() {
+    final sortMode = _viewSettings.sortMode;
+    _items = _itemsOrganiser().sortFavouritesFirst(sortMode);
+  }
+
+  ClothItemOrganiser _itemsOrganiser() => ClothItemOrganiser(_items);
 }

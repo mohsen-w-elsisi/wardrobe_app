@@ -7,6 +7,7 @@ class NewClothItemPhotoSelector extends StatelessWidget {
   final NewClothItemManager newClothItemManager;
 
   const NewClothItemPhotoSelector({
+    super.key,
     required this.newClothItemManager,
   });
 

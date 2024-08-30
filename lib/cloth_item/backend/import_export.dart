@@ -1,10 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:wardrobe_app/cloth_item/backend/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/backend/manager.dart';
 
 class MockClothItemImporter implements ClothItemImporter {
   @override
   List<ClothItem> import(String json) {
-    print("$json imported");
+    if (kDebugMode) {
+      print("$json imported");
+    }
     return [];
   }
 }

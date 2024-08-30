@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:wardrobe_app/cloth_item/backend/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/backend/manager.dart';
 import 'package:wardrobe_app/cloth_item/views/grid_view.dart';

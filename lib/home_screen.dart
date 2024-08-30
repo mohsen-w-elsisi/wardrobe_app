@@ -55,7 +55,8 @@ class HomeScreen extends StatelessWidget {
 }
 
 class _Drawer extends StatelessWidget {
-  final clothItemManager = GetIt.I.get<ClothItemManager>();
+  final _clothItemManager = GetIt.I.get<ClothItemManager>();
+  final _compoundViewManager = GetIt.I.get<ClothItemCompoundViewManager>();
 
   @override
   Widget build(BuildContext context) {
@@ -63,11 +64,17 @@ class _Drawer extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: ClothItemGroupedList(
-          clothItems: clothItemManager.clothItems,
-          onTap: (clothItem) => _onItemTileTap(context, clothItem),
+          clothItems: _clothItemManager.clothItems,
+          onItemTap: (clothItem) => _onItemTileTap(context, clothItem),
+          onTypeTap: (type) => _onlyShowTypeInCompoundView(type, context),
         ),
       ),
     );
+  }
+
+  void _onlyShowTypeInCompoundView(ClothItemType type, BuildContext context) {
+    _compoundViewManager.onlyShowType(type);
+    _closeDrawer(context);
   }
 
   void _onItemTileTap(BuildContext context, ClothItem clothItem) {
@@ -98,7 +105,7 @@ class _BottomAppBar extends StatelessWidget {
         children: [
           IconButton(
             tooltip: "settings",
-            onPressed: () => _navigateTo(context, SettingsScreen()),
+            onPressed: () => _navigateTo(context, const SettingsScreen()),
             icon: const Icon(Icons.settings_outlined),
           ),
           IconButton(

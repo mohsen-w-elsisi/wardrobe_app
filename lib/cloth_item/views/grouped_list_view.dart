@@ -5,11 +5,13 @@ import 'package:wardrobe_app/cloth_item/dispay_options/type.dart';
 
 class ClothItemGroupedList extends StatelessWidget {
   final List<ClothItem> clothItems;
-  final ClothItemTileTapCallback? onTap;
+  final ClothItemTypeTitleCallback? onTypeTap;
+  final ClothItemTileTapCallback? onItemTap;
 
   const ClothItemGroupedList({
     required this.clothItems,
-    this.onTap,
+    this.onTypeTap,
+    this.onItemTap,
     super.key,
   });
 
@@ -21,7 +23,8 @@ class ClothItemGroupedList extends StatelessWidget {
           _TypedListSection(
             type: type,
             clothItems: clothItems,
-            onTap: onTap,
+            onTypeTap: onTypeTap,
+            onItemTap: onItemTap,
           )
       ],
     );
@@ -31,13 +34,15 @@ class ClothItemGroupedList extends StatelessWidget {
 class _TypedListSection extends StatelessWidget {
   final ClothItemType type;
   final List<ClothItem> clothItems;
-  final ClothItemTileTapCallback? onTap;
+  final ClothItemTypeTitleCallback? onTypeTap;
+  final ClothItemTileTapCallback? onItemTap;
   late final ClothItemOrganiser _clothItemOrganiser;
 
   _TypedListSection({
     required this.type,
     required this.clothItems,
-    this.onTap,
+    this.onTypeTap,
+    this.onItemTap,
   }) {
     _clothItemOrganiser = ClothItemOrganiser(clothItems);
   }
@@ -53,21 +58,28 @@ class _TypedListSection extends StatelessWidget {
     );
   }
 
-  Widget _header(BuildContext context) => Align(
+  Widget _header(BuildContext context) {
+    return GestureDetector(
+      onTap: onTypeTap == null ? () {} : () => onTypeTap!(type),
+      child: Align(
         alignment: Alignment.centerLeft,
         child: Text(
           clothItemTypeDisplayOptions[type]!.text,
           style: Theme.of(context).textTheme.titleMedium,
         ),
-      );
+      ),
+    );
+  }
 
-  List<Widget> get _listTiles => [
-        for (final item in _clothItemOrganiser.filterBytype(type))
-          _ListTile(
-            item: item,
-            onTap: onTap != null ? () => onTap!(item) : null,
-          )
-      ];
+  List<Widget> get _listTiles {
+    return [
+      for (final item in _clothItemOrganiser.filterBytype(type))
+        _ListTile(
+          item: item,
+          onTap: onItemTap != null ? () => onItemTap!(item) : null,
+        )
+    ];
+  }
 }
 
 class _ListTile extends StatelessWidget {
@@ -91,4 +103,5 @@ class _ListTile extends StatelessWidget {
   }
 }
 
+typedef ClothItemTypeTitleCallback = void Function(ClothItemType);
 typedef ClothItemTileTapCallback = void Function(ClothItem);

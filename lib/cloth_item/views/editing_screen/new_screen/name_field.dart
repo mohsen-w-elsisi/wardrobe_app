@@ -4,7 +4,7 @@ import 'package:wardrobe_app/cloth_item/backend/new_item_manager.dart';
 class NewClothItemNameField extends StatefulWidget {
   final NewClothItemManager newClothItemManager;
 
-  const NewClothItemNameField({required this.newClothItemManager});
+  const NewClothItemNameField({super.key, required this.newClothItemManager});
 
   @override
   State<NewClothItemNameField> createState() => _NewClothItemNameFieldState();
