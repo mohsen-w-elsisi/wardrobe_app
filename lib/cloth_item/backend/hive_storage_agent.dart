@@ -36,6 +36,13 @@ class HiveClothItemStorageAgent implements ClothItemStorageAgent {
   }
 
   @override
+  Future<void>? deleteManyClothItems(List<ClothItem> clothItems) async {
+    for (final clothItem in clothItems) {
+      await deleteClothItem(clothItem);
+    }
+  }
+
+  @override
   Future<void> deleteClothItem(ClothItem clothItem) async {
     final itemIndex = _findIndexOfItem(clothItem)!;
     await _box.deleteAt(itemIndex);

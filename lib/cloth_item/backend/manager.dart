@@ -4,11 +4,13 @@ import 'cloth_item.dart';
 class ClothItemManager extends ChangeNotifier {
   late List<ClothItem> _clothItems;
   final ClothItemStorageAgent storageAgent;
+  final ClothItemDiffer itemDiffer;
   final ClothItemImporter importer;
   final ClothItemExporter exporter;
 
   ClothItemManager({
     required this.storageAgent,
+    required this.itemDiffer,
     required this.importer,
     required this.exporter,
   }) {
@@ -74,8 +76,12 @@ class ClothItemManager extends ChangeNotifier {
   }
 
   void _updateStorage() async {
-    await storageAgent.deleteAll();
-    await storageAgent.saveManyClothItems(_clothItems);
+    final changedItems = itemDiffer.diff(
+      storedItems: storageAgent.savedItems,
+      currentItems: clothItems,
+    );
+    await storageAgent.deleteManyClothItems(changedItems)
+    await storageAgent.saveManyClothItems(changedItems);
   }
 
   void _filterDuplicates() {
@@ -117,7 +123,15 @@ abstract class ClothItemStorageAgent {
   Future<void>? saveClothItem(ClothItem clothItem);
   Future<void>? saveManyClothItems(List<ClothItem> clothItems);
   Future<void>? deleteClothItem(ClothItem clothItem);
+  Future<void>? deleteManyClothItems(List<ClothItem> clothItems);
   Future<void>? deleteAll();
+}
+
+abstract class ClothItemDiffer {
+  List<ClothItem> diff({
+    required List<ClothItem> storedItems,
+    required List<ClothItem> currentItems,
+  });
 }
 
 abstract class ClothItemExporter {

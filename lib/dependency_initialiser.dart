@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:wardrobe_app/cloth_item/backend/differ.dart';
 import 'package:wardrobe_app/cloth_item/backend/hive_storage_agent.dart';
 import 'package:wardrobe_app/cloth_item/backend/import_export.dart';
 import 'package:wardrobe_app/cloth_item/backend/manager.dart';
@@ -40,6 +41,7 @@ class ClothItemManagerInitialiser
 
     _dependancy = ClothItemManager(
       storageAgent: storageAgent,
+      itemDiffer: MockClothItemDiffer(),
       importer: MockClothItemImporter(),
       exporter: MockClothItemExporter(),
     );
