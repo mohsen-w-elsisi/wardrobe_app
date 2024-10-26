@@ -41,7 +41,7 @@ class ClothItemManagerInitialiser
 
     _dependancy = ClothItemManager(
       storageAgent: storageAgent,
-      itemDiffer: MockClothItemDiffer(),
+      createDiffer: CLothItemDifferImpl.new,
       importer: MockClothItemImporter(),
       exporter: MockClothItemExporter(),
     );

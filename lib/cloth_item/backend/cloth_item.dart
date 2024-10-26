@@ -1,11 +1,13 @@
 import "package:flutter/foundation.dart";
 import "package:hive/hive.dart";
+// ignore: depend_on_referenced_packages
+import 'package:equatable/equatable.dart';
 
 part 'cloth_item.g.dart';
 
 @HiveType(typeId: 1)
 @immutable
-class ClothItem {
+class ClothItem extends Equatable {
   @HiveField(1)
   final String id;
 
@@ -87,6 +89,18 @@ class ClothItem {
       matchingItems: [...matchingItems, newMatchingItem.id],
     );
   }
+
+  @override
+  List<Object?> get props => [
+        name,
+        type,
+        isFavourite,
+        attributes,
+        matchingItems,
+        dateCreated,
+        id,
+        image,
+      ];
 }
 
 @HiveType(typeId: 2)
