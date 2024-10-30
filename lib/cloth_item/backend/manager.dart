@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'cloth_item.dart';
 
@@ -5,17 +7,20 @@ class ClothItemManager extends ChangeNotifier {
   late List<ClothItem> _clothItems;
   final ClothItemStorageAgent storageAgent;
   final DifferCreater createDiffer;
+  final ImageOptimizerCreater createImageOptimizer;
   final ClothItemImporter importer;
   final ClothItemExporter exporter;
 
   ClothItemManager({
     required this.storageAgent,
     required this.createDiffer,
+    required this.createImageOptimizer,
     required this.importer,
     required this.exporter,
   }) {
     _clothItems = storageAgent.savedItems;
     _filterDuplicates();
+    _optimizeClothitemImages();
   }
 
   void import(String json) {
@@ -117,6 +122,19 @@ class ClothItemManager extends ChangeNotifier {
     );
     return matchedClothItem.isBlank ? null : matchedClothItem;
   }
+
+  void _optimizeClothitemImages() {
+    final optimisedClothItems = clothItems.map(_optimseClothItemImage).toList();
+    _clothItems = optimisedClothItems;
+    _reportChange();
+  }
+
+  ClothItem _optimseClothItemImage(ClothItem clothItem) {
+    final optimisedImage = createImageOptimizer(clothItem.image).optimisedImage;
+    return clothItem.copyWith(
+      image: optimisedImage,
+    );
+  }
 }
 
 abstract class ClothItemStorageAgent {
@@ -142,6 +160,13 @@ typedef DifferCreater = ClothItemDiffer Function({
   required List<ClothItem> storedItems,
   required List<ClothItem> currentItems,
 });
+
+abstract class ImageOptimizer {
+  ImageOptimizer(Uint8List imageBytes);
+  Uint8List get optimisedImage;
+}
+
+typedef ImageOptimizerCreater = ImageOptimizer Function(Uint8List imageBytes);
 
 abstract class ClothItemExporter {
   String export(List<ClothItem> items);
