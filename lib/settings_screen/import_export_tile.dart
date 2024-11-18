@@ -1,6 +1,8 @@
+import 'dart:typed_data';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:wardrobe_app/cloth_item/backend/manager.dart';
 
 class SettingsScreenExportTile extends StatelessWidget {
@@ -14,9 +16,15 @@ class SettingsScreenExportTile extends StatelessWidget {
     );
   }
 
-  void _export() {
+  Future<void> _export() async {
     final json = _clothItemManager.export();
-    Share.share(json);
+    var jsonAsBytes = Uint8List.fromList(json.runes.toList());
+    FilePicker.platform.saveFile(
+      bytes: jsonAsBytes,
+      fileName: "wardrobe.json",
+      allowedExtensions: ["json"],
+      dialogTitle: "export wardrobe to file",
+    );
   }
 
   ClothItemManager get _clothItemManager => GetIt.I.get<ClothItemManager>();

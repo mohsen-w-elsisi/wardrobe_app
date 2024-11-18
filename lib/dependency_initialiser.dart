@@ -44,8 +44,7 @@ class ClothItemManagerInitialiser
       storageAgent: storageAgent,
       createDiffer: CLothItemDifferImpl.new,
       createImageOptimizer: ImageOptimizerImpl.new,
-      importer: MockClothItemImporter(),
-      exporter: MockClothItemExporter(),
+      importExportClient: ClothItemJsonImportExportClient(),
     );
   }
 

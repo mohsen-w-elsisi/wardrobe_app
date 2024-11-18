@@ -8,15 +8,13 @@ class ClothItemManager extends ChangeNotifier {
   final ClothItemStorageAgent storageAgent;
   final DifferCreater createDiffer;
   final ImageOptimizerCreater createImageOptimizer;
-  final ClothItemImporter importer;
-  final ClothItemExporter exporter;
+  final ClothItemImportExportClient importExportClient;
 
   ClothItemManager({
     required this.storageAgent,
     required this.createDiffer,
     required this.createImageOptimizer,
-    required this.importer,
-    required this.exporter,
+    required this.importExportClient,
   }) {
     _clothItems = storageAgent.savedItems;
     _filterDuplicates();
@@ -24,12 +22,12 @@ class ClothItemManager extends ChangeNotifier {
   }
 
   void import(String json) {
-    final importedItems = importer.import(json);
+    final importedItems = importExportClient.import(json);
     importedItems.forEach(saveItem);
   }
 
   String export() {
-    return exporter.export(clothItems);
+    return importExportClient.export(clothItems);
   }
 
   List<ClothItem> get clothItems => List.unmodifiable(_clothItems);
@@ -168,10 +166,7 @@ abstract class ImageOptimizer {
 
 typedef ImageOptimizerCreater = ImageOptimizer Function(Uint8List imageBytes);
 
-abstract class ClothItemExporter {
-  String export(List<ClothItem> items);
-}
-
-abstract class ClothItemImporter {
+abstract class ClothItemImportExportClient {
   List<ClothItem> import(String json);
+  String export(List<ClothItem> items);
 }
