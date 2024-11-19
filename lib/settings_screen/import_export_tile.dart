@@ -18,7 +18,7 @@ class SettingsScreenExportTile extends StatelessWidget {
 
   Future<void> _export() async {
     final json = _clothItemManager.export();
-    var jsonAsBytes = Uint8List.fromList(json.runes.toList());
+    final jsonAsBytes = Uint8List.fromList(json.runes.toList());
     FilePicker.platform.saveFile(
       bytes: jsonAsBytes,
       fileName: "wardrobe.json",
@@ -36,50 +36,26 @@ class SettingsScreenImportTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () => _showImportModal(context),
+      onTap: _import,
       title: const Text("import wardrobe"),
     );
   }
 
-  void _showImportModal(BuildContext context) {
-    _ImportModal(context).show();
-  }
-}
-
-class _ImportModal {
-  final _clothItemManager = GetIt.I.get<ClothItemManager>();
-  final BuildContext _context;
-  String _json = "";
-
-  _ImportModal(this._context);
-
-  void show() {
-    showDialog(context: _context, builder: (_) => _build());
+  Future<void> _import() async {
+    final result = await _selectFile();
+    if (result != null) {
+      final jsonText = await result.xFiles.first.readAsString();
+      _clothItemManager.import(jsonText);
+    }
   }
 
-  Widget _build() {
-    return AlertDialog(
-      title: const Text("import"),
-      content: TextField(
-        onChanged: (value) => _json = value,
-      ),
-      actions: [
-        TextButton(
-          onPressed: _dismiss,
-          child: const Text("cancel"),
-        ),
-        TextButton(
-          onPressed: _import,
-          child: const Text("import"),
-        ),
-      ],
+  Future<FilePickerResult?> _selectFile() async {
+    return await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ["json"],
+      dialogTitle: "select wardrobe file",
     );
   }
 
-  void _dismiss() => Navigator.pop(_context);
-
-  void _import() {
-    _clothItemManager.import(_json);
-    _dismiss();
-  }
+  ClothItemManager get _clothItemManager => GetIt.I.get<ClothItemManager>();
 }
