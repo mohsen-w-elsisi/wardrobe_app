@@ -5,6 +5,7 @@ import 'cloth_item.dart';
 
 class ClothItemManager extends ChangeNotifier {
   late List<ClothItem> _clothItems;
+
   final ClothItemStorageAgent storageAgent;
   final DifferCreater createDiffer;
   final ImageOptimizerCreater createImageOptimizer;
@@ -40,17 +41,20 @@ class ClothItemManager extends ChangeNotifier {
     } else {
       _saveNewItem(clothItem);
     }
+    imageManager.saveImage(clothItem.id, clothItem.image);
     _repairMatchingItemWeb(clothItem);
   }
 
   void deleteItem(ClothItem clothItem) {
     final itemIndex = _findIndexOfItem(clothItem)!;
     _clothItems.removeAt(itemIndex);
+    imageManager.deleteImage(clothItem.id);
     _reportChange();
   }
 
   void deleteAllItems() {
     _clothItems = [];
+    imageManager.deleteAllImages();
     _reportChange();
   }
 
@@ -90,6 +94,7 @@ class ClothItemManager extends ChangeNotifier {
       storedItems: storageAgent.savedItems,
       currentItems: clothItems,
     );
+
     await storageAgent.deleteManyClothItems(differ.deletedItems);
     await storageAgent.saveManyClothItems(differ.editedItems);
     await storageAgent.saveManyClothItems(differ.newItems);
@@ -182,4 +187,5 @@ abstract class ClothItemImageManager {
   Uint8List getImage(String id);
   void saveImage(String id, Uint8List imageBytes);
   void deleteImage(String id);
+  void deleteAllImages();
 }
