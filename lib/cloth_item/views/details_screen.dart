@@ -75,7 +75,7 @@ class _Image extends StatelessWidget {
         child: _clothItemImage,
       );
 
-  Widget get _clothItemImage => ClothItemImage(image: clothItem.image);
+  Widget get _clothItemImage => ClothItemImage(clothItem: clothItem);
 }
 
 class _MatchingItemList extends StatelessWidget {

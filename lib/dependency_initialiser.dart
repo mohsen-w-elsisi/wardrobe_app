@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:wardrobe_app/cloth_item/backend/differ.dart';
 import 'package:wardrobe_app/cloth_item/backend/hive_storage_agent.dart';
+import 'package:wardrobe_app/cloth_item/backend/image_manager.dart';
 import 'package:wardrobe_app/cloth_item/backend/image_optimization.dart';
 import 'package:wardrobe_app/cloth_item/backend/import_export.dart';
 import 'package:wardrobe_app/cloth_item/backend/manager.dart';
@@ -45,6 +46,7 @@ class ClothItemManagerInitialiser
       createDiffer: CLothItemDifferImpl.new,
       createImageOptimizer: ImageOptimizerImpl.new,
       importExportClient: ClothItemJsonImportExportClient(),
+      imageManager: ClothItemImageManagerImpl(),
     );
   }
 

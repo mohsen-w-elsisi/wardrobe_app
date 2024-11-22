@@ -1,13 +1,32 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:wardrobe_app/cloth_item/backend/cloth_item.dart';
+import 'package:wardrobe_app/cloth_item/backend/manager.dart';
 
 class ClothItemImage extends StatelessWidget {
-  final Uint8List image;
+  final ClothItem clothItem;
 
   const ClothItemImage({
     super.key,
-    required this.image,
+    required this.clothItem,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return RoundedSquareImage(
+      _clothItemManager.getImageOfItem(clothItem),
+    );
+  }
+
+  ClothItemManager get _clothItemManager => GetIt.I.get<ClothItemManager>();
+}
+
+class RoundedSquareImage extends StatelessWidget {
+  final ImageProvider image;
+
+  const RoundedSquareImage(
+    this.image, {
+    super.key,
   });
 
   @override
@@ -19,14 +38,14 @@ class ClothItemImage extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         clipBehavior: Clip.antiAlias,
-        child: _image(),
+        child: _imageWidget,
       ),
     );
   }
 
-  Widget _image() {
-    return Image.memory(
-      image,
+  Image get _imageWidget {
+    return Image(
+      image: image,
       fit: BoxFit.cover,
     );
   }

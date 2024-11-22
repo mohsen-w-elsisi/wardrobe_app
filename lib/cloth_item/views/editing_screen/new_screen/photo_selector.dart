@@ -48,6 +48,10 @@ class NewClothItemPhotoSelector extends StatelessWidget {
 
   Widget _filledImageSelector() => Hero(
         tag: newClothItemManager.id ?? "",
-        child: ClothItemImage(image: newClothItemManager.image),
+        child: RoundedSquareImage(
+          MemoryImage(
+            newClothItemManager.image,
+          ),
+        ),
       );
 }

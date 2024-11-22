@@ -9,12 +9,14 @@ class ClothItemManager extends ChangeNotifier {
   final DifferCreater createDiffer;
   final ImageOptimizerCreater createImageOptimizer;
   final ClothItemImportExportClient importExportClient;
+  final ClothItemImageManager imageManager;
 
   ClothItemManager({
     required this.storageAgent,
     required this.createDiffer,
     required this.createImageOptimizer,
     required this.importExportClient,
+    required this.imageManager,
   }) {
     _clothItems = storageAgent.savedItems;
     _filterDuplicates();
@@ -50,6 +52,11 @@ class ClothItemManager extends ChangeNotifier {
   void deleteAllItems() {
     _clothItems = [];
     _reportChange();
+  }
+
+  ImageProvider getImageOfItem(ClothItem item) {
+    final imageBytes = imageManager.getImage(item.id);
+    return MemoryImage(imageBytes);
   }
 
   void toggleFavouriteForItem(ClothItem clothItem) {
@@ -169,4 +176,10 @@ typedef ImageOptimizerCreater = ImageOptimizer Function(Uint8List imageBytes);
 abstract class ClothItemImportExportClient {
   List<ClothItem> import(String json);
   String export(List<ClothItem> items);
+}
+
+abstract class ClothItemImageManager {
+  Uint8List getImage(String id);
+  void saveImage(String id, Uint8List imageBytes);
+  void deleteImage(String id);
 }
