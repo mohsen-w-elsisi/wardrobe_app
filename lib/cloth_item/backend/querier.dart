@@ -1,61 +1,40 @@
-import 'package:wardrobe_app/cloth_item/backend/cloth_item.dart';
-import 'package:wardrobe_app/cloth_item/backend/manager.dart';
+import 'cloth_item.dart';
+import 'manager.dart';
 
 class ClothItemQuerierImpl implements ClothItemQuerier {
-  List<ClothItem> _items;
+  final Map<String, ClothItem> _items;
 
   ClothItemQuerierImpl({
     required List<ClothItem> items,
-  }) : _items = items;
+  }) : _items = {for (final item in items) item.id: item};
 
   @override
-  List<ClothItem> get cltohItems => List.unmodifiable(_items);
+  List<ClothItem> get cltohItems => List.unmodifiable(_items.values);
 
   @override
   List<ClothItem> matchingItemsOf(ClothItem item) {
-    return _items.where(item.isMatchingItem).toList();
+    return [
+      for (final matchingItemId in item.matchingItems) getById(matchingItemId)
+    ].nonNulls.toList();
   }
 
   @override
   ClothItem? getById(String id) {
-    try {
-      return _items.firstWhere((item) => item.id == id);
-    } on StateError {
-      return null;
-    }
-  }
-
-  @override
-  bool itemIsRegistered(ClothItem item) {
-    return _items.indexWhere(item.hasSameIdAs) >= 0;
+    return _items[id];
   }
 
   @override
   void registerItem(ClothItem item) {
-    if (itemIsRegistered(item)) {
-      final index = _indexOf(item);
-      _items[index] = item;
-    } else {
-      _items.add(item);
-    }
+    _items[item.id] = item;
   }
 
   @override
   void removeItem(ClothItem item) {
-    final index = _indexOf(item);
-    _items.removeAt(index);
+    _items.remove(item.id);
   }
 
   @override
   void deleteAllItems() {
-    _items = [];
-  }
-
-  int _indexOf(ClothItem item) {
-    if (itemIsRegistered(item)) {
-      return _items.indexWhere(item.hasSameIdAs);
-    } else {
-      throw StateError("${item.name} not registered");
-    }
+    _items.clear();
   }
 }

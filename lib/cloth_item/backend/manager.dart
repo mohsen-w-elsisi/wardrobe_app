@@ -16,9 +16,7 @@ class ClothItemManager extends ChangeNotifier {
     required this.createDiffer,
     required this.importExportClient,
     required this.imageManager,
-  }) {
-    _filterDuplicates();
-  }
+  });
 
   List<ClothItem> get clothItems => querier.cltohItems;
 
@@ -31,16 +29,30 @@ class ClothItemManager extends ChangeNotifier {
     importedItems.forEach(saveItem);
   }
 
-  void saveItem(ClothItem clothItem) {
-    querier.registerItem(clothItem);
-    _reportChange();
-    imageManager.saveImage(clothItem.id, clothItem.image);
-    _repairMatchingItemWeb(clothItem);
+  ImageProvider getImageOfItem(ClothItem item) {
+    final imageBytes = imageManager.getImage(item.id);
+    return MemoryImage(imageBytes);
   }
 
-  void deleteItem(ClothItem clothItem) {
-    querier.removeItem(clothItem);
-    imageManager.deleteImage(clothItem.id);
+  void toggleFavouriteForItem(ClothItem item) {
+    final adjustedItem = item.toggleFavourite();
+    saveItem(adjustedItem);
+  }
+
+  List<ClothItem> getMatchingItems(ClothItem item) =>
+      querier.matchingItemsOf(item);
+
+  void saveItem(ClothItem item) {
+    querier.registerItem(item);
+    imageManager.saveImage(item.id, item.image);
+    _repairMatchingItemWeb(item);
+    _reportChange();
+  }
+
+  void deleteItem(ClothItem item) {
+    querier.removeItem(item);
+    imageManager.deleteImage(item.id);
+    _repairMatchingItemWeb(item);
     _reportChange();
   }
 
@@ -50,21 +62,7 @@ class ClothItemManager extends ChangeNotifier {
     _reportChange();
   }
 
-  ImageProvider getImageOfItem(ClothItem item) {
-    final imageBytes = imageManager.getImage(item.id);
-    return MemoryImage(imageBytes);
-  }
-
-  void toggleFavouriteForItem(ClothItem clothItem) {
-    final adjustedItem = clothItem.toggleFavourite();
-    saveItem(adjustedItem);
-  }
-
-  List<ClothItem> getMatchingItems(ClothItem clothItem) =>
-      querier.matchingItemsOf(clothItem);
-
   void _reportChange() {
-    _filterDuplicates();
     _updateStorageAgent();
     notifyListeners();
   }
@@ -80,10 +78,6 @@ class ClothItemManager extends ChangeNotifier {
     await storageAgent.saveManyClothItems(differ.newItems);
   }
 
-  void _filterDuplicates() {
-    // TODO: implement _filterDuplicates
-  }
-
   void _repairMatchingItemWeb(ClothItem clothItem) => clothItem.matchingItems
       .map(getClothItemById)
       .nonNulls
@@ -96,7 +90,6 @@ abstract class ClothItemQuerier {
   List<ClothItem> get cltohItems;
   ClothItem? getById(String id);
   List<ClothItem> matchingItemsOf(ClothItem item);
-  bool itemIsRegistered(ClothItem item);
   void registerItem(ClothItem item);
   void removeItem(ClothItem item);
   void deleteAllItems();
