@@ -4,56 +4,48 @@ import 'package:flutter/material.dart';
 import 'cloth_item.dart';
 
 class ClothItemManager extends ChangeNotifier {
-  late List<ClothItem> _clothItems;
-
+  final ClothItemQuerier querier;
   final ClothItemStorageAgent storageAgent;
   final DifferCreater createDiffer;
-  final ImageOptimizerCreater createImageOptimizer;
   final ClothItemImportExportClient importExportClient;
   final ClothItemImageManager imageManager;
 
   ClothItemManager({
+    required this.querier,
     required this.storageAgent,
     required this.createDiffer,
-    required this.createImageOptimizer,
     required this.importExportClient,
     required this.imageManager,
   }) {
-    _clothItems = storageAgent.savedItems;
     _filterDuplicates();
-    _optimizeClothitemImages();
   }
+
+  List<ClothItem> get clothItems => querier.cltohItems;
+
+  ClothItem? getClothItemById(String id) => querier.getById(id);
+
+  String export() => importExportClient.export(clothItems);
 
   void import(String json) {
     final importedItems = importExportClient.import(json);
     importedItems.forEach(saveItem);
   }
 
-  String export() {
-    return importExportClient.export(clothItems);
-  }
-
-  List<ClothItem> get clothItems => List.unmodifiable(_clothItems);
-
   void saveItem(ClothItem clothItem) {
-    if (_itemIsAlreadySaved(clothItem)) {
-      _overwriteExistingItemOfSameId(clothItem);
-    } else {
-      _saveNewItem(clothItem);
-    }
+    querier.registerItem(clothItem);
+    _reportChange();
     imageManager.saveImage(clothItem.id, clothItem.image);
     _repairMatchingItemWeb(clothItem);
   }
 
   void deleteItem(ClothItem clothItem) {
-    final itemIndex = _findIndexOfItem(clothItem)!;
-    _clothItems.removeAt(itemIndex);
+    querier.removeItem(clothItem);
     imageManager.deleteImage(clothItem.id);
     _reportChange();
   }
 
   void deleteAllItems() {
-    _clothItems = [];
+    querier.deleteAllItems();
     imageManager.deleteAllImages();
     _reportChange();
   }
@@ -68,28 +60,16 @@ class ClothItemManager extends ChangeNotifier {
     saveItem(adjustedItem);
   }
 
-  List<ClothItem> getMatchingItems(ClothItem clothItem) {
-    return _clothItems.where(clothItem.isMatchingItem).toList();
-  }
-
-  void _saveNewItem(ClothItem clothItem) {
-    _clothItems.add(clothItem);
-    _reportChange();
-  }
-
-  void _overwriteExistingItemOfSameId(ClothItem clothItem) {
-    final itemIndex = _findIndexOfItem(clothItem)!;
-    _clothItems[itemIndex] = clothItem;
-    _reportChange();
-  }
+  List<ClothItem> getMatchingItems(ClothItem clothItem) =>
+      querier.matchingItemsOf(clothItem);
 
   void _reportChange() {
     _filterDuplicates();
-    _updateStorage();
+    _updateStorageAgent();
     notifyListeners();
   }
 
-  void _updateStorage() async {
+  void _updateStorageAgent() async {
     final differ = createDiffer(
       storedItems: storageAgent.savedItems,
       currentItems: clothItems,
@@ -101,13 +81,7 @@ class ClothItemManager extends ChangeNotifier {
   }
 
   void _filterDuplicates() {
-    final clothItemIds = <String>[];
-    for (final item in _clothItems) {
-      if (!clothItemIds.contains(item.id)) {
-        clothItemIds.add(item.id);
-      }
-    }
-    _clothItems = clothItemIds.map(getClothItemById).nonNulls.toList();
+    // TODO: implement _filterDuplicates
   }
 
   void _repairMatchingItemWeb(ClothItem clothItem) => clothItem.matchingItems
@@ -116,35 +90,16 @@ class ClothItemManager extends ChangeNotifier {
       .where((e) => !e.isMatchingItem(clothItem))
       .map((e) => e.addMatchingItem(clothItem))
       .forEach(saveItem);
+}
 
-  bool _itemIsAlreadySaved(ClothItem clothItem) =>
-      _findIndexOfItem(clothItem) != null;
-
-  int? _findIndexOfItem(ClothItem clothItem) {
-    final index = _clothItems.indexWhere(clothItem.hasSameIdAs);
-    return index.isNegative ? null : index;
-  }
-
-  ClothItem? getClothItemById(String id) {
-    final matchedClothItem = _clothItems.firstWhere(
-      (clothItem) => clothItem.id == id,
-      orElse: () => ClothItem.blank(),
-    );
-    return matchedClothItem.isBlank ? null : matchedClothItem;
-  }
-
-  void _optimizeClothitemImages() {
-    final optimisedClothItems = clothItems.map(_optimseClothItemImage).toList();
-    _clothItems = optimisedClothItems;
-    _reportChange();
-  }
-
-  ClothItem _optimseClothItemImage(ClothItem clothItem) {
-    final optimisedImage = createImageOptimizer(clothItem.image).optimisedImage;
-    return clothItem.copyWith(
-      image: optimisedImage,
-    );
-  }
+abstract class ClothItemQuerier {
+  List<ClothItem> get cltohItems;
+  ClothItem? getById(String id);
+  List<ClothItem> matchingItemsOf(ClothItem item);
+  bool itemIsRegistered(ClothItem item);
+  void registerItem(ClothItem item);
+  void removeItem(ClothItem item);
+  void deleteAllItems();
 }
 
 abstract class ClothItemStorageAgent {
@@ -161,6 +116,7 @@ abstract class ClothItemDiffer {
     required List<ClothItem> storedItems,
     required List<ClothItem> currentItems,
   });
+
   List<ClothItem> get editedItems;
   List<ClothItem> get newItems;
   List<ClothItem> get deletedItems;
@@ -170,13 +126,6 @@ typedef DifferCreater = ClothItemDiffer Function({
   required List<ClothItem> storedItems,
   required List<ClothItem> currentItems,
 });
-
-abstract class ImageOptimizer {
-  ImageOptimizer(Uint8List imageBytes);
-  Uint8List get optimisedImage;
-}
-
-typedef ImageOptimizerCreater = ImageOptimizer Function(Uint8List imageBytes);
 
 abstract class ClothItemImportExportClient {
   List<ClothItem> import(String json);
