@@ -1,30 +1,32 @@
 import 'dart:typed_data';
 
-import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/backend/manager.dart';
 
 class ClothItemImageManagerImpl implements ClothItemImageManager {
-  final Map<String, Uint8List> _savedImages = {};
+  final ClothItemImageStorageAgent _storageAgent;
+
+  ClothItemImageManagerImpl({
+    required ClothItemImageStorageAgent storageAgent,
+  }) : _storageAgent = storageAgent;
 
   @override
   Uint8List getImage(String id) {
-    return _savedImages[id] ??
-        GetIt.I.get<ClothItemManager>().getClothItemById(id)!.image;
+    return _storageAgent.getImage(id);
   }
 
   @override
   void saveImage(String id, Uint8List imageBytes) {
-    _savedImages[id] = imageBytes;
+    _storageAgent.saveImage(id, imageBytes);
   }
 
   @override
   void deleteImage(String id) {
-    _savedImages.remove(id);
+    _storageAgent.deleteImage(id);
   }
 
   @override
   void deleteAllImages() {
-    _savedImages.clear();
+    _storageAgent.deleteAllImages();
   }
 }
 
@@ -32,6 +34,7 @@ abstract class ClothItemImageStorageAgent {
   Uint8List getImage(String id);
   void saveImage(String id, Uint8List imageBytes);
   void deleteImage(String id);
+  void deleteAllImages();
   List<String> get savedIDs;
 }
 

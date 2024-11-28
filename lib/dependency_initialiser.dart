@@ -2,7 +2,8 @@ import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:wardrobe_app/cloth_item/backend/differ.dart';
 import 'package:wardrobe_app/cloth_item/backend/hive_storage_agent.dart';
-import 'package:wardrobe_app/cloth_item/backend/image_manager.dart';
+import 'package:wardrobe_app/cloth_item/backend/image/manager.dart';
+import 'package:wardrobe_app/cloth_item/backend/image/storage_agent.dart';
 import 'package:wardrobe_app/cloth_item/backend/import_export.dart';
 import 'package:wardrobe_app/cloth_item/backend/manager.dart';
 import 'package:wardrobe_app/cloth_item/backend/querier.dart';
@@ -48,7 +49,9 @@ class ClothItemManagerInitialiser
       storageAgent: storageAgent,
       createDiffer: CLothItemDifferImpl.new,
       importExportClient: ClothItemJsonImportExportClient(),
-      imageManager: ClothItemImageManagerImpl(),
+      imageManager: ClothItemImageManagerImpl(
+        storageAgent: ClothItemImageSqliteStorageAgent(),
+      ),
     );
   }
 
