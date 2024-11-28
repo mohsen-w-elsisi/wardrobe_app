@@ -10,7 +10,7 @@ class ClothItemImageManagerImpl implements ClothItemImageManager {
   }) : _storageAgent = storageAgent;
 
   @override
-  Uint8List getImage(String id) {
+  Future<Uint8List> getImage(String id) {
     return _storageAgent.getImage(id);
   }
 
@@ -31,11 +31,11 @@ class ClothItemImageManagerImpl implements ClothItemImageManager {
 }
 
 abstract class ClothItemImageStorageAgent {
-  Uint8List getImage(String id);
+  Future<Uint8List> getImage(String id);
   void saveImage(String id, Uint8List imageBytes);
   void deleteImage(String id);
   void deleteAllImages();
-  List<String> get savedIDs;
+  Future<List<String>> savedIDs();
 }
 
 abstract class ClothItemImageCachingAgent {

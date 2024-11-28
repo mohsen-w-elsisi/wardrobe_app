@@ -41,17 +41,15 @@ class ClothItemManagerInitialiser
   @override
   Future<void> _initialise() async {
     final storageAgent = await _createStorageAgent();
-
     final querier = ClothItemQuerierImpl(items: storageAgent.savedItems);
+    final imageManager = await _createImageManager();
 
     _dependancy = ClothItemManager(
       querier: querier,
       storageAgent: storageAgent,
       createDiffer: CLothItemDifferImpl.new,
       importExportClient: ClothItemJsonImportExportClient(),
-      imageManager: ClothItemImageManagerImpl(
-        storageAgent: ClothItemImageSqliteStorageAgent(),
-      ),
+      imageManager: imageManager,
     );
   }
 
@@ -59,6 +57,13 @@ class ClothItemManagerInitialiser
     final storageAgent = HiveClothItemStorageAgent();
     await storageAgent.initialize();
     return storageAgent;
+  }
+
+  Future<ClothItemImageManager> _createImageManager() async {
+    final storageAgent = ClothItemImageSqliteStorageAgent();
+    await storageAgent.initialise();
+    final manager = ClothItemImageManagerImpl(storageAgent: storageAgent);
+    return manager;
   }
 }
 

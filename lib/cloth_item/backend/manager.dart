@@ -29,8 +29,8 @@ class ClothItemManager extends ChangeNotifier {
     importedItems.forEach(saveItem);
   }
 
-  ImageProvider getImageOfItem(ClothItem item) {
-    final imageBytes = imageManager.getImage(item.id);
+  Future<ImageProvider> getImageOfItem(ClothItem item) async {
+    final imageBytes = await imageManager.getImage(item.id);
     return MemoryImage(imageBytes);
   }
 
@@ -126,7 +126,7 @@ abstract class ClothItemImportExportClient {
 }
 
 abstract class ClothItemImageManager {
-  Uint8List getImage(String id);
+  Future<Uint8List> getImage(String id);
   void saveImage(String id, Uint8List imageBytes);
   void deleteImage(String id);
   void deleteAllImages();
