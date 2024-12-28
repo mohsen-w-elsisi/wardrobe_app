@@ -1,17 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/backend/cloth_item.dart';
-import 'package:wardrobe_app/cloth_item/backend/manager.dart';
 
 class ClothItemImage extends StatelessWidget {
-  static final _emptyImage = MemoryImage(
-    const Base64Codec().decode(
-      "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
-    ),
-  );
-
   final ClothItem clothItem;
 
   const ClothItemImage({
@@ -21,21 +11,12 @@ class ClothItemImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _itemImageProvider(),
-      initialData: _emptyImage,
-      builder: (_, AsyncSnapshot snapshot) {
-        return RoundedSquareImage(
-          snapshot.data,
-        );
-      },
+    return RoundedSquareImage(
+      _itemImageProvider(),
     );
   }
 
-  Future<ImageProvider> _itemImageProvider() =>
-      _clothItemManager.getImageOfItem(clothItem);
-
-  ClothItemManager get _clothItemManager => GetIt.I.get<ClothItemManager>();
+  ImageProvider _itemImageProvider() => MemoryImage(clothItem.image);
 }
 
 class RoundedSquareImage extends StatelessWidget {

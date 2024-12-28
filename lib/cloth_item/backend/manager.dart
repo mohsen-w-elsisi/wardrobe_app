@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'cloth_item.dart';
 
@@ -8,14 +6,12 @@ class ClothItemManager extends ChangeNotifier {
   final ClothItemStorageAgent storageAgent;
   final DifferCreater createDiffer;
   final ClothItemImportExportClient importExportClient;
-  final ClothItemImageManager imageManager;
 
   ClothItemManager({
     required this.querier,
     required this.storageAgent,
     required this.createDiffer,
     required this.importExportClient,
-    required this.imageManager,
   });
 
   List<ClothItem> get clothItems => querier.cltohItems;
@@ -29,11 +25,6 @@ class ClothItemManager extends ChangeNotifier {
     importedItems.forEach(saveItem);
   }
 
-  Future<ImageProvider> getImageOfItem(ClothItem item) async {
-    final imageBytes = await imageManager.getImage(item.id);
-    return MemoryImage(imageBytes);
-  }
-
   void toggleFavouriteForItem(ClothItem item) {
     final adjustedItem = item.toggleFavourite();
     saveItem(adjustedItem);
@@ -44,21 +35,18 @@ class ClothItemManager extends ChangeNotifier {
 
   void saveItem(ClothItem item) {
     querier.registerItem(item);
-    imageManager.saveImage(item.id, item.image);
     _repairMatchingItemWeb(item);
     _reportChange();
   }
 
   void deleteItem(ClothItem item) {
     querier.removeItem(item);
-    imageManager.deleteImage(item.id);
     _repairMatchingItemWeb(item);
     _reportChange();
   }
 
   void deleteAllItems() {
     querier.deleteAllItems();
-    imageManager.deleteAllImages();
     _reportChange();
   }
 
@@ -123,11 +111,4 @@ typedef DifferCreater = ClothItemDiffer Function({
 abstract class ClothItemImportExportClient {
   List<ClothItem> import(String json);
   String export(List<ClothItem> items);
-}
-
-abstract class ClothItemImageManager {
-  Future<Uint8List> getImage(String id);
-  void saveImage(String id, Uint8List imageBytes);
-  void deleteImage(String id);
-  void deleteAllImages();
 }
