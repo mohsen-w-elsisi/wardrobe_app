@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'cloth_item.dart';
 
 class ClothItemManager extends ChangeNotifier {
-  final ClothItemQuerier querier;
+  final ClothItemQuerierOld querier;
   final ClothItemStorageAgent storageAgent;
   final DifferCreater createDiffer;
   final ClothItemImportExportClient importExportClient;
@@ -74,7 +74,7 @@ class ClothItemManager extends ChangeNotifier {
       .forEach(saveItem);
 }
 
-abstract class ClothItemQuerier {
+abstract class ClothItemQuerierOld {
   List<ClothItem> get cltohItems;
   ClothItem? getById(String id);
   List<ClothItem> matchingItemsOf(ClothItem item);

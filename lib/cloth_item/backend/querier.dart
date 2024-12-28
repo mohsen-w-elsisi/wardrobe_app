@@ -1,10 +1,10 @@
 import 'cloth_item.dart';
 import 'manager.dart';
 
-class ClothItemQuerierImpl implements ClothItemQuerier {
+class ClothItemQuerierOldImpl implements ClothItemQuerierOld {
   final Map<String, ClothItem> _items;
 
-  ClothItemQuerierImpl({
+  ClothItemQuerierOldImpl({
     required List<ClothItem> items,
   }) : _items = {for (final item in items) item.id: item};
 

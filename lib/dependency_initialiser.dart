@@ -5,6 +5,9 @@ import 'package:wardrobe_app/cloth_item/backend/hive_storage_agent.dart';
 import 'package:wardrobe_app/cloth_item/backend/import_export.dart';
 import 'package:wardrobe_app/cloth_item/backend/manager.dart';
 import 'package:wardrobe_app/cloth_item/backend/querier.dart';
+import 'package:wardrobe_app/cloth_item/persistance/data_gateway.dart';
+import 'package:wardrobe_app/cloth_item/use_cases/implementations/querier.dart';
+import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
 import 'package:wardrobe_app/cloth_item/views/compound_view/settings.dart';
 import 'package:wardrobe_app/outfit/backend/hive_storage_agent.dart';
 import 'package:wardrobe_app/outfit/backend/manager.dart';
@@ -39,7 +42,7 @@ class ClothItemManagerInitialiser
   @override
   Future<void> _initialise() async {
     final storageAgent = await _createStorageAgent();
-    final querier = ClothItemQuerierImpl(items: storageAgent.savedItems);
+    final querier = ClothItemQuerierOldImpl(items: storageAgent.savedItems);
 
     _dependancy = ClothItemManager(
       querier: querier,
@@ -103,6 +106,24 @@ class ThemeStorageControllerInitialiser
   Future<void> _initialise() async {
     final storageAgent = SharedPreferencesThemeStorageAgent();
     _dependancy = ThemeSettingsController(storageAgent: storageAgent);
+  }
+}
+
+class ClothItemQuerierInitialiser
+    extends GetItRegisterableDependancy<ClothItemQuerier> {
+  @override
+  Future<void> _initialise() async {
+    _dependancy = ClothItemQuerierImpl();
+  }
+}
+
+class ClothItemDataGatewayInitialiser
+    extends GetItRegisterableDependancy<ClothItemDataGateway> {
+  @override
+  Future<void> _initialise() async {
+    final dataGateway = ClothItemHiveDataGateway();
+    await dataGateway.initialise();
+    _dependancy = dataGateway;
   }
 }
 
