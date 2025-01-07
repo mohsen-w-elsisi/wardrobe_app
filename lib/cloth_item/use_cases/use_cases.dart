@@ -8,6 +8,7 @@ abstract class ClothItemMatcher {
 abstract class ClothItemQuerier {
   List<ClothItem> getAll();
   ClothItem getById(String id);
+  bool itemExists(String id);
 }
 
 abstract class ClothItemSaver {

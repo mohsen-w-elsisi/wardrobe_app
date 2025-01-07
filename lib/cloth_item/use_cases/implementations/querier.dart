@@ -12,4 +12,14 @@ class ClothItemQuerierImpl extends ClothItemQuerier with UseCaseUtils {
   ClothItem getById(String id) {
     return dataGateway.getById(id);
   }
+
+  @override
+  bool itemExists(String id) {
+    try {
+      dataGateway.getById(id);
+      return true;
+    } on StateError {
+      return false;
+    }
+  }
 }

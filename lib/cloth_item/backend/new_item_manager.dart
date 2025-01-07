@@ -26,8 +26,8 @@ class NewClothItemManager {
         id = clothitem.id,
         name = clothitem.name,
         type = clothitem.type,
-        attributes = clothitem.attributes,
-        matchingItems = clothitem.matchingItems,
+        attributes = clothitem.attributes.toList(growable: true),
+        matchingItems = clothitem.matchingItems.toList(growable: true),
         isFavourite = clothitem.isFavourite,
         image = clothitem.image;
 

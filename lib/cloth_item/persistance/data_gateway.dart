@@ -16,14 +16,10 @@ class ClothItemHiveDataGateway extends ClothItemDataGateway {
   }
 
   @override
-  void delete(String id) {
-    _box.delete(id);
-  }
+  void delete(String id) => _box.delete(id);
 
   @override
-  void deleteAll() {
-    _box.clear();
-  }
+  void deleteAll() => _box.clear();
 
   @override
   Iterable<ClothItem> getAllItems() {

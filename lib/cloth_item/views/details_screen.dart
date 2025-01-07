@@ -12,11 +12,11 @@ import 'image.dart';
 import 'list_view.dart';
 
 class ClothItemDetailScreen extends StatelessWidget {
-  final String clothItemId;
+  final String itemId;
   final bool enableHeroImage;
 
   const ClothItemDetailScreen(
-    this.clothItemId, {
+    this.itemId, {
     this.enableHeroImage = true,
     super.key,
   });
@@ -29,7 +29,7 @@ class ClothItemDetailScreen extends StatelessWidget {
         if (_itemExists) {
           return Scaffold(
             body: CustomScrollView(slivers: _componentSlivers),
-            floatingActionButton: _StartOutfitFAB(clothItem: _clothItem!),
+            floatingActionButton: _StartOutfitFAB(clothItem: _clothItem),
           );
         } else {
           return Container();
@@ -39,15 +39,15 @@ class ClothItemDetailScreen extends StatelessWidget {
   }
 
   List<Widget> get _componentSlivers => [
-        _AppBar(clothItem: _clothItem!),
-        _Image(clothItem: _clothItem!, enableHeroImage: enableHeroImage),
-        _AttributeChips(clothItem: _clothItem!),
-        _MatchingItemList(clothItem: _clothItem!),
+        _AppBar(clothItem: _clothItem),
+        _Image(clothItem: _clothItem, enableHeroImage: enableHeroImage),
+        _AttributeChips(clothItem: _clothItem),
+        _MatchingItemList(clothItem: _clothItem),
       ];
 
-  bool get _itemExists => _clothItem != null;
+  bool get _itemExists => GetIt.I<ClothItemQuerier>().itemExists(itemId);
 
-  ClothItem? get _clothItem => GetIt.I<ClothItemQuerier>().getById(clothItemId);
+  ClothItem get _clothItem => GetIt.I<ClothItemQuerier>().getById(itemId);
 }
 
 class _Image extends StatelessWidget {
