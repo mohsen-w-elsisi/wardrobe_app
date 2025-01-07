@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
-import 'package:wardrobe_app/cloth_item/backend/cloth_item.dart';
+import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
 import 'package:wardrobe_app/cloth_item/views/details_screen.dart';
 import 'package:wardrobe_app/cloth_item/dispay_options/type.dart';
 import 'attribute_icon_row.dart';

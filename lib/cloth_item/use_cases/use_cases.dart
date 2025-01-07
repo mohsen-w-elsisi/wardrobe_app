@@ -1,4 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
+
+abstract class ClothItemMatcher {
+  List<ClothItem> findMatchingItems(ClothItem item);
+}
 
 abstract class ClothItemQuerier {
   List<ClothItem> getAll();
@@ -7,6 +12,10 @@ abstract class ClothItemQuerier {
 
 abstract class ClothItemSaver {
   void save(ClothItem item);
+}
+
+abstract class ClothItemFavouriteToggler {
+  void toggleItem(ClothItem item);
 }
 
 abstract class ClothItemDeleter {
@@ -28,4 +37,8 @@ abstract class ClothItemDataGateway {
   void save(ClothItem item);
   void delete(String id);
   void deleteAll();
+}
+
+abstract class ClothItemUiNotifier implements Listenable {
+  void notifyUi();
 }

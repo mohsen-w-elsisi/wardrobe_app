@@ -1,8 +1,8 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/cloth_item/backend/cloth_item.dart';
-import 'package:wardrobe_app/cloth_item/backend/manager.dart';
+import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
+import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
 import 'package:wardrobe_app/cloth_item/views/attribute_icon_row.dart';
 import '../backend/outfit.dart';
 import 'presenter_screen.dart';
@@ -51,7 +51,7 @@ class OutfitTile extends StatelessWidget {
 class _OutfitItemsLabeler {
   static const _nameDivider = "-";
 
-  final _clothItemManager = GetIt.I.get<ClothItemManager>();
+  final _clothItemQuerier = GetIt.I<ClothItemQuerier>();
 
   final Iterable<String> _ids;
   late final Iterable<ClothItem> _clothitems;
@@ -68,7 +68,7 @@ class _OutfitItemsLabeler {
   }
 
   void _getClothItems() {
-    _clothitems = _ids.map(_clothItemManager.getClothItemById).nonNulls;
+    _clothitems = _ids.map(_clothItemQuerier.getById).nonNulls;
   }
 
   void _getNames() {
@@ -81,7 +81,7 @@ class _OutfitItemsLabeler {
 }
 
 class _OutfitAttributeCalculator {
-  final _clothItemManager = GetIt.I.get<ClothItemManager>();
+  final _clothItemQuerier = GetIt.I<ClothItemQuerier>();
   final Iterable<String> _ids;
   late final Iterable<ClothItem> _clothItems;
   late final List<List<ClothItemAttribute>> _attributeMatrix;
@@ -98,7 +98,7 @@ class _OutfitAttributeCalculator {
   }
 
   void _getClothItems() {
-    _clothItems = _ids.map(_clothItemManager.getClothItemById).nonNulls;
+    _clothItems = _ids.map(_clothItemQuerier.getById).nonNulls;
   }
 
   void _createInitialAttributeMatrix() {

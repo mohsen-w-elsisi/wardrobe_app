@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/cloth_item/backend/cloth_item.dart';
-import 'package:wardrobe_app/cloth_item/backend/manager.dart';
 import 'package:wardrobe_app/cloth_item/backend/organiser.dart';
+import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
+import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
 import 'package:wardrobe_app/outfit/views/maker_screen/manager.dart';
 import 'package:wardrobe_app/cloth_item/backend/attribute_selection_manager.dart';
 
@@ -10,7 +10,7 @@ import 'attribute_filter_chips.dart';
 import 'stepper.dart';
 
 class OutfitMakerScreen extends StatelessWidget {
-  final _clothItemManager = GetIt.I.get<ClothItemManager>();
+  final _clothItemQuerier = GetIt.I<ClothItemQuerier>();
   final _attributeFilterationManager = ClothItemAttributeSelectionManager({});
   late final OutfitMakerManager _outfitMakerManager;
 
@@ -52,7 +52,7 @@ class OutfitMakerScreen extends StatelessWidget {
     return organiser.filterUsingAttributes(filterAttributes);
   }
 
-  List<ClothItem> get _allSavedItems => _clothItemManager.clothItems;
+  List<ClothItem> get _allSavedItems => _clothItemQuerier.getAll();
 
   @override
   Widget build(BuildContext context) {

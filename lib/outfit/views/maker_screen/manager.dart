@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:wardrobe_app/cloth_item/backend/cloth_item.dart';
 import 'package:wardrobe_app/cloth_item/backend/organiser.dart';
+import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
 
 class OutfitMakerManager with ChangeNotifier {
   List<ClothItem> _avaliableItems;

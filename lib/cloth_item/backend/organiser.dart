@@ -1,6 +1,7 @@
+import 'package:wardrobe_app/cloth_item/data_structures/cloth_item_transformer.dart';
 import 'package:wardrobe_app/cloth_item/dispay_options/sort_mode.dart';
 
-import 'cloth_item.dart';
+import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
 
 class ClothItemOrganiser {
   final List<ClothItem> clothItems;
@@ -49,7 +50,8 @@ class ClothItemOrganiser {
   }
 
   List<ClothItem> itemsMatchingWith(ClothItem item) {
-    return clothItems.where(item.isMatchingItem).toList();
+    final itemTransformer = ClothItemTransformer(item);
+    return clothItems.where(itemTransformer.isMatchingItemOf).toList();
   }
 
   ClothItemOrganiser scopeOrganiserToType(ClothItemType type) {

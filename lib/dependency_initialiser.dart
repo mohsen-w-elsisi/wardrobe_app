@@ -6,7 +6,14 @@ import 'package:wardrobe_app/cloth_item/backend/import_export.dart';
 import 'package:wardrobe_app/cloth_item/backend/manager.dart';
 import 'package:wardrobe_app/cloth_item/backend/querier.dart';
 import 'package:wardrobe_app/cloth_item/persistance/data_gateway.dart';
+import 'package:wardrobe_app/cloth_item/use_cases/implementations/deleter.dart';
+import 'package:wardrobe_app/cloth_item/use_cases/implementations/exporter.dart';
+import 'package:wardrobe_app/cloth_item/use_cases/implementations/favourite_toggler.dart';
+import 'package:wardrobe_app/cloth_item/use_cases/implementations/importer.dart';
+import 'package:wardrobe_app/cloth_item/use_cases/implementations/matcher.dart';
 import 'package:wardrobe_app/cloth_item/use_cases/implementations/querier.dart';
+import 'package:wardrobe_app/cloth_item/use_cases/implementations/saver.dart';
+import 'package:wardrobe_app/cloth_item/use_cases/implementations/ui_notifier.dart';
 import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
 import 'package:wardrobe_app/cloth_item/views/compound_view/settings.dart';
 import 'package:wardrobe_app/outfit/backend/hive_storage_agent.dart';
@@ -18,6 +25,17 @@ class AppDependencyInitialiser {
   static final List<Dependancy> _dependancies = [
     HiveInitialiser(),
     ClothItemManagerInitialiser(),
+    //
+    ClothItemDataGatewayInitialiser(),
+    ClothItemUiNotifierInitialiser(),
+    ClothItemSaverInitialiser(),
+    ClothItemDeleterInitialiser(),
+    ClothItemFavouriteTogglerInitialiser(),
+    ClothItemQuerierInitialiser(),
+    ClothItemMatcherInitialiser(),
+    ClothItemExporterInitialiser(),
+    ClothItemImporterInitialiser(),
+    //
     OutfitManagerInitialiser(),
     CompoundViewManagerInitialiser(),
     ThemeStorageControllerInitialiser(),
@@ -86,18 +104,16 @@ class CompoundViewManagerInitialiser
 
   void _createCompoundViewManager() {
     _dependancy = ClothItemCompoundViewManager(
-      clothItems: _clothItemManager.clothItems,
+      clothItems: GetIt.I<ClothItemQuerier>().getAll(),
       settings: _defaultSettings,
     );
   }
 
   void _listenForItemChanges() {
-    _clothItemManager.addListener(() {
-      _dependancy.clothItems = _clothItemManager.clothItems;
+    GetIt.I<ClothItemUiNotifier>().addListener(() {
+      _dependancy.clothItems = GetIt.I<ClothItemQuerier>().getAll();
     });
   }
-
-  ClothItemManager get _clothItemManager => GetIt.I.get<ClothItemManager>();
 }
 
 class ThemeStorageControllerInitialiser
@@ -109,11 +125,67 @@ class ThemeStorageControllerInitialiser
   }
 }
 
+class ClothItemExporterInitialiser
+    extends GetItRegisterableDependancy<ClothItemExporter> {
+  @override
+  Future<void> _initialise() async {
+    _dependancy = ClothItemExporterImpl();
+  }
+}
+
+class ClothItemImporterInitialiser
+    extends GetItRegisterableDependancy<ClothItemImporter> {
+  @override
+  Future<void> _initialise() async {
+    _dependancy = ClothItemImporterImpl();
+  }
+}
+
+class ClothItemMatcherInitialiser
+    extends GetItRegisterableDependancy<ClothItemMatcher> {
+  @override
+  Future<void> _initialise() async {
+    _dependancy = ClothItemMatcherImpl();
+  }
+}
+
+class ClothItemFavouriteTogglerInitialiser
+    extends GetItRegisterableDependancy<ClothItemFavouriteToggler> {
+  @override
+  Future<void> _initialise() async {
+    _dependancy = ClothItemFavouriteTogglerImpl();
+  }
+}
+
+class ClothItemDeleterInitialiser
+    extends GetItRegisterableDependancy<ClothItemDeleter> {
+  @override
+  Future<void> _initialise() async {
+    _dependancy = ClothItemDeleterImpl();
+  }
+}
+
+class ClothItemSaverInitialiser
+    extends GetItRegisterableDependancy<ClothItemSaver> {
+  @override
+  Future<void> _initialise() async {
+    _dependancy = ClothItemSaverImpl();
+  }
+}
+
 class ClothItemQuerierInitialiser
     extends GetItRegisterableDependancy<ClothItemQuerier> {
   @override
   Future<void> _initialise() async {
     _dependancy = ClothItemQuerierImpl();
+  }
+}
+
+class ClothItemUiNotifierInitialiser
+    extends GetItRegisterableDependancy<ClothItemUiNotifier> {
+  @override
+  Future<void> _initialise() async {
+    _dependancy = ClothItemUiNotifierImpl();
   }
 }
 

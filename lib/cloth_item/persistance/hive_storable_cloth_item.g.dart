@@ -17,14 +17,14 @@ class HiveStorableClothItemAdapter extends TypeAdapter<HiveStorableClothItem> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return HiveStorableClothItem(
-      fields[1] as String,
-      fields[3] as String,
-      fields[4] as int,
-      fields[5] as bool,
-      (fields[6] as List).cast<int>(),
-      (fields[7] as List).cast<String>(),
-      fields[2] as DateTime,
-      fields[8] as Uint8List,
+      id: fields[1] as String,
+      name: fields[3] as String,
+      image: fields[8] as Uint8List,
+      dateCreated: fields[2] as DateTime,
+      type: fields[4] as int,
+      attributes: (fields[6] as List).cast<int>(),
+      isFavourite: fields[5] as bool,
+      matchingItems: (fields[7] as List).cast<String>(),
     );
   }
 
@@ -33,21 +33,21 @@ class HiveStorableClothItemAdapter extends TypeAdapter<HiveStorableClothItem> {
     writer
       ..writeByte(8)
       ..writeByte(1)
-      ..write(obj._id)
+      ..write(obj.id)
       ..writeByte(2)
-      ..write(obj._dateCreated)
+      ..write(obj.dateCreated)
       ..writeByte(3)
-      ..write(obj._name)
+      ..write(obj.name)
       ..writeByte(4)
-      ..write(obj._type)
+      ..write(obj.type)
       ..writeByte(5)
-      ..write(obj._isFavourite)
+      ..write(obj.isFavourite)
       ..writeByte(6)
-      ..write(obj._attributes)
+      ..write(obj.attributes)
       ..writeByte(7)
-      ..write(obj._matchingItems)
+      ..write(obj.matchingItems)
       ..writeByte(8)
-      ..write(obj._image);
+      ..write(obj.image);
   }
 
   @override

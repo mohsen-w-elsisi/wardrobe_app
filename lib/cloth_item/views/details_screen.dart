@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/cloth_item/backend/cloth_item.dart';
-import 'package:wardrobe_app/cloth_item/backend/manager.dart';
+import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
+import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
 import 'package:wardrobe_app/cloth_item/views/matching_dialog.dart';
 import 'package:wardrobe_app/cloth_item/backend/new_item_manager.dart';
 import 'package:wardrobe_app/cloth_item/views/editing_screen/new_screen/editing_screen.dart';
@@ -12,11 +12,10 @@ import 'image.dart';
 import 'list_view.dart';
 
 class ClothItemDetailScreen extends StatelessWidget {
-  final clothItemManager = GetIt.I.get<ClothItemManager>();
   final String clothItemId;
   final bool enableHeroImage;
 
-  ClothItemDetailScreen(
+  const ClothItemDetailScreen(
     this.clothItemId, {
     this.enableHeroImage = true,
     super.key,
@@ -25,7 +24,7 @@ class ClothItemDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: clothItemManager,
+      listenable: GetIt.I<ClothItemUiNotifier>(),
       builder: (_, __) {
         if (_itemExists) {
           return Scaffold(
@@ -48,7 +47,7 @@ class ClothItemDetailScreen extends StatelessWidget {
 
   bool get _itemExists => _clothItem != null;
 
-  ClothItem? get _clothItem => clothItemManager.getClothItemById(clothItemId);
+  ClothItem? get _clothItem => GetIt.I<ClothItemQuerier>().getById(clothItemId);
 }
 
 class _Image extends StatelessWidget {
@@ -79,17 +78,16 @@ class _Image extends StatelessWidget {
 }
 
 class _MatchingItemList extends StatelessWidget {
-  final _clothItemManager = GetIt.I.get<ClothItemManager>();
   final ClothItem clothItem;
 
-  _MatchingItemList({
+  const _MatchingItemList({
     required this.clothItem,
   });
 
   @override
   Widget build(BuildContext context) {
     return ClothItemListView(
-      _clothItemManager.getMatchingItems(clothItem),
+      GetIt.I<ClothItemMatcher>().findMatchingItems(clothItem),
       sliver: true,
     );
   }
@@ -129,10 +127,9 @@ class _AttributeChips extends StatelessWidget {
 }
 
 class _AppBar extends StatelessWidget {
-  final clothItemManager = GetIt.I.get<ClothItemManager>();
   final ClothItem clothItem;
 
-  _AppBar({
+  const _AppBar({
     required this.clothItem,
   });
 
@@ -175,7 +172,7 @@ class _AppBar extends StatelessWidget {
     ClothItemMatchingDialog(
       newClothItemManager: newClothItemManager,
       clothItem: clothItem,
-      onDismiss: (context) => clothItemManager.saveItem(
+      onDismiss: (context) => GetIt.I<ClothItemSaver>().save(
         newClothItemManager.clothItem,
       ),
     ).show(context);
@@ -194,7 +191,7 @@ class _AppBar extends StatelessWidget {
   }
 
   void _deleteItem(BuildContext context) {
-    clothItemManager.deleteItem(clothItem);
+    GetIt.I<ClothItemDeleter>().delete(clothItem);
     Navigator.pop(context);
     _showDeletionSnackBar(context);
   }
@@ -208,7 +205,7 @@ class _AppBar extends StatelessWidget {
   }
 
   void _toggleItemFavourite() =>
-      clothItemManager.toggleFavouriteForItem(clothItem);
+      GetIt.I<ClothItemFavouriteToggler>().toggleItem(clothItem);
 }
 
 class _StartOutfitFAB extends StatelessWidget {

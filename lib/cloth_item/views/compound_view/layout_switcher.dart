@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wardrobe_app/cloth_item/backend/cloth_item.dart';
+import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
 import 'package:wardrobe_app/cloth_item/views/grid_view.dart';
 import 'package:wardrobe_app/cloth_item/views/list_view.dart';
 

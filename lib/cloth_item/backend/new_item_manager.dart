@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:wardrobe_app/cloth_item/backend/cloth_item.dart';
+import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
 
 class NewClothItemManager {
   late final DateTime dateCreated;

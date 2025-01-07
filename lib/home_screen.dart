@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
+import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
 import 'package:wardrobe_app/cloth_item/views/compound_view/settings.dart';
 import 'package:wardrobe_app/outfit/views/list_screen.dart';
 
-import 'cloth_item/backend/cloth_item.dart';
 import 'cloth_item/backend/manager.dart';
 import 'cloth_item/backend/new_item_manager.dart';
 import 'cloth_item/views/editing_screen/new_screen/editing_screen.dart';
@@ -55,7 +56,6 @@ class HomeScreen extends StatelessWidget {
 }
 
 class _Drawer extends StatelessWidget {
-  final _clothItemManager = GetIt.I.get<ClothItemManager>();
   final _compoundViewManager = GetIt.I.get<ClothItemCompoundViewManager>();
 
   @override
@@ -64,7 +64,7 @@ class _Drawer extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: ClothItemGroupedList(
-          clothItems: _clothItemManager.clothItems,
+          clothItems: GetIt.I<ClothItemQuerier>().getAll(),
           onItemTap: (clothItem) => _onItemTileTap(context, clothItem),
           onTypeTap: (type) => _onlyShowTypeInCompoundView(type, context),
         ),

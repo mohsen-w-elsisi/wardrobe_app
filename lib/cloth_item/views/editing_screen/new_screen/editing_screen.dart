@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/cloth_item/backend/manager.dart';
+
 import 'package:wardrobe_app/cloth_item/backend/organiser.dart';
+import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
 import 'package:wardrobe_app/cloth_item/views/matching_dialog.dart';
-import '../../../backend/new_item_manager.dart';
+import 'package:wardrobe_app/cloth_item/backend/new_item_manager.dart';
+
 import 'attribute_selector.dart';
 import 'name_field.dart';
 import 'photo_selector.dart';
@@ -63,7 +65,7 @@ class NewClothItemScreen extends StatelessWidget {
 }
 
 class _NextStepButton extends StatelessWidget {
-  final clothItemManager = GetIt.I.get<ClothItemManager>();
+  final clothItemSaver = GetIt.I<ClothItemSaver>();
   final NewClothItemManager newClothItemManager;
   final bool showMatchingsDialog;
 
@@ -89,7 +91,8 @@ class _NextStepButton extends StatelessWidget {
       : _saveItemOrShowMissingInputDialog;
 
   bool get _thereAreParableItems {
-    final itemOrganiser = ClothItemOrganiser(clothItemManager.clothItems);
+    final itemOrganiser =
+        ClothItemOrganiser(GetIt.I<ClothItemQuerier>().getAll());
     final parableItems = itemOrganiser.filterOutType(newClothItemManager.type);
     return parableItems.isNotEmpty;
   }
@@ -125,7 +128,7 @@ class _NextStepButton extends StatelessWidget {
   }
 
   void _saveItem(BuildContext context) {
-    clothItemManager.saveItem(newClothItemManager.clothItem);
+    clothItemSaver.save(newClothItemManager.clothItem);
     Navigator.pop(context);
   }
 }

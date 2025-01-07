@@ -5,8 +5,10 @@ import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
 
 class ClothItemHiveDataGateway extends ClothItemDataGateway {
   static const _boxName = "ClothItems";
+  static const _itemNotFoundErrorMessage =
+      "attempted to query cloth item that does not exist in Hive";
 
-  late final Box<ClothItem> _box;
+  late final Box<HiveStorableClothItem> _box;
 
   Future<void> initialise() async {
     Hive.registerAdapter(HiveStorableClothItemAdapter());
@@ -25,16 +27,21 @@ class ClothItemHiveDataGateway extends ClothItemDataGateway {
 
   @override
   Iterable<ClothItem> getAllItems() {
-    return _box.values;
+    return _box.values.map((item) => item.toClothItem());
   }
 
   @override
   ClothItem getById(String id) {
-    return _box.get(id)!;
+    final item = _box.get(id);
+    if (item == null) throw StateError(_itemNotFoundErrorMessage);
+    return item.toClothItem();
   }
 
   @override
   void save(ClothItem item) {
-    _box.put(item.id, item);
+    _box.put(
+      item.id,
+      HiveStorableClothItem.fromClothItem(item),
+    );
   }
 }
