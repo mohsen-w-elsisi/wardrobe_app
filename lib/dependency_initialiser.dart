@@ -129,7 +129,7 @@ class ClothItemExporterInitialiser
     extends GetItRegisterableDependancy<ClothItemExporter> {
   @override
   Future<void> _initialise() async {
-    _dependancy = ClothItemExporterImpl();
+    _dependancy = ClothItemJsonExporter();
   }
 }
 
@@ -137,7 +137,7 @@ class ClothItemImporterInitialiser
     extends GetItRegisterableDependancy<ClothItemImporter> {
   @override
   Future<void> _initialise() async {
-    _dependancy = ClothItemImporterImpl();
+    _dependancy = ClothItemJsonImporter();
   }
 }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/backend/manager.dart';
+import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
 
 class SettingsScreenClearWardrobeTile extends StatelessWidget {
   const SettingsScreenClearWardrobeTile({super.key});
@@ -48,12 +49,10 @@ class _Dialog extends StatelessWidget {
   }
 
   void _deleteAll(BuildContext context) {
-    clothItemManager.deleteAllItems();
+    GetIt.I<ClothItemDeleter>().clearWardrobe();
     _close(context);
     _showConfirmationSnackbar(context);
   }
-
-  ClothItemManager get clothItemManager => GetIt.I.get<ClothItemManager>();
 
   void _showConfirmationSnackbar(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(

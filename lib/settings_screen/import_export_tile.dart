@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/cloth_item/backend/manager.dart';
+import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
 
 class SettingsScreenExportTile extends StatelessWidget {
   const SettingsScreenExportTile({super.key});
@@ -17,8 +17,12 @@ class SettingsScreenExportTile extends StatelessWidget {
   }
 
   Future<void> _export() async {
-    final json = _clothItemManager.export();
+    final json = GetIt.I<ClothItemExporter>().export();
     final jsonAsBytes = Uint8List.fromList(json.runes.toList());
+    _saveBytesToFile(jsonAsBytes);
+  }
+
+  void _saveBytesToFile(Uint8List jsonAsBytes) {
     FilePicker.platform.saveFile(
       bytes: jsonAsBytes,
       fileName: "wardrobe.json",
@@ -26,8 +30,6 @@ class SettingsScreenExportTile extends StatelessWidget {
       dialogTitle: "export wardrobe to file",
     );
   }
-
-  ClothItemManager get _clothItemManager => GetIt.I.get<ClothItemManager>();
 }
 
 class SettingsScreenImportTile extends StatelessWidget {
@@ -45,7 +47,7 @@ class SettingsScreenImportTile extends StatelessWidget {
     final result = await _selectFile();
     if (result != null) {
       final jsonText = await result.xFiles.first.readAsString();
-      _clothItemManager.import(jsonText);
+      GetIt.I<ClothItemImporter>().import(jsonText);
     }
   }
 
@@ -56,6 +58,4 @@ class SettingsScreenImportTile extends StatelessWidget {
       dialogTitle: "select wardrobe file",
     );
   }
-
-  ClothItemManager get _clothItemManager => GetIt.I.get<ClothItemManager>();
 }
