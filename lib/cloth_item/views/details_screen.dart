@@ -3,11 +3,11 @@ import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
 import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
 import 'package:wardrobe_app/cloth_item/views/matching_dialog.dart';
-import 'package:wardrobe_app/cloth_item/backend/new_item_manager.dart';
+import 'package:wardrobe_app/cloth_item/presenters/new_item_manager.dart';
 import 'package:wardrobe_app/cloth_item/views/editing_screen/new_screen/editing_screen.dart';
 import 'package:wardrobe_app/outfit/views/maker_screen/maker_screen.dart';
 
-import '../dispay_options/attribute.dart';
+import '../presenters/attribute_display_options.dart';
 import 'image.dart';
 import 'list_view.dart';
 

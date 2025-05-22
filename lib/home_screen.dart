@@ -4,7 +4,7 @@ import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
 import 'package:wardrobe_app/cloth_item/views/compound_view/settings.dart';
 import 'package:wardrobe_app/outfit/views/list_screen.dart';
 
-import 'cloth_item/backend/new_item_manager.dart';
+import 'cloth_item/presenters/new_item_manager.dart';
 import 'cloth_item/views/editing_screen/new_screen/editing_screen.dart';
 import 'outfit/views/maker_screen/maker_screen.dart';
 import 'settings_screen/settings_screen.dart';
@@ -35,7 +35,10 @@ class HomeScreen extends StatelessWidget {
     final compoundViewManager = GetIt.I<ClothItemCompoundViewManager>();
     return ListenableBuilder(
       listenable: GetIt.I<ClothItemUiNotifier>(),
-      builder: (_, __) => ClothItemCompoundView(compoundViewManager),
+      builder: (_, __) {
+        print("homescreen rebuilt");
+        return ClothItemCompoundView(compoundViewManager);
+      },
     );
   }
 

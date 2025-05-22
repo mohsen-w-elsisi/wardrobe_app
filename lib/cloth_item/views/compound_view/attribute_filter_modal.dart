@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
-import 'package:wardrobe_app/cloth_item/dispay_options/attribute.dart';
+import 'package:wardrobe_app/cloth_item/presenters/attribute_display_options.dart';
 import 'package:wardrobe_app/subbmitable_bottom_sheet.dart';
-import '../../backend/attribute_selection_manager.dart';
+import '../../presenters/attribute_selection_manager.dart';
 import 'settings.dart';
 
 class ClothItemCompoundViewAttributeFilterModal extends StatelessWidget {

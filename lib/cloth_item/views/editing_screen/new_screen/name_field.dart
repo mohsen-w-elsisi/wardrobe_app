@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wardrobe_app/cloth_item/backend/new_item_manager.dart';
+import 'package:wardrobe_app/cloth_item/presenters/new_item_manager.dart';
 
 class NewClothItemNameField extends StatefulWidget {
   final NewClothItemManager newClothItemManager;

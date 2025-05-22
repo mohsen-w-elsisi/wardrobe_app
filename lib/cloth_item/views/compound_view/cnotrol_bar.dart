@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wardrobe_app/cloth_item/views/compound_view/attribute_filter_modal.dart';
-import 'package:wardrobe_app/cloth_item/dispay_options/sort_mode.dart';
+import 'package:wardrobe_app/cloth_item/presenters/sort_mode.dart';
 
 import 'settings.dart';
 

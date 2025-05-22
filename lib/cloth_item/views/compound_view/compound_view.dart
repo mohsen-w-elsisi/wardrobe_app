@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
-import 'package:wardrobe_app/cloth_item/backend/organiser.dart';
+import 'package:wardrobe_app/cloth_item/presenters/organiser.dart';
 import 'package:wardrobe_app/cloth_item/views/compound_view/filter_chips.dart';
 
 import 'cnotrol_bar.dart';

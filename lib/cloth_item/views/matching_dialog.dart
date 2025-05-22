@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/cloth_item/backend/organiser.dart';
-import 'package:wardrobe_app/cloth_item/backend/new_item_manager.dart';
+import 'package:wardrobe_app/cloth_item/presenters/organiser.dart';
+import 'package:wardrobe_app/cloth_item/presenters/new_item_manager.dart';
 import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
 import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
 import 'package:wardrobe_app/cloth_item/views/details_screen.dart';
-import 'package:wardrobe_app/cloth_item/dispay_options/type.dart';
+import 'package:wardrobe_app/cloth_item/presenters/type_display_options.dart';
 import 'package:wardrobe_app/subbmitable_bottom_sheet.dart';
 
 class ClothItemMatchingDialog extends StatelessWidget {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-import 'package:wardrobe_app/cloth_item/backend/organiser.dart';
+import 'package:wardrobe_app/cloth_item/presenters/organiser.dart';
 import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
 import 'package:wardrobe_app/cloth_item/views/matching_dialog.dart';
-import 'package:wardrobe_app/cloth_item/backend/new_item_manager.dart';
+import 'package:wardrobe_app/cloth_item/presenters/new_item_manager.dart';
 
 import 'attribute_selector.dart';
 import 'name_field.dart';

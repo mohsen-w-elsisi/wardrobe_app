@@ -1,5 +1,5 @@
 import 'package:wardrobe_app/cloth_item/data_structures/cloth_item_transformer.dart';
-import 'package:wardrobe_app/cloth_item/dispay_options/sort_mode.dart';
+import 'package:wardrobe_app/cloth_item/presenters/sort_mode.dart';
 
 import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
 

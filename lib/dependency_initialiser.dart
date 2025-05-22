@@ -1,10 +1,5 @@
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:wardrobe_app/cloth_item/backend/differ.dart';
-import 'package:wardrobe_app/cloth_item/backend/hive_storage_agent.dart';
-import 'package:wardrobe_app/cloth_item/backend/import_export.dart';
-import 'package:wardrobe_app/cloth_item/backend/manager.dart';
-import 'package:wardrobe_app/cloth_item/backend/querier.dart';
 import 'package:wardrobe_app/cloth_item/persistance/data_gateway.dart';
 import 'package:wardrobe_app/cloth_item/use_cases/implementations/deleter.dart';
 import 'package:wardrobe_app/cloth_item/use_cases/implementations/exporter.dart';
@@ -24,8 +19,6 @@ import 'package:wardrobe_app/theme/theme_settings_controller.dart';
 class AppDependencyInitialiser {
   static final List<Dependancy> _dependancies = [
     HiveInitialiser(),
-    ClothItemManagerInitialiser(),
-    //
     ClothItemDataGatewayInitialiser(),
     ClothItemUiNotifierInitialiser(),
     ClothItemSaverInitialiser(),
@@ -35,7 +28,6 @@ class AppDependencyInitialiser {
     ClothItemMatcherInitialiser(),
     ClothItemExporterInitialiser(),
     ClothItemImporterInitialiser(),
-    //
     OutfitManagerInitialiser(),
     CompoundViewManagerInitialiser(),
     ThemeStorageControllerInitialiser(),
@@ -52,28 +44,6 @@ class HiveInitialiser implements Dependancy {
   @override
   Future<void> initialise() async {
     await Hive.initFlutter();
-  }
-}
-
-class ClothItemManagerInitialiser
-    extends GetItRegisterableDependancy<ClothItemManager> {
-  @override
-  Future<void> _initialise() async {
-    final storageAgent = await _createStorageAgent();
-    final querier = ClothItemQuerierOldImpl(items: storageAgent.savedItems);
-
-    _dependancy = ClothItemManager(
-      querier: querier,
-      storageAgent: storageAgent,
-      createDiffer: CLothItemDifferImpl.new,
-      importExportClient: ClothItemJsonImportExportClient(),
-    );
-  }
-
-  Future<ClothItemStorageAgent> _createStorageAgent() async {
-    final storageAgent = HiveClothItemStorageAgent();
-    await storageAgent.initialize();
-    return storageAgent;
   }
 }
 

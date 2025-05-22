@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wardrobe_app/cloth_item/backend/organiser.dart';
+import 'package:wardrobe_app/cloth_item/presenters/organiser.dart';
 import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
-import 'package:wardrobe_app/cloth_item/dispay_options/type.dart';
+import 'package:wardrobe_app/cloth_item/presenters/type_display_options.dart';
 
 class ClothItemGroupedList extends StatelessWidget {
   final List<ClothItem> clothItems;

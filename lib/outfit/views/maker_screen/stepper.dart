@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:wardrobe_app/cloth_item/backend/organiser.dart';
+import 'package:wardrobe_app/cloth_item/presenters/organiser.dart';
 import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
 import 'package:wardrobe_app/cloth_item/views/details_screen.dart';
-import 'package:wardrobe_app/cloth_item/dispay_options/sort_mode.dart';
-import 'package:wardrobe_app/cloth_item/dispay_options/type.dart';
+import 'package:wardrobe_app/cloth_item/presenters/sort_mode.dart';
+import 'package:wardrobe_app/cloth_item/presenters/type_display_options.dart';
 import 'package:wardrobe_app/cloth_item/views/attribute_icon_row.dart';
 import 'package:wardrobe_app/outfit/backend/outfit.dart';
 

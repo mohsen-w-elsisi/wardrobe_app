@@ -48,8 +48,8 @@ class _Dialog extends StatelessWidget {
   }
 
   void _deleteAll(BuildContext context) {
-    GetIt.I<ClothItemDeleter>().clearWardrobe();
     _close(context);
+    GetIt.I<ClothItemDeleter>().clearWardrobe();
     _showConfirmationSnackbar(context);
   }
 
