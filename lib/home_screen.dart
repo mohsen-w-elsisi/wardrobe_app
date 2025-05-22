@@ -1,29 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
 import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
 import 'package:wardrobe_app/cloth_item/views/compound_view/settings.dart';
 import 'package:wardrobe_app/outfit/views/list_screen.dart';
 
-import 'cloth_item/backend/manager.dart';
 import 'cloth_item/backend/new_item_manager.dart';
 import 'cloth_item/views/editing_screen/new_screen/editing_screen.dart';
-import 'cloth_item/views/grouped_list_view.dart';
 import 'outfit/views/maker_screen/maker_screen.dart';
 import 'settings_screen/settings_screen.dart';
 import 'cloth_item/views/compound_view/compound_view.dart';
-import 'cloth_item/views/details_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  final clothItemManager = GetIt.I.get<ClothItemManager>();
-
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(),
-      drawer: _Drawer(),
       body: _mainBody(),
       floatingActionButton: _floatingActionButton(context),
       bottomNavigationBar: _BottomAppBar(),
@@ -39,9 +32,9 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _mainBody() {
-    final compoundViewManager = GetIt.I.get<ClothItemCompoundViewManager>();
+    final compoundViewManager = GetIt.I<ClothItemCompoundViewManager>();
     return ListenableBuilder(
-      listenable: clothItemManager,
+      listenable: GetIt.I<ClothItemUiNotifier>(),
       builder: (_, __) => ClothItemCompoundView(compoundViewManager),
     );
   }
@@ -55,49 +48,7 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class _Drawer extends StatelessWidget {
-  final _compoundViewManager = GetIt.I.get<ClothItemCompoundViewManager>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: ClothItemGroupedList(
-          clothItems: GetIt.I<ClothItemQuerier>().getAll(),
-          onItemTap: (clothItem) => _onItemTileTap(context, clothItem),
-          onTypeTap: (type) => _onlyShowTypeInCompoundView(type, context),
-        ),
-      ),
-    );
-  }
-
-  void _onlyShowTypeInCompoundView(ClothItemType type, BuildContext context) {
-    _compoundViewManager.onlyShowType(type);
-    _closeDrawer(context);
-  }
-
-  void _onItemTileTap(BuildContext context, ClothItem clothItem) {
-    _closeDrawer(context);
-    _openDetailScreenforClothItem(context, clothItem);
-  }
-
-  void _openDetailScreenforClothItem(
-      BuildContext context, ClothItem clothItem) {
-    _navigateTo(
-      context,
-      ClothItemDetailScreen(clothItem.id, enableHeroImage: false),
-    );
-  }
-
-  void _closeDrawer(BuildContext context) {
-    Scaffold.of(context).closeDrawer();
-  }
-}
-
 class _BottomAppBar extends StatelessWidget {
-  final clothItemManager = GetIt.I.get<ClothItemManager>();
-
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(

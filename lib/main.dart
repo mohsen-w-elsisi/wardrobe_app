@@ -29,7 +29,7 @@ class App extends StatelessWidget {
             useMaterial3: true,
             colorSchemeSeed: themeSettingsController.colorSchemeSeed,
           ),
-          home: HomeScreen(),
+          home: const HomeScreen(),
         );
       },
     );

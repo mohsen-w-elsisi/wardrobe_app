@@ -22,8 +22,7 @@ class OutfitWasSavedSnackbar {
           const Spacer(),
           TextButton(
             onPressed: () {
-              Navigator.of(context)
-                  .pushAndRemoveUntil(_route, (route) => route.isFirst);
+              Navigator.of(context).push(_route);
             },
             child: const Text("view"),
           )
