@@ -18,21 +18,15 @@ class ClothItemCompoundViewFilterChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.all(8.0),
       child: Wrap(
         spacing: 8,
+        runSpacing: 8,
         children: [
-          if (_viewSettings.showOnlyType != null) _typeChip,
           ..._attributeChips,
+          ..._typeChips,
         ],
       ),
-    );
-  }
-
-  _TypeChip get _typeChip {
-    return _TypeChip(
-      type: _viewSettings.showOnlyType!,
-      viewManager: _viewManager,
     );
   }
 
@@ -45,9 +39,19 @@ class ClothItemCompoundViewFilterChips extends StatelessWidget {
         )
     ];
   }
+
+  List<_TypeChip> get _typeChips {
+    return [
+      for (final filterType in _viewSettings.filteredTypes)
+        _TypeChip(
+          viewManager: _viewManager,
+          type: filterType,
+        )
+    ];
+  }
 }
 
-class _AttributeChip extends StatelessWidget {
+class _AttributeChip extends _FilterChip {
   final ClothItemAttribute _filterAttribute;
   final ClothItemCompoundViewManager _viewManager;
 
@@ -58,26 +62,22 @@ class _AttributeChip extends StatelessWidget {
         _viewManager = viewManager;
 
   @override
-  Widget build(BuildContext context) {
-    return Chip(
-      label: Text(_attributeDisplayoption.name),
-      avatar: Icon(_attributeDisplayoption.icon),
-      deleteIcon: const Icon(Icons.cancel),
-      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-      onDeleted: _removeAttributeFromFilters,
-    );
-  }
-
-  void _removeAttributeFromFilters() {
+  void _removeFilter() {
     _viewManager.removeFilteredAttribute(_filterAttribute);
   }
+
+  @override
+  String get _label => _attributeDisplayoption.name;
+
+  @override
+  Widget _avatar(_) => Icon(_attributeDisplayoption.icon);
 
   ClothItemAttributeDisplayOption get _attributeDisplayoption {
     return clothItemAttributeDisplayOptions[_filterAttribute]!;
   }
 }
 
-class _TypeChip extends StatelessWidget {
+class _TypeChip extends _FilterChip {
   final ClothItemType _type;
   final ClothItemCompoundViewManager _viewManager;
 
@@ -88,18 +88,41 @@ class _TypeChip extends StatelessWidget {
         _type = type;
 
   @override
+  String get _label => clothItemTypeDisplayOptions[_type]!.text;
+
+  @override
+  Widget _avatar(BuildContext context) =>
+      SvgPicture.asset(ClothItemTypeIconQuerier(context, _type).icon);
+
+  @override
+  void _removeFilter() {
+    _viewManager.removeFilteredType(_type);
+  }
+}
+
+abstract class _FilterChip extends StatelessWidget {
+  const _FilterChip({
+    super.key,
+  });
+
+  @override
   Widget build(BuildContext context) {
-    return Chip(
-      label: Text(_label),
-      avatar: _icon(context),
-      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-      deleteIcon: const Icon(Icons.cancel),
-      onDeleted: _viewManager.showAllTypes,
+    return GestureDetector(
+      onTap: _removeFilter,
+      child: Chip(
+        label: Text(_label),
+        avatar: _avatar(),
+        visualDensity: VisualDensity.compact,
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        deleteIcon: const Icon(Icons.cancel),
+        onDeleted: _removeFilter,
+      ),
     );
   }
 
-  String get _label => clothItemTypeDisplayOptions[_type]!.text;
+  String get _label;
 
-  Widget _icon(BuildContext context) =>
-      SvgPicture.asset(ClothItemTypeIconQuerier(context, _type).icon);
+  Widget _avatar(BuildContext context);
+
+  void _removeFilter();
 }

@@ -22,6 +22,17 @@ class ClothItemOrganiser {
     return availableItems;
   }
 
+  List<ClothItem> filterUsingTypes(Set<ClothItemType> types) {
+    if (types.isEmpty) return clothItems;
+    final availableItems = <ClothItem>[];
+    for (final item in clothItems) {
+      if (types.contains(item.type)) {
+        availableItems.add(item);
+      }
+    }
+    return availableItems;
+  }
+
   List<ClothItem> itemsMatchingWithBaseitemsOfType(
       List<ClothItem> baseItems, ClothItemType type) {
     final clothItemsOfType = filterBytype(type);

@@ -74,7 +74,7 @@ class ClothItemCompoundViewControlBar extends StatelessWidget {
   }
 
   void _openAttributeFilterModal(BuildContext context) {
-    ClothItemCompoundViewAttributeFilterModal(
+    ClothItemCompoundViewFiltersModal(
       settingsController: settingsController,
     ).show(context);
   }

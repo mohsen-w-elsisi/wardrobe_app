@@ -36,14 +36,19 @@ class ClothItemCompoundViewManager with ChangeNotifier {
     notifyListeners();
   }
 
-  void onlyShowType(ClothItemType type) {
-    _settings = _settings.copyWith(showOnlyType: type);
+  void setFilteredTypes(Set<ClothItemType> types) {
+    _settings = _settings.copyWith(filteredTypes: types);
     notifyListeners();
   }
 
-  void showAllTypes() {
-    _settings = _settings.copyWith(showOnlyType: null);
-    notifyListeners();
+  void removeFilteredType(ClothItemType type) {
+    setFilteredTypes(
+      _settings.filteredTypes
+          .where(
+            (testType) => testType != type,
+          )
+          .toSet(),
+    );
   }
 
   void setFilteredAttributes(Set<ClothItemAttribute> attributes) {
@@ -72,7 +77,7 @@ class ClothItemCompoundViewSettings with _$ClothItemCompoundViewSettings {
     ClothItemCompoundViewLayout layout,
     @Default(ClothItemSortMode.byName) ClothItemSortMode sortMode,
     @Default({}) Set<ClothItemAttribute> filteredAttributes,
-    ClothItemType? showOnlyType,
+    @Default({}) Set<ClothItemType> filteredTypes,
   }) = _ClothItemCompoundViewSettings;
 }
 

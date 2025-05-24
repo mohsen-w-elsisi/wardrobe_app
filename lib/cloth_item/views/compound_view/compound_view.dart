@@ -64,10 +64,8 @@ class _CompoundViewItemsFilterAndSorter {
   List<ClothItem> get items => [..._items];
 
   void _filterByType() {
-    final filterType = _viewSettings.showOnlyType;
-    if (filterType != null) {
-      _items = _itemsOrganiser().filterBytype(filterType);
-    }
+    final filterTypes = _viewSettings.filteredTypes;
+    _items = _itemsOrganiser().filterUsingTypes(filterTypes);
   }
 
   void _filterByAttribute() {
