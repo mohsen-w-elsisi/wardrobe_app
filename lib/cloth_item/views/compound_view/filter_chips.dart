@@ -111,7 +111,7 @@ abstract class _FilterChip extends StatelessWidget {
       onTap: _removeFilter,
       child: Chip(
         label: Text(_label),
-        avatar: _avatar(),
+        avatar: _avatar(context),
         visualDensity: VisualDensity.compact,
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         deleteIcon: const Icon(Icons.cancel),
