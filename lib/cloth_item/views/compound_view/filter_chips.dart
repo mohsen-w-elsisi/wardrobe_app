@@ -101,9 +101,7 @@ class _TypeChip extends _FilterChip {
 }
 
 abstract class _FilterChip extends StatelessWidget {
-  const _FilterChip({
-    super.key,
-  });
+  const _FilterChip();
 
   @override
   Widget build(BuildContext context) {

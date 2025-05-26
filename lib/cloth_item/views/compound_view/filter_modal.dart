@@ -78,7 +78,7 @@ class ClothItemCompoundViewFiltersModal extends StatelessWidget {
 }
 
 class _FilterSectionTitle extends StatelessWidget {
-  const _FilterSectionTitle(this.text, {super.key});
+  const _FilterSectionTitle(this.text);
 
   final String text;
 
@@ -88,7 +88,7 @@ class _FilterSectionTitle extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Text(
         text,
-        style: Theme.of(context).textTheme.headlineSmall,
+        style: Theme.of(context).textTheme.titleLarge,
       ),
     );
   }
