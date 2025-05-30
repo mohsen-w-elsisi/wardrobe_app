@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
-import 'package:wardrobe_app/cloth_item/views/compound_view/settings.dart';
+import 'package:wardrobe_app/dependancies/compound_view_manager_initialiser.dart';
 import 'package:wardrobe_app/outfit/views/list_screen.dart';
 
 import 'cloth_item/presenters/new_item_manager.dart';
@@ -32,11 +32,11 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _mainBody() {
-    final compoundViewManager = GetIt.I<ClothItemCompoundViewManager>();
+    final compoundViewManager =
+        ClothItemCompoundViewManagerinitialiser().assembleViewManager();
     return ListenableBuilder(
       listenable: GetIt.I<ClothItemUiNotifier>(),
       builder: (_, __) {
-        print("homescreen rebuilt");
         return ClothItemCompoundView(compoundViewManager);
       },
     );

@@ -7,7 +7,7 @@ import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
 import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
 import 'package:wardrobe_app/cloth_item/views/details_screen.dart';
 import 'package:wardrobe_app/cloth_item/presenters/type_display_options.dart';
-import 'package:wardrobe_app/subbmitable_bottom_sheet.dart';
+import 'package:wardrobe_app/common_widgets/subbmitable_bottom_sheet.dart';
 
 class ClothItemMatchingDialog extends StatelessWidget {
   final ClothItemEditingManager newClothItemManager;

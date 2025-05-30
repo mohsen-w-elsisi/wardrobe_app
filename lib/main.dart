@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/dependency_initialiser.dart';
+import 'package:wardrobe_app/dependancies/global_dependency_initialiser.dart';
 import 'package:wardrobe_app/home_screen.dart';
 import 'package:wardrobe_app/theme/theme_settings_controller.dart';
 
 Future<void> main() async {
-  await AppDependencyInitialiser.initiaseDependencies();
+  await GlobalDependencyInitialiser.initiaseDependencies();
   runApp(const App());
 }
 

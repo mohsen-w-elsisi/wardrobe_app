@@ -3,7 +3,7 @@ import 'package:wardrobe_app/cloth_item/presenters/type_selection_manager.dart';
 import 'package:wardrobe_app/cloth_item/views/selectable_attribute_chips.dart';
 import 'package:wardrobe_app/cloth_item/views/selectable_type_chips.dart';
 import 'package:wardrobe_app/cloth_item/presenters/attribute_selection_manager.dart';
-import 'package:wardrobe_app/subbmitable_bottom_sheet.dart';
+import 'package:wardrobe_app/common_widgets/subbmitable_bottom_sheet.dart';
 import 'settings.dart';
 
 class ClothItemCompoundViewFiltersModal extends StatelessWidget {
