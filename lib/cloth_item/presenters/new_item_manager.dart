@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
 
-class NewClothItemManager {
+class ClothItemEditingManager {
   late final DateTime dateCreated;
   final bool isFavourite;
   String? id;
@@ -12,7 +12,7 @@ class NewClothItemManager {
   List<String> matchingItems;
   Uint8List image;
 
-  NewClothItemManager()
+  ClothItemEditingManager()
       : dateCreated = DateTime.now(),
         name = "",
         type = ClothItemType.top,
@@ -21,7 +21,7 @@ class NewClothItemManager {
         isFavourite = false,
         image = Uint8List(0);
 
-  NewClothItemManager.from(ClothItem clothitem)
+  ClothItemEditingManager.from(ClothItem clothitem)
       : dateCreated = clothitem.dateCreated,
         id = clothitem.id,
         name = clothitem.name,

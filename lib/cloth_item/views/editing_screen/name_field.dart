@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:wardrobe_app/cloth_item/presenters/new_item_manager.dart';
 
-class NewClothItemNameField extends StatefulWidget {
-  final NewClothItemManager newClothItemManager;
+class ClothItemNameField extends StatefulWidget {
+  final ClothItemEditingManager editingManager;
 
-  const NewClothItemNameField({super.key, required this.newClothItemManager});
+  const ClothItemNameField({super.key, required this.editingManager});
 
   @override
-  State<NewClothItemNameField> createState() => _NewClothItemNameFieldState();
+  State<ClothItemNameField> createState() => _ClothItemNameFieldState();
 }
 
-class _NewClothItemNameFieldState extends State<NewClothItemNameField> {
+class _ClothItemNameFieldState extends State<ClothItemNameField> {
   late final TextEditingController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.newClothItemManager.name);
+    _controller = TextEditingController(text: widget.editingManager.name);
   }
 
   @override
@@ -29,7 +29,7 @@ class _NewClothItemNameFieldState extends State<NewClothItemNameField> {
   Widget build(BuildContext context) {
     return TextField(
       controller: _controller,
-      onChanged: (text) => widget.newClothItemManager.name = text,
+      onChanged: (text) => widget.editingManager.name = text,
       decoration: const InputDecoration(labelText: "name"),
     );
   }

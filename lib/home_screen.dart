@@ -5,7 +5,7 @@ import 'package:wardrobe_app/cloth_item/views/compound_view/settings.dart';
 import 'package:wardrobe_app/outfit/views/list_screen.dart';
 
 import 'cloth_item/presenters/new_item_manager.dart';
-import 'cloth_item/views/editing_screen/new_screen/editing_screen.dart';
+import 'cloth_item/views/editing_screen/editing_screen.dart';
 import 'outfit/views/maker_screen/maker_screen.dart';
 import 'settings_screen/settings_screen.dart';
 import 'cloth_item/views/compound_view/compound_view.dart';
@@ -70,8 +70,8 @@ class _BottomAppBar extends StatelessWidget {
             tooltip: "new item",
             onPressed: () => _navigateTo(
               context,
-              NewClothItemScreen(
-                newClothItemManager: NewClothItemManager(),
+              ClothItemEditingScreen(
+                editingManager: ClothItemEditingManager(),
               ),
             ),
             icon: const Icon(Icons.add),

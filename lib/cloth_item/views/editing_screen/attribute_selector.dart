@@ -3,13 +3,13 @@ import 'package:wardrobe_app/cloth_item/presenters/new_item_manager.dart';
 import 'package:wardrobe_app/cloth_item/views/selectable_attribute_chips.dart';
 import 'package:wardrobe_app/cloth_item/presenters/attribute_selection_manager.dart';
 
-class NewClothItemScreenAttributeSelector extends StatelessWidget {
-  final NewClothItemManager newClothItemManager;
+class ClothItemAttributeSelector extends StatelessWidget {
+  final ClothItemEditingManager editingManager;
   late final ClothItemAttributeSelectionManager _selectionManager;
 
-  NewClothItemScreenAttributeSelector({
+  ClothItemAttributeSelector({
     super.key,
-    required this.newClothItemManager,
+    required this.editingManager,
   }) {
     _initSelectionManager();
     _watchSelectionAndUpdateNewClothItem();
@@ -17,7 +17,7 @@ class NewClothItemScreenAttributeSelector extends StatelessWidget {
 
   void _initSelectionManager() {
     _selectionManager = ClothItemAttributeSelectionManager(
-      newClothItemManager.attributes.toSet(),
+      editingManager.attributes.toSet(),
     );
   }
 
@@ -26,8 +26,7 @@ class NewClothItemScreenAttributeSelector extends StatelessWidget {
   }
 
   void _updateNewClothItem() {
-    newClothItemManager.attributes =
-        _selectionManager.selectedAttributes.toList();
+    editingManager.attributes = _selectionManager.selectedAttributes.toList();
   }
 
   @override

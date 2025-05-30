@@ -1,16 +1,14 @@
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wardrobe_app/cloth_item/presenters/new_item_manager.dart';
+import 'package:wardrobe_app/cloth_item/views/editing_screen/image/image_selecter.dart';
 
-class ImageSelectorModal extends StatelessWidget {
-  final NewClothItemManager newClothItemManager;
+class ClothItemImageSelectionModal extends StatelessWidget {
+  final ClothItemEditingManager editingManager;
   final Function()? onSelect;
 
-  const ImageSelectorModal({
-    required this.newClothItemManager,
+  const ClothItemImageSelectionModal({
+    required this.editingManager,
     this.onSelect,
     super.key,
   });
@@ -56,35 +54,7 @@ class ImageSelectorModal extends StatelessWidget {
   Future<void> _savedPickedImage(ImageSource source) async {
     final imageBytes = await ImageSelecter(source: source).pickImage();
     if (imageBytes != null) {
-      newClothItemManager.image = imageBytes;
+      editingManager.image = imageBytes;
     }
   }
-}
-
-class ImageSelecter {
-  final ImageSource _source;
-  late final XFile? _xFile;
-  late final Uint8List _bytes;
-
-  ImageSelecter({required ImageSource source}) : _source = source;
-
-  Future<Uint8List?> pickImage() async {
-    await _getPickedXFIle();
-    if (_imageWasSelected) {
-      await _readXFileAsBytes();
-      return _bytes;
-    } else {
-      return null;
-    }
-  }
-
-  Future<void> _readXFileAsBytes() async {
-    _bytes = await File(_xFile!.path).readAsBytes();
-  }
-
-  Future<void> _getPickedXFIle() async {
-    _xFile = await ImagePicker().pickImage(source: _source);
-  }
-
-  bool get _imageWasSelected => _xFile != null;
 }

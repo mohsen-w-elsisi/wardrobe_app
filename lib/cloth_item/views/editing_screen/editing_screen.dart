@@ -8,15 +8,15 @@ import 'package:wardrobe_app/cloth_item/presenters/new_item_manager.dart';
 
 import 'attribute_selector.dart';
 import 'name_field.dart';
-import 'photo_selector.dart';
+import 'image/selection_preview.dart';
 import 'type_selector.dart';
 
-class NewClothItemScreen extends StatelessWidget {
-  final NewClothItemManager newClothItemManager;
+class ClothItemEditingScreen extends StatelessWidget {
+  final ClothItemEditingManager editingManager;
   final bool showMatchingsDialog;
 
-  const NewClothItemScreen({
-    required this.newClothItemManager,
+  const ClothItemEditingScreen({
+    required this.editingManager,
     this.showMatchingsDialog = true,
     super.key,
   });
@@ -50,15 +50,13 @@ class NewClothItemScreen extends StatelessWidget {
   }
 
   List<Widget> get _editingComponents => [
-        NewClothItemPhotoSelector(newClothItemManager: newClothItemManager),
-        NewClothItemNameField(newClothItemManager: newClothItemManager),
-        NewClothItemScreenTypeSelector(
-            newClothItemManager: newClothItemManager),
-        NewClothItemScreenAttributeSelector(
-            newClothItemManager: newClothItemManager),
+        ClothItemImageSelectionPreview(editingManager: editingManager),
+        ClothItemNameField(editingManager: editingManager),
+        ClothItemTypeSelector(editingManager: editingManager),
+        ClothItemAttributeSelector(editingManager: editingManager),
         const Spacer(),
         _NextStepButton(
-          newClothItemManager: newClothItemManager,
+          newClothItemManager: editingManager,
           showMatchingsDialog: showMatchingsDialog,
         ),
       ];
@@ -66,7 +64,7 @@ class NewClothItemScreen extends StatelessWidget {
 
 class _NextStepButton extends StatelessWidget {
   final clothItemSaver = GetIt.I<ClothItemSaver>();
-  final NewClothItemManager newClothItemManager;
+  final ClothItemEditingManager newClothItemManager;
   final bool showMatchingsDialog;
 
   _NextStepButton({

@@ -4,7 +4,7 @@ import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
 import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
 import 'package:wardrobe_app/cloth_item/views/matching_dialog.dart';
 import 'package:wardrobe_app/cloth_item/presenters/new_item_manager.dart';
-import 'package:wardrobe_app/cloth_item/views/editing_screen/new_screen/editing_screen.dart';
+import 'package:wardrobe_app/cloth_item/views/editing_screen/editing_screen.dart';
 import 'package:wardrobe_app/outfit/views/maker_screen/maker_screen.dart';
 
 import '../presenters/attribute_display_options.dart';
@@ -168,7 +168,7 @@ class _AppBar extends StatelessWidget {
       );
 
   void _showMatchingItemsDialoG(BuildContext context) {
-    final newClothItemManager = NewClothItemManager.from(clothItem);
+    final newClothItemManager = ClothItemEditingManager.from(clothItem);
     ClothItemMatchingDialog(
       newClothItemManager: newClothItemManager,
       clothItem: clothItem,
@@ -179,11 +179,11 @@ class _AppBar extends StatelessWidget {
   }
 
   void _openEditScreen(BuildContext context) {
-    final newClothItemManager = NewClothItemManager.from(clothItem);
+    final newClothItemManager = ClothItemEditingManager.from(clothItem);
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => NewClothItemScreen(
-          newClothItemManager: newClothItemManager,
+        builder: (context) => ClothItemEditingScreen(
+          editingManager: newClothItemManager,
           showMatchingsDialog: false,
         ),
       ),

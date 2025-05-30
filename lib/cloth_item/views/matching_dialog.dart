@@ -10,7 +10,7 @@ import 'package:wardrobe_app/cloth_item/presenters/type_display_options.dart';
 import 'package:wardrobe_app/subbmitable_bottom_sheet.dart';
 
 class ClothItemMatchingDialog extends StatelessWidget {
-  final NewClothItemManager newClothItemManager;
+  final ClothItemEditingManager newClothItemManager;
   final void Function(BuildContext) onDismiss;
   final ClothItem clothItem;
 
@@ -48,7 +48,7 @@ class ClothItemMatchingDialog extends StatelessWidget {
 
 class _ListBody extends StatelessWidget {
   final clothItemQuerier = GetIt.I<ClothItemQuerier>();
-  final NewClothItemManager newClothItemManager;
+  final ClothItemEditingManager newClothItemManager;
   final ClothItem clothItem;
   late final ClothItemOrganiser clothItemOrganiser;
 
@@ -85,7 +85,7 @@ class _ListBody extends StatelessWidget {
 }
 
 class _ListTile extends StatelessWidget {
-  final NewClothItemManager newClothItemManager;
+  final ClothItemEditingManager newClothItemManager;
   final ClothItem item;
   final StateSetter setState;
 

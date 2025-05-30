@@ -4,12 +4,12 @@ import 'package:wardrobe_app/cloth_item/presenters/new_item_manager.dart';
 import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
 import 'package:wardrobe_app/cloth_item/presenters/type_display_options.dart';
 
-class NewClothItemScreenTypeSelector extends StatelessWidget {
-  final NewClothItemManager newClothItemManager;
+class ClothItemTypeSelector extends StatelessWidget {
+  final ClothItemEditingManager editingManager;
 
-  const NewClothItemScreenTypeSelector({
+  const ClothItemTypeSelector({
     super.key,
-    required this.newClothItemManager,
+    required this.editingManager,
   });
 
   @override
@@ -22,7 +22,7 @@ class NewClothItemScreenTypeSelector extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: _DropDown(newClothItemManager: newClothItemManager),
+          child: _DropDown(newClothItemManager: editingManager),
         ),
       ],
     );
@@ -30,7 +30,7 @@ class NewClothItemScreenTypeSelector extends StatelessWidget {
 }
 
 class _DropDown extends StatefulWidget {
-  final NewClothItemManager newClothItemManager;
+  final ClothItemEditingManager newClothItemManager;
 
   const _DropDown({
     required this.newClothItemManager,

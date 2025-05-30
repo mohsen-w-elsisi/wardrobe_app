@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:wardrobe_app/cloth_item/views/editing_screen/new_screen/image_source_selector_modal.dart';
+import 'package:wardrobe_app/cloth_item/views/editing_screen/image/selection_model.dart';
 import 'package:wardrobe_app/cloth_item/presenters/new_item_manager.dart';
 import 'package:wardrobe_app/cloth_item/views/image.dart';
 
-class NewClothItemPhotoSelector extends StatelessWidget {
-  final NewClothItemManager newClothItemManager;
+class ClothItemImageSelectionPreview extends StatelessWidget {
+  final ClothItemEditingManager editingManager;
 
-  const NewClothItemPhotoSelector({
+  const ClothItemImageSelectionPreview({
     super.key,
-    required this.newClothItemManager,
+    required this.editingManager,
   });
 
   @override
@@ -16,7 +16,7 @@ class NewClothItemPhotoSelector extends StatelessWidget {
     return StatefulBuilder(
       builder: (context, setState) => GestureDetector(
         onTap: () => _showImageSourceOptions(context, setState),
-        child: newClothItemManager.image.isEmpty
+        child: editingManager.image.isEmpty
             ? _blankImageSelector(context)
             : _filledImageSelector(),
       ),
@@ -24,8 +24,8 @@ class NewClothItemPhotoSelector extends StatelessWidget {
   }
 
   void _showImageSourceOptions(BuildContext context, StateSetter setState) {
-    ImageSelectorModal(
-      newClothItemManager: newClothItemManager,
+    ClothItemImageSelectionModal(
+      editingManager: editingManager,
       onSelect: () => setState(() {}),
     ).show(context);
   }
@@ -47,10 +47,10 @@ class NewClothItemPhotoSelector extends StatelessWidget {
   }
 
   Widget _filledImageSelector() => Hero(
-        tag: newClothItemManager.id ?? "",
+        tag: editingManager.id ?? "",
         child: RoundedSquareImage(
           MemoryImage(
-            newClothItemManager.image,
+            editingManager.image,
           ),
         ),
       );
