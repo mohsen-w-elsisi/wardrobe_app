@@ -12,6 +12,7 @@ class SubmitableBottomSheet extends StatelessWidget {
   final String submitButtonText;
   final void Function() onSubmit;
   final Widget Function(BuildContext context) builder;
+  final bool scrollable;
 
   const SubmitableBottomSheet({
     super.key,
@@ -20,10 +21,17 @@ class SubmitableBottomSheet extends StatelessWidget {
     required this.onSubmit,
     required this.context,
     required this.builder,
+    this.scrollable = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    return scrollable
+        ? _scrollableLayout(context)
+        : _nonScrollableLayout(context);
+  }
+
+  Widget _nonScrollableLayout(BuildContext context) {
     return Padding(
       padding: _sheetPadding,
       child: Stack(
@@ -40,10 +48,45 @@ class SubmitableBottomSheet extends StatelessWidget {
     );
   }
 
+  Widget _scrollableLayout(BuildContext context) {
+    return DraggableScrollableSheet(
+      snap: true,
+      snapSizes: const [0.3, 0.5, 1],
+      minChildSize: 0.3,
+      builder: (context, scrollController) => Container(
+        padding: _sheetPadding,
+        decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(25),
+              topRight: Radius.circular(25),
+            )),
+        child: ListView(
+          controller: scrollController,
+          children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: FilledButton(
+                onPressed: _onSubmitAndPop,
+                child: Text(submitButtonText),
+              ),
+            ),
+            _title(context),
+            Padding(
+              padding: _titleBodySpacing,
+              child: builder(context),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _title(BuildContext context) {
     return Text(
       title,
       style: Theme.of(context).textTheme.headlineSmall,
+      textAlign: TextAlign.center,
     );
   }
 

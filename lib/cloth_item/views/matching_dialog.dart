@@ -22,11 +22,10 @@ class ClothItemMatchingDialog extends StatelessWidget {
   });
 
   void show(BuildContext context) {
-    final maxHeight = MediaQuery.of(context).size.height * 0.7;
     showModalBottomSheet(
-      isScrollControlled: true,
-      constraints: BoxConstraints(maxHeight: maxHeight),
       context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       builder: (context) => this,
     );
   }
@@ -35,6 +34,7 @@ class ClothItemMatchingDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return SubmitableBottomSheet(
       context: context,
+      scrollable: true,
       title: "Select matching items",
       submitButtonText: "save",
       onSubmit: () => onDismiss(context),
@@ -63,7 +63,7 @@ class _ListBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return StatefulBuilder(
       builder: (context, setState) {
-        return ListView(
+        return Column(
           children: _itemTiles(setState),
         );
       },

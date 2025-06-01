@@ -17,17 +17,18 @@ class ClothItemCompoundViewFilterChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Wrap(
-        spacing: 8,
-        runSpacing: 8,
-        children: [
-          ..._attributeChips,
-          ..._typeChips,
-        ],
-      ),
-    );
+    final chips = [..._attributeChips, ..._typeChips];
+
+    return chips.isEmpty
+        ? Container()
+        : Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: chips,
+            ),
+          );
   }
 
   List<_AttributeChip> get _attributeChips {
