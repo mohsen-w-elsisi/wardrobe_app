@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
 import 'package:wardrobe_app/dependancies/compound_view_manager_initialiser.dart';
 import 'package:wardrobe_app/outfit/views/list_screen.dart';
+import 'package:wardrobe_app/cloth_item/views/search_deligate.dart';
 
 import 'cloth_item/presenters/new_item_manager.dart';
 import 'cloth_item/views/editing_screen/editing_screen.dart';
@@ -16,7 +17,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBar(),
+      appBar: _appBar(context),
       body: _mainBody(),
       floatingActionButton: _floatingActionButton(context),
       bottomNavigationBar: _BottomAppBar(),
@@ -24,10 +25,19 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  AppBar _appBar() {
+  AppBar _appBar(BuildContext context) {
     return AppBar(
       title: const Text("wardrobe"),
       centerTitle: true,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: () => showSearch(
+            context: context,
+            delegate: ClothItemSearchDeligate(),
+          ),
+        )
+      ],
     );
   }
 
@@ -57,27 +67,39 @@ class _BottomAppBar extends StatelessWidget {
     return BottomAppBar(
       child: Row(
         children: [
-          IconButton(
-            tooltip: "settings",
-            onPressed: () => _navigateTo(context, const SettingsScreen()),
-            icon: const Icon(Icons.settings_outlined),
-          ),
-          IconButton(
-            onPressed: () => _navigateTo(context, const OutfitListScreen()),
-            icon: const Icon(Icons.bookmark_outline),
-          ),
-          IconButton(
-            tooltip: "new item",
-            onPressed: () => _navigateTo(
-              context,
-              ClothItemEditingScreen(
-                editingManager: ClothItemEditingManager(),
-              ),
-            ),
-            icon: const Icon(Icons.add),
-          ),
+          _settingsButton(context),
+          _savedOutfitsButton(context),
+          _newItemButton(context),
         ],
       ),
+    );
+  }
+
+  Widget _settingsButton(BuildContext context) {
+    return IconButton(
+      tooltip: "settings",
+      onPressed: () => _navigateTo(context, const SettingsScreen()),
+      icon: const Icon(Icons.settings_outlined),
+    );
+  }
+
+  Widget _savedOutfitsButton(BuildContext context) {
+    return IconButton(
+      onPressed: () => _navigateTo(context, const OutfitListScreen()),
+      icon: const Icon(Icons.bookmark_outline),
+    );
+  }
+
+  Widget _newItemButton(BuildContext context) {
+    return IconButton(
+      tooltip: "new item",
+      onPressed: () => _navigateTo(
+        context,
+        ClothItemEditingScreen(
+          editingManager: ClothItemEditingManager(),
+        ),
+      ),
+      icon: const Icon(Icons.add),
     );
   }
 }
