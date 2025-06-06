@@ -9,8 +9,14 @@ import 'settings.dart';
 
 class ClothItemCompoundView extends StatelessWidget {
   final ClothItemCompoundViewManager _settingsManager;
+  final String _noItemsMessageText;
 
-  const ClothItemCompoundView(this._settingsManager, {super.key});
+  const ClothItemCompoundView({
+    super.key,
+    required ClothItemCompoundViewManager settingsManager,
+    required String noItemsMessageText,
+  })  : _settingsManager = settingsManager,
+        _noItemsMessageText = noItemsMessageText;
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +28,8 @@ class ClothItemCompoundView extends StatelessWidget {
   }
 
   Widget get _noItemsMessage {
-    return const Center(
-      child: Text("no items saved yet"),
+    return Center(
+      child: Text(_noItemsMessageText),
     );
   }
 

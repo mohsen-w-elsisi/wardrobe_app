@@ -47,7 +47,10 @@ class HomeScreen extends StatelessWidget {
     return ListenableBuilder(
       listenable: GetIt.I<ClothItemUiNotifier>(),
       builder: (_, __) {
-        return ClothItemCompoundView(compoundViewManager);
+        return ClothItemCompoundView(
+          settingsManager: compoundViewManager,
+          noItemsMessageText: "no items saved yet",
+        );
       },
     );
   }
