@@ -4,12 +4,12 @@ import 'package:wardrobe_app/cloth_item/views/compound_view/layout_switcher/anim
 import 'package:wardrobe_app/cloth_item/views/grid_view.dart';
 import 'package:wardrobe_app/cloth_item/views/list_view.dart';
 
-class ListClothItemAnimatedLayoutDeligate
-    extends ClothItemAnimatedLayoutDeligate {
+class ListClothItemAnimatedLayoutFactory
+    extends ClothItemAnimatedLayoutFactory {
   final Animation<double> _currentAnimation;
   final double _screenWidth;
 
-  ListClothItemAnimatedLayoutDeligate({
+  ListClothItemAnimatedLayoutFactory({
     required super.controller,
     required super.clothItems,
     required Animation<double> currentAnimation,
@@ -34,12 +34,12 @@ class ListClothItemAnimatedLayoutDeligate
   }
 }
 
-class GridClothItemAnimatedLayoutDeligate
-    extends ClothItemAnimatedLayoutDeligate {
+class GridClothItemAnimatedLayoutFactory
+    extends ClothItemAnimatedLayoutFactory {
   final Animation<double> _currentAnimation;
   final double _screenWidth;
 
-  GridClothItemAnimatedLayoutDeligate({
+  GridClothItemAnimatedLayoutFactory({
     required super.controller,
     required super.clothItems,
     required Animation<double> currentAnimation,
@@ -63,11 +63,11 @@ class GridClothItemAnimatedLayoutDeligate
   }
 }
 
-abstract class ClothItemAnimatedLayoutDeligate {
+abstract class ClothItemAnimatedLayoutFactory {
   final AnimationController controller;
   final List<ClothItem> clothItems;
 
-  const ClothItemAnimatedLayoutDeligate({
+  const ClothItemAnimatedLayoutFactory({
     required this.controller,
     required this.clothItems,
   });
@@ -77,9 +77,9 @@ abstract class ClothItemAnimatedLayoutDeligate {
 
   Widget _buildLayout();
 
-  ClothItemAnimatedLayout buildAnimatedLayout() => ClothItemAnimatedLayout(
+  ClothItemAnimatedLayout animatedLayout() => ClothItemAnimatedLayout(
       controller: controller,
-      layout: _buildLayout(),
       xPosition: _xPosition,
-      opacity: _opacity);
+      opacity: _opacity,
+      child: _buildLayout());
 }

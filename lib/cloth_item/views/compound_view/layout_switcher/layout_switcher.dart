@@ -30,8 +30,8 @@ class _ClothItemCompoundViewLayoutSwitcherState
   late final Animation<double> _toListAnimation;
   late final Animation<double> _toGridAnimation;
 
-  bool _showGrid = true;
-  bool _showList = true;
+  final _LayoutVisibilitiesManager _visibilitiesManager =
+      _LayoutVisibilitiesManager();
 
   @override
   void initState() {
@@ -50,20 +50,11 @@ class _ClothItemCompoundViewLayoutSwitcherState
 
   void _initLayoutVisibilatyUpdates() {
     _controller.addStatusListener(
-      (_) => _updateLayoutVisibilities(),
+      (_) => _visibilitiesManager.update(
+        controller: _controller,
+        layout: widget.currentLayout,
+      ),
     );
-  }
-
-  void _updateLayoutVisibilities() {
-    setState(() {
-      if (_controller.isAnimating) {
-        _showList = true;
-        _showGrid = true;
-      } else {
-        _showGrid = _layoutIsGrid;
-        _showList = !_layoutIsGrid;
-      }
-    });
   }
 
   void _initCurvedAnimations() {
@@ -90,8 +81,10 @@ class _ClothItemCompoundViewLayoutSwitcherState
 
     return Stack(
       children: [
-        if (_showGrid) _gridAnimatedLayoutDeligate.buildAnimatedLayout(),
-        if (_showList) _listAnimatedLayoutDeligate.buildAnimatedLayout(),
+        if (_visibilitiesManager.showGrid)
+          _gridAnimatedLayoutFactory.animatedLayout(),
+        if (_visibilitiesManager.showList)
+          _listAnimatedLayoutFactory.animatedLayout(),
       ],
     );
   }
@@ -107,16 +100,16 @@ class _ClothItemCompoundViewLayoutSwitcherState
   bool get _layoutIsGrid =>
       widget.currentLayout == ClothItemCompoundViewLayout.grid;
 
-  ClothItemAnimatedLayoutDeligate get _gridAnimatedLayoutDeligate =>
-      GridClothItemAnimatedLayoutDeligate(
+  ClothItemAnimatedLayoutFactory get _gridAnimatedLayoutFactory =>
+      GridClothItemAnimatedLayoutFactory(
         controller: _controller,
         clothItems: widget.clothItems,
         currentAnimation: _currentAnimation,
         screenWidth: _screenWidth,
       );
 
-  ClothItemAnimatedLayoutDeligate get _listAnimatedLayoutDeligate =>
-      ListClothItemAnimatedLayoutDeligate(
+  ClothItemAnimatedLayoutFactory get _listAnimatedLayoutFactory =>
+      ListClothItemAnimatedLayoutFactory(
         controller: _controller,
         clothItems: widget.clothItems,
         currentAnimation: _currentAnimation,
@@ -127,4 +120,28 @@ class _ClothItemCompoundViewLayoutSwitcherState
       _layoutIsGrid ? _toGridAnimation : _toListAnimation;
 
   double get _screenWidth => MediaQuery.of(context).size.width;
+}
+
+class _LayoutVisibilitiesManager {
+  bool _showGrid = true;
+  bool _showList = true;
+
+  bool get showGrid => _showGrid;
+  bool get showList => _showList;
+
+  void update({
+    required AnimationController controller,
+    required ClothItemCompoundViewLayout layout,
+  }) {
+    if (controller.isAnimating) {
+      _showList = true;
+      _showGrid = true;
+    } else {
+      _showGrid = _layoutIsGrid(layout);
+      _showList = !_layoutIsGrid(layout);
+    }
+  }
+
+  bool _layoutIsGrid(ClothItemCompoundViewLayout layout) =>
+      layout == ClothItemCompoundViewLayout.grid;
 }
