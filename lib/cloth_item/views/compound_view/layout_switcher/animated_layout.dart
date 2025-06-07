@@ -4,13 +4,13 @@ class ClothItemAnimatedLayout extends AnimatedWidget {
   const ClothItemAnimatedLayout({
     super.key,
     required this.controller,
-    required this.layout,
+    required this.child,
     required this.xPosition,
     required this.opacity,
   }) : super(listenable: controller);
 
   final AnimationController controller;
-  final Widget layout;
+  final Widget child;
   final double Function() xPosition;
   final double Function() opacity;
 
@@ -20,7 +20,7 @@ class ClothItemAnimatedLayout extends AnimatedWidget {
       offset: Offset(xPosition(), 0),
       child: Opacity(
         opacity: opacity(),
-        child: layout,
+        child: child,
       ),
     );
   }
