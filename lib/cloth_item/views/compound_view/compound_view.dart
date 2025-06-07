@@ -4,7 +4,7 @@ import 'package:wardrobe_app/cloth_item/presenters/organiser.dart';
 import 'package:wardrobe_app/cloth_item/views/compound_view/filter_chips.dart';
 
 import 'cnotrol_bar.dart';
-import 'layout_switcher.dart';
+import 'layout_switcher/layout_switcher.dart';
 import 'settings.dart';
 
 class ClothItemCompoundView extends StatelessWidget {

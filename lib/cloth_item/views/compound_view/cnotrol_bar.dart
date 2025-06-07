@@ -4,6 +4,8 @@ import 'package:wardrobe_app/cloth_item/presenters/sort_mode.dart';
 
 import 'settings.dart';
 
+const layoutSwitchAnimationDuration = Duration(milliseconds: 400);
+
 class ClothItemCompoundViewControlBar extends StatelessWidget {
   final ClothItemCompoundViewManager settingsController;
 

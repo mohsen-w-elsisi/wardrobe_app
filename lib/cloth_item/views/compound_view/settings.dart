@@ -5,8 +5,6 @@ import 'package:wardrobe_app/cloth_item/presenters/sort_mode.dart';
 
 part 'settings.freezed.dart';
 
-const layoutSwitchAnimationDuration = Duration(milliseconds: 400);
-
 class ClothItemCompoundViewManager with ChangeNotifier {
   List<ClothItem> _clothItems;
   ClothItemCompoundViewSettings _settings;
