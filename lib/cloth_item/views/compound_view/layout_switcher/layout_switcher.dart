@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
 
-import 'animated_layout_deligates.dart';
-import 'curved_animation_factory.dart';
+import 'animated_layout_factories.dart';
 
 import '../cnotrol_bar.dart';
 import '../settings.dart';
@@ -32,6 +31,8 @@ class _ClothItemCompoundViewLayoutSwitcherState
 
   final _visibilitiesManager = _LayoutVisibilitiesManager();
 
+  bool initialAnimationWasRun = false;
+
   @override
   void initState() {
     super.initState();
@@ -57,15 +58,9 @@ class _ClothItemCompoundViewLayoutSwitcherState
   }
 
   void _initCurvedAnimations() {
-    _toGridAnimation = LayoutSwitcherCurvedAnimationFactory(
-      controller: _controller,
-      curve: Curves.easeInQuart,
-    ).animation();
-
-    _toListAnimation = LayoutSwitcherCurvedAnimationFactory(
-      controller: _controller,
-      curve: Curves.easeOutQuart,
-    ).animation();
+    final animationIniter = _ListAndGridAnimationIniter(_controller);
+    _toListAnimation = animationIniter.listAnimation;
+    _toGridAnimation = animationIniter.gridAnimation;
   }
 
   @override
@@ -76,8 +71,7 @@ class _ClothItemCompoundViewLayoutSwitcherState
 
   @override
   Widget build(BuildContext context) {
-    _runSwitchAnimation();
-
+    _animate();
     return Stack(
       children: [
         if (_visibilitiesManager.showGrid)
@@ -88,11 +82,28 @@ class _ClothItemCompoundViewLayoutSwitcherState
     );
   }
 
-  void _runSwitchAnimation() {
+  void _animate() {
+    if (initialAnimationWasRun) {
+      _runAnimation();
+    } else {
+      initialAnimationWasRun = true;
+      _skipAnimation();
+    }
+  }
+
+  void _runAnimation() {
     if (_layoutIsGrid) {
       _controller.reverse();
     } else {
       _controller.forward();
+    }
+  }
+
+  void _skipAnimation() {
+    if (_layoutIsGrid) {
+      _controller.value = 0;
+    } else {
+      _controller.value = 1;
     }
   }
 
@@ -143,4 +154,28 @@ class _LayoutVisibilitiesManager {
 
   bool _layoutIsGrid(ClothItemCompoundViewLayout layout) =>
       layout == ClothItemCompoundViewLayout.grid;
+}
+
+class _ListAndGridAnimationIniter {
+  final AnimationController _controller;
+
+  _ListAndGridAnimationIniter(this._controller);
+
+  Animation<double> get gridAnimation =>
+      _animationWithCurve(Curves.easeInQuart);
+
+  Animation<double> get listAnimation =>
+      _animationWithCurve(Curves.easeOutQuart);
+
+  Animation<double> _animationWithCurve(Curve curve) {
+    return Tween(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: curve,
+      ),
+    );
+  }
 }

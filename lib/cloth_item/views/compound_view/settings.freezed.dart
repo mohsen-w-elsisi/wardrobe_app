@@ -22,7 +22,9 @@ mixin _$ClothItemCompoundViewSettings {
       throw _privateConstructorUsedError;
   Set<ClothItemType> get filteredTypes => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ClothItemCompoundViewSettings
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ClothItemCompoundViewSettingsCopyWith<ClothItemCompoundViewSettings>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -53,6 +55,8 @@ class _$ClothItemCompoundViewSettingsCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ClothItemCompoundViewSettings
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -108,6 +112,8 @@ class __$$ClothItemCompoundViewSettingsImplCopyWithImpl<$Res>
       $Res Function(_$ClothItemCompoundViewSettingsImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ClothItemCompoundViewSettings
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -201,7 +207,9 @@ class _$ClothItemCompoundViewSettingsImpl
       const DeepCollectionEquality().hash(_filteredAttributes),
       const DeepCollectionEquality().hash(_filteredTypes));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ClothItemCompoundViewSettings
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ClothItemCompoundViewSettingsImplCopyWith<
@@ -227,8 +235,11 @@ abstract class _ClothItemCompoundViewSettings
   Set<ClothItemAttribute> get filteredAttributes;
   @override
   Set<ClothItemType> get filteredTypes;
+
+  /// Create a copy of ClothItemCompoundViewSettings
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ClothItemCompoundViewSettingsImplCopyWith<
           _$ClothItemCompoundViewSettingsImpl>
       get copyWith => throw _privateConstructorUsedError;
