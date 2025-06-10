@@ -33,7 +33,8 @@ class _Dialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text("Are you sure you want to delete everything?"),
-      content: const Text("deleted data cannot be recovered."),
+      content: const Text(
+          "Deleted data cannot be recovered. Consider exporting your wardrobe first."),
       actions: [
         TextButton(
           onPressed: () => _close(context),
