@@ -1,0 +1,9 @@
+{
+  "@@locale": "ar",
+  "appTitle": "واردروب",
+  "wardrobeEmpty": "لم يتم تسجيل أي ملابس حتى الآن",
+  "noSearchResults": "لم يوجد أي قطع",
+  "savedOutfitsScreenTitle": "الأزياء المسجلة",
+  "noOutfitsSaved": "لم يتم تسجيل أي أزياء بعد",
+  "settings": "الإعدادات"
+}

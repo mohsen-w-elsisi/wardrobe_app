@@ -4,12 +4,12 @@ import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
 import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
 import 'package:wardrobe_app/cloth_item/views/compound_view/compound_view.dart';
 import 'package:wardrobe_app/cloth_item/views/compound_view/settings.dart';
+import 'package:wardrobe_app/l10n/app_localizations.dart';
 
 class ClothItemSearchDeligate extends SearchDelegate<ClothItem> {
   late ClothItemCompoundViewManager _viewManager;
 
-  ClothItemCompoundViewSettings _viewSettings =
-      const ClothItemCompoundViewSettings(
+  var _viewSettings = const ClothItemCompoundViewSettings(
     layout: ClothItemCompoundViewLayout.list,
   );
 
@@ -21,16 +21,16 @@ class ClothItemSearchDeligate extends SearchDelegate<ClothItem> {
   Widget? buildLeading(BuildContext context) => null;
 
   @override
-  Widget buildResults(BuildContext context) => _resultsWidget();
+  Widget buildResults(BuildContext context) => _resultsWidget(context);
 
   @override
-  Widget buildSuggestions(BuildContext context) => _resultsWidget();
+  Widget buildSuggestions(BuildContext context) => _resultsWidget(context);
 
-  Widget _resultsWidget() {
+  Widget _resultsWidget(BuildContext context) {
     _generateUpdatedViewManager();
     return ClothItemCompoundView(
       settingsManager: _viewManager,
-      noItemsMessageText: "no items found",
+      noItemsMessageText: AppLocalizations.of(context)!.noSearchResults,
     );
   }
 
