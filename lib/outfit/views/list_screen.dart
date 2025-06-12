@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:wardrobe_app/l10n/app_localizations.dart';
 
 import '../backend/outfit.dart';
 import 'tile.dart';
@@ -14,19 +15,21 @@ class OutfitListScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           _appBar,
-          _listOrEmptyMessage,
+          _listOrEmptyMessage(context),
         ],
       ),
     );
   }
 
-  Widget get _listOrEmptyMessage =>
-      _outfits.isNotEmpty ? _list : _noOutfitsMessage;
+  Widget _listOrEmptyMessage(BuildContext context) =>
+      _outfits.isNotEmpty ? _list : _noOutfitsMessage(context);
 
-  Widget get _noOutfitsMessage {
-    return const SliverFillRemaining(
+  Widget _noOutfitsMessage(BuildContext context) {
+    return SliverFillRemaining(
       child: Center(
-        child: Text("no outfits saved yet"),
+        child: Text(
+          AppLocalizations.of(context)!.noOutfitsSaved,
+        ),
       ),
     );
   }

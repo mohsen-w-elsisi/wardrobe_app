@@ -1,0 +1,27 @@
+{
+  "@@locale": "en",
+  "appTitle": "wardrobe",
+  "@appTitle": {
+    "description": "title in appbar of main screen"
+  },
+  "wardrobeEmpty": "no items saved yet",
+  "@wardrobeEmpty": {
+    "description": "shown when wardobe database is empty"
+  },
+  "noSearchResults": "no items found",
+  "@noSearchResults": {
+    "description": "shown when no cloth items found in search"
+  },
+  "savedOutfitsScreenTitle": "saved outfits",
+  "@savedOutfitsScreenTitle": {
+    "description": "title in appbar of saved outfits screen"
+  },
+  "noOutfitsSaved": "no outfits saved yet",
+  "@noOutfitsSaved": {
+    "description": "shown when outfits database is empty"
+  },
+  "settings": "settings",
+  "@settings": {
+    "description": "title in appbar of settings screen and hint in settings button"
+  }
+}

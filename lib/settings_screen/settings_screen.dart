@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wardrobe_app/l10n/app_localizations.dart';
 
 import 'about_app_tile.dart';
 import 'clear_wardrobe_tile.dart';
@@ -34,9 +35,11 @@ class _AppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SliverAppBar.medium(
+    return SliverAppBar.medium(
       flexibleSpace: FlexibleSpaceBar(
-        title: Text("settings"),
+        title: Text(
+          AppLocalizations.of(context)!.settings,
+        ),
       ),
     );
   }

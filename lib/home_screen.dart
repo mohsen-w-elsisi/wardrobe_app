@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
 import 'package:wardrobe_app/dependancies/compound_view_manager_initialiser.dart';
+import 'package:wardrobe_app/l10n/app_localizations.dart';
 import 'package:wardrobe_app/outfit/views/list_screen.dart';
 import 'package:wardrobe_app/cloth_item/views/search_deligate.dart';
 
@@ -18,7 +19,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(context),
-      body: _mainBody(),
+      body: _mainBody(context),
       floatingActionButton: _floatingActionButton(context),
       bottomNavigationBar: _BottomAppBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
@@ -27,7 +28,9 @@ class HomeScreen extends StatelessWidget {
 
   AppBar _appBar(BuildContext context) {
     return AppBar(
-      title: const Text("wardrobe"),
+      title: Text(
+        AppLocalizations.of(context)!.appTitle,
+      ),
       centerTitle: true,
       actions: [
         IconButton(
@@ -41,7 +44,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _mainBody() {
+  Widget _mainBody(BuildContext context) {
     final compoundViewManager =
         ClothItemCompoundViewManagerinitialiser().assembleViewManager();
     return ListenableBuilder(
@@ -49,7 +52,7 @@ class HomeScreen extends StatelessWidget {
       builder: (_, __) {
         return ClothItemCompoundView(
           settingsManager: compoundViewManager,
-          noItemsMessageText: "no items saved yet",
+          noItemsMessageText: AppLocalizations.of(context)!.wardrobeEmpty,
         );
       },
     );
@@ -80,7 +83,7 @@ class _BottomAppBar extends StatelessWidget {
 
   Widget _settingsButton(BuildContext context) {
     return IconButton(
-      tooltip: "settings",
+      tooltip: AppLocalizations.of(context)!.settings,
       onPressed: () => _navigateTo(context, const SettingsScreen()),
       icon: const Icon(Icons.settings_outlined),
     );
