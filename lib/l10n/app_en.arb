@@ -23,5 +23,121 @@
   "settings": "settings",
   "@settings": {
     "description": "title in appbar of settings screen and hint in settings button"
+  },
+  "edit": "edit",
+  "@edit": {
+    "description": "tooltip in edit button"
+  },
+  "delete": "delete",
+  "@delete": {
+    "description": "tooltip in delete button"
+  },
+  "matchingItemsTooltip": "pair with items",
+  "@matchingItemsTooltip": {
+    "description": "tooltip in select matching items button"
+  },
+  "favourite": "favourite",
+  "@favourite": {
+    "description": "tooltip in favourite button"
+  },
+  "matchingItemsSheetTitle": "select matching items",
+  "@matchingItemsSheetTitle": {
+    "description": "title in matching items modal bottom sheet"
+  },
+  "newOutfitTooltip": "new outfit",
+  "@newOutfitTooltip": {
+    "description": "tooltip in new outfit button"
+  },
+  "newOutfitUsingCurrentItemsTooltip": "new outfit with this",
+  "@newOutfitUsingCurrentItemsTooltip": {
+    "description": "tooltip in new outfit button on item details screen"
+  },
+  "formalAttribute": "formal",
+  "@formalAttribute": {
+    "description": "display name for formal attribute"
+  },
+  "sportyAttribute": "sporty",
+  "@sportyAttribute": {
+    "description": "display name for sporty attribute"
+  },
+  "onFashionAttribute": "on fashion",
+  "@onFashionAttribute": {
+    "description": "display name for onFashion attribute"
+  },
+  "sortBy": "sort by",
+  "@sortBy": {
+    "description": "label next to sort mode dropdown"
+  },
+  "nameSOrtMode": "name",
+  "@nameSOrtMode": {
+    "description": "display name for name mode in sort mode dropdown"
+  },
+  "dateSortMode": "date created",
+  "@dateSortMode": {
+    "description": "display name for date created mode in sort mode dropdown"
+  },
+  "switchLayoutTooltip": "switch layout",
+  "@switchLayoutTooltip": {
+    "description": "tooltip in switch layout button (cloth item compound view)"
+  },
+  "filters": "filters",
+  "@filters": {
+    "description": "title in modal bottom sheet and tooltip in filters button"
+  },
+  "typeFilterHeader": "type",
+  "@typeFilterHeader": {
+    "description": "header for type filters in filter modal bottom sheet"
+  },
+  "attributeFilterHeader": "attributes",
+  "@attributeFilterHeader": {
+    "description": "header for attribute filter"
+  },
+  "applyFiltersButton": "apply",
+  "@applyFiltersButton": {
+    "description": "label in apply filters button"
+  },
+  "clearFiltersButton": "clear",
+  "@clearFiltersButton": {
+    "description": "label in clear filters button"
+  },
+  "searchHint": "search",
+  "@searchHint": {
+    "description": "hint in search text field"
+  },
+  "newClothItemTooltip": "new item",
+  "@newClothItemTooltip": {
+    "description": "tooltip in new cloth item button"
+  },
+  "newClothItemScreenTitle": "new item",
+  "@newClothItemScreenTitle": {
+    "description": "title in appbar of new cloth item screen"
+  },
+  "editClothItemScreenTitle": "edit item",
+  "@editClothItemScreenTitle": {
+    "description": "title in appbar of edit cloth item screen"
+  },
+  "clothItemDetailsScreenTitle": "item details",
+  "@clothItemDetailsScreenTitle": {
+    "description": "title in appbar of cloth item details screen"
+  },
+  "outfitDetailsScreenTitle": "outfit details",
+  "@outfitDetailsScreenTitle": {
+    "description": "title in appbar of outfit details screen"
+  },
+  "newOutfitScreenTitle": "new outfit",
+  "@newOutfitScreenTitle": {
+    "description": "title in appbar of new outfit screen"
+  },
+  "editOutfitScreenTitle": "edit outfit",
+  "@editOutfitScreenTitle": {
+    "description": "title in appbar of edit outfit screen"
+  },
+  "nameTextFieldLabel": "name",
+  "@nameTextFieldLabel": {
+    "description": "label in name text field"
+  },
+  "nameTextFieldHint": "enter name",
+  "@nameTextFieldHint": {
+    "description": "hint in name text field"
   }
 }
