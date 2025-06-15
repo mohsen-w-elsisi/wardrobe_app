@@ -1,5 +1,5 @@
 import 'package:share_plus/share_plus.dart';
-import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
+import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
 
 class OutfitSharer {
   static const _fileExtension = "jpg";

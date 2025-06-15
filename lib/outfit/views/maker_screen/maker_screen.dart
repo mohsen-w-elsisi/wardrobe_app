@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/cloth_item/presenters/organiser.dart';
-import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
-import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
+import 'package:wardrobe_app/cloth_item/presentation/shared_presenters/organiser.dart';
+import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
+import 'package:wardrobe_app/cloth_item/domain/use_cases/use_cases.dart';
 import 'package:wardrobe_app/outfit/views/maker_screen/manager.dart';
-import 'package:wardrobe_app/cloth_item/presenters/attribute_selection_manager.dart';
+import 'package:wardrobe_app/cloth_item/presentation/shared_presenters/attribute_selection_manager.dart';
 
 import 'attribute_filter_chips.dart';
 import 'stepper.dart';

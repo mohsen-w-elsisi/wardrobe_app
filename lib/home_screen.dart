@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
+import 'package:wardrobe_app/cloth_item/domain/ui_controllers.dart';
 import 'package:wardrobe_app/dependancies/compound_view_manager_initialiser.dart';
 import 'package:wardrobe_app/outfit/views/list_screen.dart';
-import 'package:wardrobe_app/cloth_item/views/search_deligate.dart';
+import 'package:wardrobe_app/cloth_item/presentation/screens/search_deligate.dart';
 
-import 'cloth_item/presenters/new_item_manager.dart';
-import 'cloth_item/views/editing_screen/editing_screen.dart';
+import 'cloth_item/presentation/shared_presenters/new_item_manager.dart';
+import 'cloth_item/presentation/screens/editing_screen/editing_screen.dart';
 import 'outfit/views/maker_screen/maker_screen.dart';
 import 'settings_screen/settings_screen.dart';
-import 'cloth_item/views/compound_view/compound_view.dart';
+import 'cloth_item/presentation/screens/compound_view/compound_view.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

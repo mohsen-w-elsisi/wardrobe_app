@@ -1,7 +1,8 @@
 import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/cloth_item/data_structures/data_structures.dart';
-import 'package:wardrobe_app/cloth_item/use_cases/use_cases.dart';
-import 'package:wardrobe_app/cloth_item/views/compound_view/settings.dart';
+import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
+import 'package:wardrobe_app/cloth_item/domain/ui_controllers.dart';
+import 'package:wardrobe_app/cloth_item/domain/use_cases/use_cases.dart';
+import 'package:wardrobe_app/cloth_item/presentation/screens/compound_view/settings.dart';
 
 class ClothItemCompoundViewManagerinitialiser {
   static const _defaultSettings = ClothItemCompoundViewSettings();
