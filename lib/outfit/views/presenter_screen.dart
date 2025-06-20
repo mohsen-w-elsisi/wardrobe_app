@@ -13,32 +13,55 @@ import 'package:wardrobe_app/outfit/views/outfit_was_saved_snackbar.dart';
 
 import 'saving_modal.dart';
 
-class OutfitPresenterScreen extends StatelessWidget {
+class OutfitPresenterScreen extends StatefulWidget {
   final Outfit outfit;
 
   const OutfitPresenterScreen(this.outfit, {super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          _AppBar(outfit: outfit),
-          if (_itemsWereDeleted)
-            const SliverToBoxAdapter(
-              child: _MissingClothItemsMessage(),
-            ),
-          ClothItemGridView(_clothItems, sliver: true),
-        ],
-      ),
-    );
+  State<OutfitPresenterScreen> createState() => _OutfitPresenterScreenState();
+}
+
+class _OutfitPresenterScreenState extends State<OutfitPresenterScreen> {
+  late final List<ClothItem> _clothItems;
+  bool _itemsFetched = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchClothItems();
   }
 
-  bool get _itemsWereDeleted => _clothItems.length != outfit.items.length;
+  @override
+  Widget build(BuildContext context) {
+    if (_itemsFetched) {
+      return Scaffold(
+        body: CustomScrollView(
+          slivers: <Widget>[
+            _AppBar(outfit: widget.outfit),
+            if (_itemsWereDeleted)
+              const SliverToBoxAdapter(
+                child: _MissingClothItemsMessage(),
+              ),
+            ClothItemGridView(_clothItems, sliver: true),
+          ],
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
 
-  List<ClothItem> get _clothItems {
+  bool get _itemsWereDeleted =>
+      _clothItems.length != widget.outfit.items.length;
+
+  Future<void> _fetchClothItems() async {
     final clothItemQuerier = GetIt.I<ClothItemQuerier>();
-    return outfit.items.map(clothItemQuerier.getById).nonNulls.toList();
+    _clothItems = [
+      for (final itemId in widget.outfit.items)
+        await clothItemQuerier.getById(itemId),
+    ];
+    setState(() => _itemsFetched = true);
   }
 }
 
@@ -101,13 +124,16 @@ class _AppBar extends StatelessWidget {
     );
   }
 
-  void _share() {
-    OutfitSharer(_clothItems).share();
+  Future<void> _share() async {
+    OutfitSharer(await _clothItems).share();
   }
 
-  List<ClothItem> get _clothItems {
+  Future<List<ClothItem>> get _clothItems async {
     final clothitemQuerier = GetIt.I<ClothItemQuerier>();
-    return _outfit.items.map(clothitemQuerier.getById).nonNulls.toList();
+    return [
+      for (final itemId in _outfit.items)
+        await clothitemQuerier.getById(itemId),
+    ];
   }
 }
 

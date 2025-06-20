@@ -27,21 +27,33 @@ class OutfitTile extends StatelessWidget {
   Widget _closedBuilder(_, __) {
     return ListTile(
       title: Text(_outfit.name),
-      subtitle: Text(_itemNames, overflow: TextOverflow.ellipsis),
-      trailing: _attributesRow,
+      subtitle: FutureBuilder(
+        future: _itemNames,
+        initialData: "",
+        builder: (_, snapshot) {
+          return Text(snapshot.data!, overflow: TextOverflow.ellipsis);
+        },
+      ),
+      trailing: FutureBuilder(
+        future: _attributes,
+        initialData: const <ClothItemAttribute>[],
+        builder: (_, snapshot) {
+          return _attributesRow(snapshot.data!);
+        },
+      ),
     );
   }
 
-  String get _itemNames => _OutfitItemsLabeler(_outfit.items).label();
+  Future<String> get _itemNames => _OutfitItemsLabeler(_outfit.items).label();
 
-  Widget get _attributesRow {
+  Widget _attributesRow(Iterable<ClothItemAttribute> attributes) {
     return SizedBox(
       width: 100,
-      child: ClothItemAttributeIconRow(_attributes, alignEnd: true),
+      child: ClothItemAttributeIconRow(attributes, alignEnd: true),
     );
   }
 
-  Iterable<ClothItemAttribute> get _attributes {
+  Future<Iterable<ClothItemAttribute>> get _attributes {
     return _OutfitAttributeCalculator(_outfit.items).attributes();
   }
 
@@ -60,15 +72,17 @@ class _OutfitItemsLabeler {
 
   _OutfitItemsLabeler(this._ids);
 
-  String label() {
-    _getClothItems();
+  Future<String> label() async {
+    await _getClothItems();
     _getNames();
     _concatNames();
     return _label;
   }
 
-  void _getClothItems() {
-    _clothitems = _ids.map(_clothItemQuerier.getById).nonNulls;
+  Future<void> _getClothItems() async {
+    _clothitems = [
+      for (final id in _ids) await _clothItemQuerier.getById(id),
+    ].nonNulls;
   }
 
   void _getNames() {
@@ -89,16 +103,18 @@ class _OutfitAttributeCalculator {
 
   _OutfitAttributeCalculator(this._ids);
 
-  Iterable<ClothItemAttribute> attributes() {
-    _getClothItems();
+  Future<Iterable<ClothItemAttribute>> attributes() async {
+    await _getClothItems();
     _createInitialAttributeMatrix();
     _removeEmptyAttributeRows();
     _collapseMatrixToList();
     return _attributes;
   }
 
-  void _getClothItems() {
-    _clothItems = _ids.map(_clothItemQuerier.getById).nonNulls;
+  Future<void> _getClothItems() async {
+    _clothItems = [
+      for (final id in _ids) await _clothItemQuerier.getById(id),
+    ].nonNulls;
   }
 
   void _createInitialAttributeMatrix() {

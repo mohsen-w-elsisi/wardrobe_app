@@ -17,7 +17,7 @@ class SettingsScreenExportTile extends StatelessWidget {
   }
 
   Future<void> _export() async {
-    final json = GetIt.I<ClothItemExporter>().export();
+    final json = await GetIt.I<ClothItemExporter>().export();
     final jsonAsBytes = Uint8List.fromList(json.runes.toList());
     _saveBytesToFile(jsonAsBytes);
   }

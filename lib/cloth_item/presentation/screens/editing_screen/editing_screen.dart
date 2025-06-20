@@ -78,19 +78,20 @@ class _NextStepButton extends StatelessWidget {
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 8),
       child: FilledButton(
-        onPressed: () => _onTap(context),
+        onPressed: () async => (await _onTap)(context),
         child: const Text("next"),
       ),
     );
   }
 
-  Function get _onTap => showMatchingsDialog && _thereAreParableItems
-      ? _showItemMatchingDialogOrMissingInputSnacknbar
-      : _saveItemOrShowMissingInputDialog;
+  Future<Function> get _onTap async =>
+      showMatchingsDialog && (await _thereAreParableItems)
+          ? _showItemMatchingDialogOrMissingInputSnacknbar
+          : _saveItemOrShowMissingInputDialog;
 
-  bool get _thereAreParableItems {
+  Future<bool> get _thereAreParableItems async {
     final itemOrganiser =
-        ClothItemOrganiser(GetIt.I<ClothItemQuerier>().getAll());
+        ClothItemOrganiser(await GetIt.I<ClothItemQuerier>().getAll());
     final parableItems = itemOrganiser.filterOutType(newClothItemManager.type);
     return parableItems.isNotEmpty;
   }

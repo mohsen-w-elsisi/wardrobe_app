@@ -6,9 +6,9 @@ import 'package:wardrobe_app/cloth_item/domain/use_cases/use_cases.dart';
 
 class ClothItemSaverImpl extends ClothItemSaver with UseCaseUtils {
   @override
-  void save(ClothItem item) {
-    dataGateway.save(item);
-    _MatchingItemWebRepairer(item).repairWeb();
+  Future<void> save(ClothItem item) async {
+    await dataGateway.save(item);
+    await _MatchingItemWebRepairer(item).repairWeb();
     notifyUi();
   }
 }
@@ -23,29 +23,31 @@ class _MatchingItemWebRepairer {
       : _subjectId = subject.id,
         _subjectMatchingItemIds = subject.matchingItems;
 
-  void repairWeb() {
-    _updateNewlyMatchedItems();
-    _updatePreviouslyMatchedItems();
+  Future<void> repairWeb() async {
+    await _updateNewlyMatchedItems();
+    await _updatePreviouslyMatchedItems();
   }
 
-  void _updateNewlyMatchedItems() {
-    for (final subjectMatchingItem in _subjectMatchingItems()) {
+  Future<void> _updateNewlyMatchedItems() async {
+    for (final subjectMatchingItem in await _subjectMatchingItems()) {
       if (!_subjectRecordedAsMatchingItemOf(subjectMatchingItem)) {
         _addSubjectToMatchingItemsOf(subjectMatchingItem);
       }
     }
   }
 
-  List<ClothItem> _subjectMatchingItems() {
-    return [for (final id in _subjectMatchingItemIds) _dataGateway.getById(id)];
+  Future<List<ClothItem>> _subjectMatchingItems() async {
+    return [
+      for (final id in _subjectMatchingItemIds) await _dataGateway.getById(id)
+    ];
   }
 
   bool _subjectRecordedAsMatchingItemOf(ClothItem item) {
     return item.matchingItems.contains(_subjectId);
   }
 
-  void _addSubjectToMatchingItemsOf(ClothItem item) {
-    _saveItem(
+  Future<void> _addSubjectToMatchingItemsOf(ClothItem item) async {
+    await _saveItem(
       item.copyWith(
         matchingItems: [
           ...item.matchingItems,
@@ -55,23 +57,23 @@ class _MatchingItemWebRepairer {
     );
   }
 
-  void _updatePreviouslyMatchedItems() {
-    for (final item in _itemsRecordingSubjectAsMatching()) {
+  Future<void> _updatePreviouslyMatchedItems() async {
+    for (final item in await _itemsRecordingSubjectAsMatching()) {
       if (!_subjectMatchingItemIds.contains(item.id)) {
         _removeSubjectFromMatchingItemsOf(item);
       }
     }
   }
 
-  List<ClothItem> _itemsRecordingSubjectAsMatching() {
+  Future<List<ClothItem>> _itemsRecordingSubjectAsMatching() async {
     return [
-      for (final item in _dataGateway.getAllItems())
+      for (final item in await _dataGateway.getAllItems())
         if (_subjectRecordedAsMatchingItemOf(item)) item
     ];
   }
 
-  void _removeSubjectFromMatchingItemsOf(ClothItem item) {
-    _saveItem(
+  Future<void> _removeSubjectFromMatchingItemsOf(ClothItem item) async {
+    await _saveItem(
       item.copyWith(
         matchingItems: _matchingItemsListWithoutSubjectIdOf(item),
       ),
@@ -85,5 +87,5 @@ class _MatchingItemWebRepairer {
     ];
   }
 
-  void _saveItem(ClothItem item) => _dataGateway.save(item);
+  Future<void> _saveItem(ClothItem item) async => _dataGateway.save(item);
 }

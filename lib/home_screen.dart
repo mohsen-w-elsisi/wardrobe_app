@@ -42,15 +42,22 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _mainBody() {
-    final compoundViewManager =
-        ClothItemCompoundViewManagerinitialiser().assembleViewManager();
-    return ListenableBuilder(
-      listenable: GetIt.I<ClothItemUiNotifier>(),
-      builder: (_, __) {
-        return ClothItemCompoundView(
-          settingsManager: compoundViewManager,
-          noItemsMessageText: "no items saved yet",
-        );
+    return FutureBuilder(
+      future: ClothItemCompoundViewManagerinitialiser().assembleViewManager(),
+      builder: (_, snapshot) {
+        if (snapshot.hasData) {
+          return ListenableBuilder(
+            listenable: GetIt.I<ClothItemUiNotifier>(),
+            builder: (_, __) {
+              return ClothItemCompoundView(
+                settingsManager: snapshot.data!,
+                noItemsMessageText: "no items saved yet",
+              );
+            },
+          );
+        } else {
+          return Container();
+        }
       },
     );
   }

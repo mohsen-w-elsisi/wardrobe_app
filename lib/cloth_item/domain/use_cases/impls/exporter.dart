@@ -6,8 +6,8 @@ import 'package:wardrobe_app/cloth_item/domain/use_cases/use_cases.dart';
 
 class ClothItemJsonExporter extends ClothItemExporter with UseCaseUtils {
   @override
-  String export() {
-    var items = dataGateway.getAllItems().toList();
+  Future<String> export() async {
+    var items = (await dataGateway.getAllItems()).toList();
     return _JsonItemExporter(items).export();
   }
 }

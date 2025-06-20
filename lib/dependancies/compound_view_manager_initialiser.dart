@@ -9,25 +9,25 @@ class ClothItemCompoundViewManagerinitialiser {
 
   late ClothItemCompoundViewManager _viewManager;
 
-  ClothItemCompoundViewManager assembleViewManager() {
-    _instantiateViewManager();
-    _listenForItemChanges();
+  Future<ClothItemCompoundViewManager> assembleViewManager() async {
+    await _instantiateViewManager();
+    await _listenForItemChanges();
     return _viewManager;
   }
 
-  void _instantiateViewManager() {
+  Future<void> _instantiateViewManager() async {
     _viewManager = ClothItemCompoundViewManager(
-      clothItems: _allClothitems(),
+      clothItems: await _allClothitems(),
       settings: _defaultSettings,
     );
   }
 
-  void _listenForItemChanges() {
-    GetIt.I<ClothItemUiNotifier>().addListener(() {
-      _viewManager.clothItems = _allClothitems();
+  Future<void> _listenForItemChanges() async {
+    GetIt.I<ClothItemUiNotifier>().addListener(() async {
+      _viewManager.clothItems = await _allClothitems();
     });
   }
 
-  static List<ClothItem> _allClothitems() =>
+  static Future<List<ClothItem>> _allClothitems() =>
       GetIt.I<ClothItemQuerier>().getAll();
 }

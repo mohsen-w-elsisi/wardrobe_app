@@ -16,25 +16,25 @@ class ClothItemHiveDataGateway extends ClothItemDataGateway {
   }
 
   @override
-  void delete(String id) => _box.delete(id);
+  Future<void> delete(String id) async => _box.delete(id);
 
   @override
-  void deleteAll() => _box.clear();
+  Future<void> deleteAll() async => _box.clear();
 
   @override
-  Iterable<ClothItem> getAllItems() {
+  Future<Iterable<ClothItem>> getAllItems() async {
     return _box.values.map((item) => item.toClothItem());
   }
 
   @override
-  ClothItem getById(String id) {
+  Future<ClothItem> getById(String id) async {
     final item = _box.get(id);
     if (item == null) throw StateError(_itemNotFoundErrorMessage);
     return item.toClothItem();
   }
 
   @override
-  void save(ClothItem item) {
+  Future<void> save(ClothItem item) async {
     _box.put(
       item.id,
       HiveStorableClothItem.fromClothItem(item),

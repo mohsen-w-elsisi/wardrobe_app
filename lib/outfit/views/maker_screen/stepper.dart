@@ -131,7 +131,9 @@ class _Step {
   late final List<ClothItem> validItems;
 
   _Step(this.outfitMakerManager, this.type) {
-    validItems = outfitMakerManager.validItemsOfType(type);
+    validItems = outfitMakerManager.isInitialised
+        ? outfitMakerManager.validItemsOfType(type)
+        : const [];
   }
 
   Step get step {

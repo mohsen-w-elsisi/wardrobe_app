@@ -27,23 +27,25 @@ class ClothItemSearchDeligate extends SearchDelegate<ClothItem> {
   Widget buildSuggestions(BuildContext context) => _resultsWidget();
 
   Widget _resultsWidget() {
-    _generateUpdatedViewManager();
-    return ClothItemCompoundView(
-      settingsManager: _viewManager,
-      noItemsMessageText: "no items found",
+    return FutureBuilder(
+      future: _generateUpdatedViewManager(),
+      builder: (_, __) => ClothItemCompoundView(
+        settingsManager: _viewManager,
+        noItemsMessageText: "no items found",
+      ),
     );
   }
 
-  void _generateUpdatedViewManager() {
+  Future<void> _generateUpdatedViewManager() async {
     _viewManager = ClothItemCompoundViewManager(
-      clothItems: _findItemsMatchingQuery(),
+      clothItems: await _findItemsMatchingQuery(),
       settings: _viewSettings,
     );
     _viewManager.addListener(() => _viewSettings = _viewManager.settings);
   }
 
-  List<ClothItem> _findItemsMatchingQuery() {
-    final allItems = GetIt.I<ClothItemQuerier>().getAll();
+  Future<List<ClothItem>> _findItemsMatchingQuery() async {
+    final allItems = await GetIt.I<ClothItemQuerier>().getAll();
     return [
       for (final item in allItems)
         if (item.name.contains(query)) item

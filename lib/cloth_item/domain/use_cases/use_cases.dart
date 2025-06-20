@@ -1,13 +1,13 @@
 import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
 
 abstract class ClothItemMatcher {
-  List<ClothItem> findMatchingItems(ClothItem item);
+  Future<List<ClothItem>> findMatchingItems(ClothItem item);
 }
 
 abstract class ClothItemQuerier {
-  List<ClothItem> getAll();
-  ClothItem getById(String id);
-  bool itemExists(String id);
+  Future<List<ClothItem>> getAll();
+  Future<ClothItem> getById(String id);
+  Future<bool> itemExists(String id);
 }
 
 abstract class ClothItemSaver {
@@ -28,5 +28,5 @@ abstract class ClothItemImporter {
 }
 
 abstract class ClothItemExporter {
-  String export();
+  Future<String> export();
 }

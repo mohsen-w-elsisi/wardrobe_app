@@ -48,23 +48,28 @@ class ClothItemMatchingDialog extends StatelessWidget {
 
 class _ListBody extends StatelessWidget {
   final clothItemQuerier = GetIt.I<ClothItemQuerier>();
+  late final ClothItemOrganiser clothItemOrganiser;
   final ClothItemEditingManager newClothItemManager;
   final ClothItem clothItem;
-  late final ClothItemOrganiser clothItemOrganiser;
 
   _ListBody({
     required this.newClothItemManager,
     required this.clothItem,
-  }) {
-    clothItemOrganiser = ClothItemOrganiser(clothItemQuerier.getAll());
-  }
+  });
 
   @override
   Widget build(BuildContext context) {
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return Column(
-          children: _itemTiles(setState),
+    return FutureBuilder(
+      future: _initOrganiser(),
+      builder: (_, snapshot) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Column(
+              children: snapshot.connectionState == ConnectionState.done
+                  ? _itemTiles(setState)
+                  : [],
+            );
+          },
         );
       },
     );
@@ -81,6 +86,11 @@ class _ListBody extends StatelessWidget {
               item: item,
             )
     ];
+  }
+
+  Future<void> _initOrganiser() async {
+    final allItems = await clothItemQuerier.getAll();
+    clothItemOrganiser = ClothItemOrganiser(allItems);
   }
 }
 

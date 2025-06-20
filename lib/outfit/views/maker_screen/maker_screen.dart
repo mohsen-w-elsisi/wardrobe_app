@@ -12,18 +12,20 @@ import 'stepper.dart';
 class OutfitMakerScreen extends StatelessWidget {
   final _clothItemQuerier = GetIt.I<ClothItemQuerier>();
   final _attributeFilterationManager = ClothItemAttributeSelectionManager({});
-  late final OutfitMakerManager _outfitMakerManager;
+  final _outfitMakerManager = OutfitMakerManager();
+
+  late List<ClothItem> _allSavedItems;
 
   OutfitMakerScreen({List<ClothItem>? preSelectedItems, super.key}) {
-    _initOutfitMakerManager();
-    _registerPreSelectedItemsWithOutfitMakerManager(preSelectedItems);
-    _listenToChangesInFilteredAttributesAndUpdateAvailableItems();
+    _initOutfitMakerManager().whenComplete(() {
+      _registerPreSelectedItemsWithOutfitMakerManager(preSelectedItems);
+      _listenToChangesInFilteredAttributesAndUpdateAvailableItems();
+    });
   }
 
-  void _initOutfitMakerManager() {
-    _outfitMakerManager = OutfitMakerManager(
-      avaliableItems: _allSavedItems,
-    );
+  Future<void> _initOutfitMakerManager() async {
+    await _fetchSavedItems();
+    _outfitMakerManager.initialiseAvailableItems(_allSavedItems);
   }
 
   void _registerPreSelectedItemsWithOutfitMakerManager(
@@ -52,24 +54,23 @@ class OutfitMakerScreen extends StatelessWidget {
     return organiser.filterUsingAttributes(filterAttributes);
   }
 
-  List<ClothItem> get _allSavedItems => _clothItemQuerier.getAll();
-
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-        listenable: _outfitMakerManager,
-        builder: (_, __) {
-          return Scaffold(
-            appBar: _appBar,
-            body: ListView(
-              children: [
-                _attributeFilterChips,
-                _stepper,
-              ],
-            ),
-            floatingActionButton: _skipToPreviewButton,
-          );
-        });
+      listenable: _outfitMakerManager,
+      builder: (_, __) {
+        return Scaffold(
+          appBar: _appBar,
+          body: ListView(
+            children: [
+              _attributeFilterChips,
+              _stepper,
+            ],
+          ),
+          floatingActionButton: _skipToPreviewButton,
+        );
+      },
+    );
   }
 
   AppBar get _appBar {
@@ -99,5 +100,9 @@ class OutfitMakerScreen extends StatelessWidget {
         child: const Icon(Icons.arrow_forward),
       ),
     );
+  }
+
+  Future<void> _fetchSavedItems() async {
+    _allSavedItems = await _clothItemQuerier.getAll();
   }
 }

@@ -26,29 +26,40 @@ class ClothItemDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListenableBuilder(
       listenable: GetIt.I<ClothItemUiNotifier>(),
-      builder: (_, __) {
-        if (_itemExists) {
-          return Scaffold(
-            body: CustomScrollView(slivers: _componentSlivers),
-            floatingActionButton: _StartOutfitFAB(clothItem: _clothItem),
-          );
-        } else {
-          return Container();
-        }
-      },
+      builder: (_, __) => FutureBuilder(
+        future: _clothItem,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final item = snapshot.data!;
+            return _filledDetailsView(item);
+          } else {
+            return Container();
+          }
+        },
+      ),
     );
   }
 
-  List<Widget> get _componentSlivers => [
-        _AppBar(clothItem: _clothItem),
-        _Image(clothItem: _clothItem, enableHeroImage: enableHeroImage),
-        _AttributeChips(clothItem: _clothItem),
-        _MatchingItemList(clothItem: _clothItem),
-      ];
+  Widget _filledDetailsView(ClothItem item) {
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: _componentSlivers(item),
+      ),
+      floatingActionButton: _StartOutfitFAB(clothItem: item),
+    );
+  }
 
-  bool get _itemExists => GetIt.I<ClothItemQuerier>().itemExists(itemId);
+  List<Widget> _componentSlivers(ClothItem item) {
+    return [
+      _AppBar(clothItem: item),
+      _Image(clothItem: item, enableHeroImage: enableHeroImage),
+      _AttributeChips(clothItem: item),
+      _MatchingItemList(clothItem: item),
+    ];
+  }
 
-  ClothItem get _clothItem => GetIt.I<ClothItemQuerier>().getById(itemId);
+  Future<ClothItem> get _clothItem =>
+      GetIt.I<ClothItemQuerier>().getById(itemId);
 }
 
 class _Image extends StatelessWidget {
@@ -87,11 +98,19 @@ class _MatchingItemList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClothItemListView(
-      GetIt.I<ClothItemMatcher>().findMatchingItems(clothItem),
-      sliver: true,
+    return FutureBuilder(
+      future: _matchingItems,
+      builder: (_, snapshot) {
+        return ClothItemListView(
+          snapshot.data ?? [],
+          sliver: true,
+        );
+      },
     );
   }
+
+  Future<List<ClothItem>> get _matchingItems =>
+      GetIt.I<ClothItemMatcher>().findMatchingItems(clothItem);
 }
 
 class _AttributeChips extends StatelessWidget {

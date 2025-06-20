@@ -4,19 +4,17 @@ import 'package:wardrobe_app/cloth_item/domain/use_cases/use_cases.dart';
 
 class ClothItemQuerierImpl extends ClothItemQuerier with UseCaseUtils {
   @override
-  List<ClothItem> getAll() {
-    return dataGateway.getAllItems().toList();
+  Future<List<ClothItem>> getAll() async {
+    return (await dataGateway.getAllItems()).toList();
   }
 
   @override
-  ClothItem getById(String id) {
-    return dataGateway.getById(id);
-  }
+  Future<ClothItem> getById(String id) async => dataGateway.getById(id);
 
   @override
-  bool itemExists(String id) {
+  Future<bool> itemExists(String id) async {
     try {
-      dataGateway.getById(id);
+      await dataGateway.getById(id);
       return true;
     } on StateError {
       return false;

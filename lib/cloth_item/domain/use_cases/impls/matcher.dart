@@ -4,12 +4,13 @@ import 'package:wardrobe_app/cloth_item/domain/use_cases/use_cases.dart';
 
 class ClothItemMatcherImpl extends ClothItemMatcher {
   @override
-  List<ClothItem> findMatchingItems(ClothItem item) {
+  Future<List<ClothItem>> findMatchingItems(ClothItem item) async {
     return [
-      for (final testItem in _allItems)
+      for (final testItem in (await _allItems))
         if (item.matchingItems.contains(testItem.id)) testItem
     ];
   }
 
-  List<ClothItem> get _allItems => GetIt.I<ClothItemQuerier>().getAll();
+  Future<List<ClothItem>> get _allItems async =>
+      GetIt.I<ClothItemQuerier>().getAll();
 }
