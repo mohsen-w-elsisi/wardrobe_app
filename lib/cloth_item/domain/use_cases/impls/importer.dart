@@ -42,6 +42,7 @@ class _ClothItemJsonDecoder {
   late final List<int> _attributeIndicies;
   late final List<String> _matchingItems;
   late final List<int> _imageByteList;
+  late final int _seasonIndex;
 
   late final ClothItem _clothItem;
 
@@ -60,6 +61,9 @@ class _ClothItemJsonDecoder {
     _attributeIndicies = _castAsListOf<int>(_itemMap["attributes"]);
     _matchingItems = _castAsListOf<String>(_itemMap["matchingItems"]);
     _imageByteList = _castAsListOf<int>(_itemMap["image"]);
+    _seasonIndex = _itemMap["season"] != null
+        ? _itemMap["season"] as int
+        : Season.all.index;
   }
 
   void _assembleClothItem() {
@@ -72,6 +76,7 @@ class _ClothItemJsonDecoder {
       matchingItems: _matchingItems,
       dateCreated: DateTime.now(),
       image: Uint8List.fromList(_imageByteList),
+      season: Season.values[_seasonIndex],
     );
   }
 

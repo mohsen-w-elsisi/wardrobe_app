@@ -30,6 +30,9 @@ class HiveStorableClothItem {
   @HiveField(8)
   final Uint8List image;
 
+  @HiveField(9)
+  final int season;
+
   HiveStorableClothItem({
     required this.id,
     required this.name,
@@ -39,6 +42,7 @@ class HiveStorableClothItem {
     required this.attributes,
     required this.isFavourite,
     required this.matchingItems,
+    required this.season,
   });
 
   HiveStorableClothItem.fromClothItem(ClothItem item)
@@ -51,6 +55,7 @@ class HiveStorableClothItem {
           attributes: [for (final attr in item.attributes) attr.index],
           isFavourite: item.isFavourite,
           matchingItems: item.matchingItems,
+          season: item.season.index,
         );
 
   ClothItem toClothItem() => ClothItem(
@@ -64,5 +69,6 @@ class HiveStorableClothItem {
         ],
         isFavourite: isFavourite,
         matchingItems: matchingItems,
+        season: Season.values[season],
       );
 }

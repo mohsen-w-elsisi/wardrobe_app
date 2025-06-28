@@ -25,13 +25,14 @@ class HiveStorableClothItemAdapter extends TypeAdapter<HiveStorableClothItem> {
       attributes: (fields[6] as List).cast<int>(),
       isFavourite: fields[5] as bool,
       matchingItems: (fields[7] as List).cast<String>(),
+      season: fields[9] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, HiveStorableClothItem obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(1)
       ..write(obj.id)
       ..writeByte(2)
@@ -47,7 +48,9 @@ class HiveStorableClothItemAdapter extends TypeAdapter<HiveStorableClothItem> {
       ..writeByte(7)
       ..write(obj.matchingItems)
       ..writeByte(8)
-      ..write(obj.image);
+      ..write(obj.image)
+      ..writeByte(9)
+      ..write(obj.season);
   }
 
   @override
