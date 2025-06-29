@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
 import 'package:wardrobe_app/cloth_item/domain/ui_controllers.dart';
 import 'package:wardrobe_app/cloth_item/domain/use_cases/use_cases.dart';
+import 'package:wardrobe_app/cloth_item/presentation/shared_presenters/display_configs/seasons.dart';
 import 'package:wardrobe_app/cloth_item/presentation/shared_widgets/matching_dialog.dart';
 import 'package:wardrobe_app/cloth_item/presentation/shared_presenters/new_item_manager.dart';
 import 'package:wardrobe_app/cloth_item/presentation/screens/editing_screen/editing_screen.dart';
@@ -53,7 +54,7 @@ class ClothItemDetailScreen extends StatelessWidget {
     return [
       _AppBar(clothItem: item),
       _Image(clothItem: item, enableHeroImage: enableHeroImage),
-      _AttributeChips(clothItem: item),
+      _DescribterChips(clothItem: item),
       _MatchingItemList(clothItem: item),
     ];
   }
@@ -113,10 +114,10 @@ class _MatchingItemList extends StatelessWidget {
       GetIt.I<ClothItemMatcher>().findMatchingItems(clothItem);
 }
 
-class _AttributeChips extends StatelessWidget {
+class _DescribterChips extends StatelessWidget {
   final ClothItem clothItem;
 
-  const _AttributeChips({
+  const _DescribterChips({
     required this.clothItem,
   });
 
@@ -126,6 +127,7 @@ class _AttributeChips extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Wrap(
+          spacing: 8.0,
           children: _chips,
         ),
       ),
@@ -134,13 +136,24 @@ class _AttributeChips extends StatelessWidget {
 
   List<Widget> get _chips {
     return [
+      if (clothItem.season != Season.all) _seasonChip,
+      ..._attributeChips,
+    ];
+  }
+
+  Widget get _seasonChip {
+    return Chip(
+      label: Text(seasonDisplayConfigs[clothItem.season]!.name),
+      avatar: Icon(seasonDisplayConfigs[clothItem.season]!.icon),
+    );
+  }
+
+  List<Widget> get _attributeChips {
+    return [
       for (final attribute in clothItem.attributes)
-        Padding(
-          padding: const EdgeInsets.only(right: 8.0),
-          child: Chip(
-            label: Text(clothItemAttributeDisplayOptions[attribute]!.name),
-            avatar: Icon(clothItemAttributeDisplayOptions[attribute]!.icon),
-          ),
+        Chip(
+          label: Text(clothItemAttributeDisplayOptions[attribute]!.name),
+          avatar: Icon(clothItemAttributeDisplayOptions[attribute]!.icon),
         )
     ];
   }
