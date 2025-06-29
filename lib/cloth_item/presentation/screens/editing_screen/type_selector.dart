@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:wardrobe_app/cloth_item/presentation/shared_presenters/new_item_manager.dart';
 import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
-import 'package:wardrobe_app/cloth_item/presentation/shared_presenters/type_display_options.dart';
+import 'package:wardrobe_app/cloth_item/presentation/shared_presenters/display_configs/types.dart';
 
 class ClothItemTypeSelector extends StatelessWidget {
   final ClothItemEditingManager editingManager;

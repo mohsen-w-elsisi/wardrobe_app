@@ -15,7 +15,7 @@ class ClothItemTypeIconQuerier {
     }
   }
 
-  ClothItemTypeDisplayOption get _typeDisplayOption {
+  ClothItemTypeDisplayConfig get _typeDisplayOption {
     return clothItemTypeDisplayOptions[_type]!;
   }
 
@@ -25,33 +25,33 @@ class ClothItemTypeIconQuerier {
   }
 }
 
-const ClothItemTypeDisplayOptions clothItemTypeDisplayOptions = {
-  ClothItemType.headWear: ClothItemTypeDisplayOption(
+const ClothItemTypeDisplayConfigs clothItemTypeDisplayOptions = {
+  ClothItemType.headWear: ClothItemTypeDisplayConfig(
     text: "head wear",
     icon: "hat.svg",
   ),
-  ClothItemType.top: ClothItemTypeDisplayOption(
+  ClothItemType.top: ClothItemTypeDisplayConfig(
     text: "top",
     icon: "top.svg",
   ),
-  ClothItemType.bottom: ClothItemTypeDisplayOption(
+  ClothItemType.bottom: ClothItemTypeDisplayConfig(
     text: "leg ware",
     icon: "pants.svg",
   ),
-  ClothItemType.jacket: ClothItemTypeDisplayOption(
+  ClothItemType.jacket: ClothItemTypeDisplayConfig(
     text: "jacket",
     icon: "jacket.svg",
   ),
-  ClothItemType.shoe: ClothItemTypeDisplayOption(
+  ClothItemType.shoe: ClothItemTypeDisplayConfig(
     text: "shoe",
     icon: "shoe.svg",
   ),
 };
 
-typedef ClothItemTypeDisplayOptions
-    = Map<ClothItemType, ClothItemTypeDisplayOption>;
+typedef ClothItemTypeDisplayConfigs
+    = Map<ClothItemType, ClothItemTypeDisplayConfig>;
 
-class ClothItemTypeDisplayOption<T extends ClothItemType> {
+class ClothItemTypeDisplayConfig<T extends ClothItemType> {
   static const _typeIconsPathPrefix = "assets/type_icons";
   static const _typeIconsPathPrefixLight = "$_typeIconsPathPrefix/light_mode";
   static const _typeIconsPathPrefixDark = "$_typeIconsPathPrefix/dark_mode";
@@ -60,7 +60,7 @@ class ClothItemTypeDisplayOption<T extends ClothItemType> {
   final String iconLight;
   final String iconDark;
 
-  const ClothItemTypeDisplayOption({
+  const ClothItemTypeDisplayConfig({
     required this.text,
     required String icon,
   })  : iconLight = "$_typeIconsPathPrefixLight/$icon",

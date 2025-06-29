@@ -8,7 +8,7 @@ import 'package:wardrobe_app/cloth_item/presentation/shared_presenters/new_item_
 import 'package:wardrobe_app/cloth_item/presentation/screens/editing_screen/editing_screen.dart';
 import 'package:wardrobe_app/outfit/views/maker_screen/maker_screen.dart';
 
-import '../shared_presenters/attribute_display_options.dart';
+import '../shared_presenters/display_configs/attributes.dart';
 import '../shared_widgets/image.dart';
 import '../shared_widgets/list_view.dart';
 

@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
 
-const ClothItemAttributeDisplayOptions clothItemAttributeDisplayOptions = {
-  ClothItemAttribute.classic: ClothItemAttributeDisplayOption(
+const ClothItemAttributeDisplayConfigs clothItemAttributeDisplayOptions = {
+  ClothItemAttribute.classic: ClothItemAttributeDisplayConfig(
     name: "classic",
     icon: Icons.work_outline,
   ),
-  ClothItemAttribute.onFasion: ClothItemAttributeDisplayOption(
+  ClothItemAttribute.onFasion: ClothItemAttributeDisplayConfig(
     name: "on fassion",
     icon: Icons.star_border_sharp,
   ),
-  ClothItemAttribute.sportive: ClothItemAttributeDisplayOption(
+  ClothItemAttribute.sportive: ClothItemAttributeDisplayConfig(
     name: "sporty",
     icon: Icons.sports_basketball,
   ),
 };
 
-typedef ClothItemAttributeDisplayOptions
-    = Map<ClothItemAttribute, ClothItemAttributeDisplayOption>;
+typedef ClothItemAttributeDisplayConfigs
+    = Map<ClothItemAttribute, ClothItemAttributeDisplayConfig>;
 
-class ClothItemAttributeDisplayOption {
+class ClothItemAttributeDisplayConfig {
   final String name;
   final IconData icon;
 
-  const ClothItemAttributeDisplayOption({
+  const ClothItemAttributeDisplayConfig({
     required this.name,
     required this.icon,
   });

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import 'package:wardrobe_app/cloth_item/presentation/screens/editing_screen/season_selector.dart';
 import 'package:wardrobe_app/cloth_item/presentation/shared_presenters/organiser.dart';
 import 'package:wardrobe_app/cloth_item/domain/use_cases/use_cases.dart';
 import 'package:wardrobe_app/cloth_item/presentation/shared_widgets/matching_dialog.dart';
@@ -53,6 +54,7 @@ class ClothItemEditingScreen extends StatelessWidget {
         ClothItemImageSelectionPreview(editingManager: editingManager),
         ClothItemNameField(editingManager: editingManager),
         ClothItemTypeSelector(editingManager: editingManager),
+        CkithItemSeasonSelector(editingManager: editingManager),
         ClothItemAttributeSelector(editingManager: editingManager),
         const Spacer(),
         _NextStepButton(
