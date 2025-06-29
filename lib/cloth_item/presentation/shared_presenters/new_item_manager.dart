@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
+import 'package:wardrobe_app/shared/entities/season.dart';
 
 class ClothItemEditingManager {
   late final DateTime dateCreated;

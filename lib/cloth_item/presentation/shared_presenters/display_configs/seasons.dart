@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
+import 'package:wardrobe_app/shared/entities/season.dart';
 
 const SeasonDisplayConfigs seasonDisplayConfigs = {
   Season.all: SeasonDisplayConfig(

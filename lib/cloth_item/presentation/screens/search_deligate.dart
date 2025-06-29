@@ -45,7 +45,7 @@ class ClothItemSearchDeligate extends SearchDelegate<ClothItem> {
   }
 
   Future<List<ClothItem>> _findItemsMatchingQuery() async {
-    final allItems = await GetIt.I<ClothItemQuerier>().getAll();
+    final allItems = await GetIt.I<ClothItemQuerier>().getAllofCurrentSeason();
     return [
       for (final item in allItems)
         if (item.name.contains(query)) item

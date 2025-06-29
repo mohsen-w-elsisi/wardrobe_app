@@ -14,6 +14,8 @@ import 'package:wardrobe_app/cloth_item/domain/ui_controllers.dart';
 import 'package:wardrobe_app/cloth_item/domain/use_cases/use_cases.dart';
 import 'package:wardrobe_app/outfit/backend/hive_storage_agent.dart';
 import 'package:wardrobe_app/outfit/backend/manager.dart';
+import 'package:wardrobe_app/shared/use_cases/impls/seasons.dart';
+import 'package:wardrobe_app/shared/use_cases/use_cases.dart';
 import 'package:wardrobe_app/theme/shared_preferences_theme_storage_agent.dart';
 import 'package:wardrobe_app/theme/theme_settings_controller.dart';
 
@@ -30,6 +32,8 @@ class GlobalDependencyInitialiser {
     ClothItemExporterInitialiser(),
     ClothItemImporterInitialiser(),
     OutfitManagerInitialiser(),
+    SeasonGetterInitialiser(),
+    SeasonSetterInitialiser(),
     ThemeStorageControllerInitialiser(),
   ];
 
@@ -142,6 +146,22 @@ class ClothItemDataGatewayInitialiser
     final dataGateway = ClothItemHiveDataGateway();
     await dataGateway.initialise();
     _dependancy = dataGateway;
+  }
+}
+
+class SeasonGetterInitialiser
+    extends GetItRegisterableDependancy<SeasonGetter> {
+  @override
+  Future<void> _initialise() async {
+    _dependancy = SeasonGetterImpl();
+  }
+}
+
+class SeasonSetterInitialiser
+    extends GetItRegisterableDependancy<SeasonSetter> {
+  @override
+  Future<void> _initialise() async {
+    _dependancy = SeasonSetterImpl();
   }
 }
 

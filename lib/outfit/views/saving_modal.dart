@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wardrobe_app/common_widgets/subbmitable_bottom_sheet.dart';
+import 'package:wardrobe_app/shared/widgets/subbmitable_bottom_sheet.dart';
 
 import '../backend/outfit_saver.dart';
 

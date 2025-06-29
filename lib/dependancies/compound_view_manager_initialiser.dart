@@ -29,5 +29,5 @@ class ClothItemCompoundViewManagerinitialiser {
   }
 
   static Future<List<ClothItem>> _allClothitems() =>
-      GetIt.I<ClothItemQuerier>().getAll();
+      GetIt.I<ClothItemQuerier>().getAllofCurrentSeason();
 }

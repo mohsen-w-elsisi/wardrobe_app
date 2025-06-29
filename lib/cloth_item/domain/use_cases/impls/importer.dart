@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
 import 'package:wardrobe_app/cloth_item/domain/use_cases/impls/use_case_utils.dart';
 import 'package:wardrobe_app/cloth_item/domain/use_cases/use_cases.dart';
+import 'package:wardrobe_app/shared/entities/season.dart';
 
 class ClothItemJsonImporter extends ClothItemImporter with UseCaseUtils {
   @override

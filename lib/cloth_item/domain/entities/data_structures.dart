@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:copy_with_extension/copy_with_extension.dart';
+import 'package:wardrobe_app/shared/entities/season.dart';
 
 part 'data_structures.g.dart';
 
@@ -32,5 +33,3 @@ class ClothItem {
 enum ClothItemType { headWear, top, bottom, jacket, shoe }
 
 enum ClothItemAttribute { sportive, onFasion, classic }
-
-enum Season { summer, winter, all }

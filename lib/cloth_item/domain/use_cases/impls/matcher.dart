@@ -13,4 +13,15 @@ class ClothItemMatcherImpl extends ClothItemMatcher {
 
   Future<List<ClothItem>> get _allItems async =>
       GetIt.I<ClothItemQuerier>().getAll();
+
+  @override
+  Future<List<ClothItem>> findMatchingItemsOfSeason(ClothItem item) async {
+    return [
+      for (final testItem in await _allItemsOfSeason)
+        if (item.matchingItems.contains(testItem.id)) testItem
+    ];
+  }
+
+  Future<List<ClothItem>> get _allItemsOfSeason =>
+      GetIt.I<ClothItemQuerier>().getAllofCurrentSeason();
 }
