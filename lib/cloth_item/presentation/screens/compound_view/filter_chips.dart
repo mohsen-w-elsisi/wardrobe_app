@@ -74,7 +74,7 @@ class _AttributeChip extends _FilterChip {
   Widget _avatar(_) => Icon(_attributeDisplayoption.icon);
 
   ClothItemAttributeDisplayConfig get _attributeDisplayoption {
-    return clothItemAttributeDisplayOptions[_filterAttribute]!;
+    return ClothItemAttributeDisplayConfig.of(_filterAttribute);
   }
 }
 
@@ -89,11 +89,12 @@ class _TypeChip extends _FilterChip {
         _type = type;
 
   @override
-  String get _label => clothItemTypeDisplayOptions[_type]!.text;
+  String get _label => ClothItemTypeDisplayConfig.of(_type).text;
 
   @override
-  Widget _avatar(BuildContext context) =>
-      SvgPicture.asset(ClothItemTypeIconQuerier(context, _type).icon);
+  Widget _avatar(BuildContext context) => SvgPicture.asset(
+        ClothItemTypeDisplayConfig.of(_type).iconPath(context),
+      );
 
   @override
   void _removeFilter() {

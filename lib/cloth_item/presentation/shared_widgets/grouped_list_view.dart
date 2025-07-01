@@ -64,7 +64,7 @@ class _TypedListSection extends StatelessWidget {
       child: Align(
         alignment: Alignment.centerLeft,
         child: Text(
-          clothItemTypeDisplayOptions[type]!.text,
+          ClothItemTypeDisplayConfig.of(type).text,
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ),

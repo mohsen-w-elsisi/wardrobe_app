@@ -144,8 +144,8 @@ class _DescribterChips extends StatelessWidget {
 
   Widget get _seasonChip {
     return Chip(
-      label: Text(seasonDisplayConfigs[clothItem.season]!.name),
-      avatar: Icon(seasonDisplayConfigs[clothItem.season]!.icon),
+      label: Text(SeasonDisplayConfig.of(clothItem.season).name),
+      avatar: Icon(SeasonDisplayConfig.of(clothItem.season).icon),
     );
   }
 
@@ -153,8 +153,8 @@ class _DescribterChips extends StatelessWidget {
     return [
       for (final attribute in clothItem.attributes)
         Chip(
-          label: Text(clothItemAttributeDisplayOptions[attribute]!.name),
-          avatar: Icon(clothItemAttributeDisplayOptions[attribute]!.icon),
+          label: Text(ClothItemAttributeDisplayConfig.of(attribute).name),
+          avatar: Icon(ClothItemAttributeDisplayConfig.of(attribute).icon),
         )
     ];
   }

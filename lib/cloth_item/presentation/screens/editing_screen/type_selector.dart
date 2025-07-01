@@ -84,7 +84,7 @@ class _DropDownButtonBuilder {
 
   Widget get _icon {
     return SvgPicture.asset(
-      ClothItemTypeIconQuerier(_context, _type).icon,
+      ClothItemTypeDisplayConfig.of(_type).iconPath(_context),
       height: 16,
     );
   }
@@ -96,5 +96,5 @@ class _DropDownButtonBuilder {
     );
   }
 
-  String get _typeName => clothItemTypeDisplayOptions[_type]!.text;
+  String get _typeName => ClothItemTypeDisplayConfig.of(_type).text;
 }

@@ -25,7 +25,7 @@ class ClothItemAttributeIconRow extends StatelessWidget {
                 ? const EdgeInsets.only(left: 4)
                 : const EdgeInsets.only(right: 4),
             child: Icon(
-              clothItemAttributeDisplayOptions[attribute]!.icon,
+              ClothItemAttributeDisplayConfig.of(attribute).icon,
               size: 20,
             ),
           )

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
 import 'package:wardrobe_app/cloth_item/presentation/shared_presenters/display_configs/seasons.dart';
 import 'package:wardrobe_app/shared/entities/season.dart';
 
@@ -49,9 +48,9 @@ class _SeasonDropdownButtonState extends State<SeasonDropdownButton> {
           value: season,
           child: Row(
             children: [
-              Icon(seasonDisplayConfigs[season]!.icon),
+              Icon(SeasonDisplayConfig.of(season).icon),
               const SizedBox(width: 8),
-              Text(seasonDisplayConfigs[season]!.name),
+              Text(SeasonDisplayConfig.of(season).name),
             ],
           ),
         ),

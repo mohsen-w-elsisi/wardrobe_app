@@ -1,6 +1,5 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
 import 'package:wardrobe_app/cloth_item/domain/ui_controllers.dart';
 import 'package:wardrobe_app/shared/entities/season.dart';
 import 'package:wardrobe_app/shared/use_cases/use_cases.dart';

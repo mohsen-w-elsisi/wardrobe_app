@@ -130,7 +130,7 @@ class _ListTile extends StatelessWidget {
 
   Widget _itemTypeIcon(BuildContext context) {
     return SvgPicture.asset(
-      ClothItemTypeIconQuerier(context, item.type).icon,
+      ClothItemTypeDisplayConfig.of(item.type).iconPath(context),
       height: 20,
     );
   }

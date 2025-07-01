@@ -1,30 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
 import 'package:wardrobe_app/shared/entities/season.dart';
 
-const SeasonDisplayConfigs seasonDisplayConfigs = {
-  Season.all: SeasonDisplayConfig(
-    name: "All Seasons",
-    icon: Icons.all_inclusive,
-  ),
-  Season.summer: SeasonDisplayConfig(
-    name: "Summer",
-    icon: Icons.wb_sunny,
-  ),
-  Season.winter: SeasonDisplayConfig(
-    name: "Winter",
-    icon: Icons.ac_unit,
-  ),
-};
+enum SeasonDisplayConfig {
+  summer(Season.summer, "Summer", Icons.wb_sunny),
+  winter(Season.winter, "Winter", Icons.ac_unit),
+  all(Season.all, "All Seasons", Icons.all_inclusive);
 
-typedef SeasonDisplayConfigs = Map<Season, SeasonDisplayConfig>;
+  const SeasonDisplayConfig(this.season, this.name, this.icon);
 
-class SeasonDisplayConfig {
+  final Season season;
   final String name;
   final IconData icon;
 
-  const SeasonDisplayConfig({
-    required this.name,
-    required this.icon,
-  });
+  factory SeasonDisplayConfig.of(Season season) {
+    return SeasonDisplayConfig.values.firstWhere(
+      (config) => config.season == season,
+    );
+  }
 }

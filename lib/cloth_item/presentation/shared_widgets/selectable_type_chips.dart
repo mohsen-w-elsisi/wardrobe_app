@@ -72,10 +72,11 @@ class _SelectableTypeChip extends StatelessWidget {
     );
   }
 
-  Widget get _label => Text(clothItemTypeDisplayOptions[type]!.text);
+  Widget get _label => Text(ClothItemTypeDisplayConfig.of(type).text);
+
   Widget _avatar(BuildContext context) {
     return SvgPicture.asset(
-      ClothItemTypeIconQuerier(context, type).icon,
+      ClothItemTypeDisplayConfig.of(type).iconPath(context),
       height: 16,
     );
   }

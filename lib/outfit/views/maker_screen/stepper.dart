@@ -96,7 +96,7 @@ class _StepIcon extends StatelessWidget {
   }
 
   String _iconAssetPath(BuildContext context) {
-    return ClothItemTypeIconQuerier(context, type).icon;
+    return ClothItemTypeDisplayConfig.of(type).iconPath(context);
   }
 }
 
@@ -147,7 +147,7 @@ class _Step {
   }
 
   String get _stepLabel {
-    final typeName = clothItemTypeDisplayOptions[type]!.text;
+    final typeName = ClothItemTypeDisplayConfig.of(type).text;
     final colom = outfitMakerManager.itemOfTypeIsSelected(type) ? ":" : "";
     final selectedItem = outfitMakerManager.selectedItems[type]?.name ?? "";
     return "$typeName$colom $selectedItem";

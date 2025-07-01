@@ -72,8 +72,9 @@ class _SelectableAttributeChip extends StatelessWidget {
     );
   }
 
-  Widget get _label => Text(clothItemAttributeDisplayOptions[attribute]!.name);
-  Widget get _avatar => Icon(clothItemAttributeDisplayOptions[attribute]!.icon);
+  Widget get _label => Text(ClothItemAttributeDisplayConfig.of(attribute).name);
+  Widget get _avatar =>
+      Icon(ClothItemAttributeDisplayConfig.of(attribute).icon);
 
   void _select() => selectionManager.selectAttribute(attribute);
   void _unselect() => selectionManager.unselectAttribute(attribute);
