@@ -5,7 +5,7 @@ import 'package:wardrobe_app/cloth_item/presentation/shared_presenters/organiser
 import 'package:wardrobe_app/cloth_item/presentation/shared_presenters/new_item_manager.dart';
 import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
 import 'package:wardrobe_app/cloth_item/domain/use_cases/use_cases.dart';
-import 'package:wardrobe_app/cloth_item/presentation/screens/details_screen.dart';
+import 'package:wardrobe_app/cloth_item/presentation/screens/details_screen/details_screen.dart';
 import 'package:wardrobe_app/cloth_item/presentation/shared_presenters/display_configs/types.dart';
 import 'package:wardrobe_app/shared/widgets/subbmitable_bottom_sheet.dart';
 

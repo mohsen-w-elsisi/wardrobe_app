@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
-import 'package:wardrobe_app/cloth_item/presentation/screens/details_screen.dart';
+import 'package:wardrobe_app/cloth_item/presentation/screens/details_screen/details_screen.dart';
 import 'package:wardrobe_app/cloth_item/presentation/shared_presenters/display_configs/types.dart';
 import 'attribute_icon_row.dart';
 
