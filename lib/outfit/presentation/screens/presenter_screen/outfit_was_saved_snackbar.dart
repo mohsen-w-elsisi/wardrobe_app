@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wardrobe_app/outfit/backend/outfit.dart';
-import 'package:wardrobe_app/outfit/views/presenter_screen.dart';
+import 'package:wardrobe_app/outfit/domain/outfit.dart';
+import 'package:wardrobe_app/outfit/presentation/screens/presenter_screen/presenter_screen.dart';
 
 class OutfitWasSavedSnackbar {
   final Outfit outfit;

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:wardrobe_app/shared/widgets/subbmitable_bottom_sheet.dart';
 
-import '../backend/outfit_saver.dart';
+import 'editing_manager.dart';
 
 class OutfitSavingDialog extends StatelessWidget {
-  final OutfitSaver outfitSaver;
+  final OutfitEditingManager outfitSaver;
   final void Function() onSubmit;
 
   const OutfitSavingDialog({

@@ -6,10 +6,10 @@ import 'package:wardrobe_app/cloth_item/presentation/screens/details_screen/deta
 import 'package:wardrobe_app/cloth_item/presentation/shared_presenters/sort_mode.dart';
 import 'package:wardrobe_app/cloth_item/presentation/shared_presenters/display_configs/types.dart';
 import 'package:wardrobe_app/cloth_item/presentation/shared_widgets/attribute_icon_row.dart';
-import 'package:wardrobe_app/outfit/backend/outfit.dart';
+import 'package:wardrobe_app/outfit/domain/outfit.dart';
 
 import 'manager.dart';
-import '../presenter_screen.dart';
+import '../presenter_screen/presenter_screen.dart';
 
 class OutfitMakerStepper extends StatelessWidget {
   final OutfitMakerManager outfitMakerManager;

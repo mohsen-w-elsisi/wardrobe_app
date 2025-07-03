@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:wardrobe_app/outfit/domain/ui_notifier.dart';
+import 'package:wardrobe_app/outfit/domain/use_cases/use_cases.dart';
 
-import '../backend/outfit.dart';
-import 'tile.dart';
-import '../backend/manager.dart';
+import '../../domain/outfit.dart';
+import '../shared_widgets/tile.dart';
 
 class OutfitListScreen extends StatelessWidget {
   const OutfitListScreen({super.key});
@@ -39,7 +40,7 @@ class OutfitListScreen extends StatelessWidget {
 
   Widget get _list {
     return ListenableBuilder(
-      listenable: _outfitManager,
+      listenable: GetIt.I<OutfitUiNotifier>(),
       builder: (_, __) {
         return SliverList.separated(
           itemCount: _outfits.length,
@@ -50,7 +51,5 @@ class OutfitListScreen extends StatelessWidget {
     );
   }
 
-  List<Outfit> get _outfits => _outfitManager.outfits;
-
-  OutfitManager get _outfitManager => GetIt.I.get<OutfitManager>();
+  List<Outfit> get _outfits => GetIt.I<OutfitQuerier>().getAll().toList();
 }

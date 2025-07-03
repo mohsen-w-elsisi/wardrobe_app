@@ -12,8 +12,14 @@ import 'package:wardrobe_app/cloth_item/domain/use_cases/impls/saver.dart';
 import 'package:wardrobe_app/cloth_item/domain/use_cases/impls/ui_notifier.dart';
 import 'package:wardrobe_app/cloth_item/domain/ui_controllers.dart';
 import 'package:wardrobe_app/cloth_item/domain/use_cases/use_cases.dart';
-import 'package:wardrobe_app/outfit/backend/hive_storage_agent.dart';
-import 'package:wardrobe_app/outfit/backend/manager.dart';
+import 'package:wardrobe_app/outfit/domain/data_gateway.dart';
+import 'package:wardrobe_app/outfit/domain/ui_notifier.dart';
+import 'package:wardrobe_app/outfit/domain/use_cases/impls/deleter.dart';
+import 'package:wardrobe_app/outfit/domain/use_cases/impls/querier.dart';
+import 'package:wardrobe_app/outfit/domain/use_cases/impls/saver.dart';
+import 'package:wardrobe_app/outfit/domain/use_cases/impls/sharer.dart';
+import 'package:wardrobe_app/outfit/domain/use_cases/use_cases.dart';
+import 'package:wardrobe_app/outfit/persistance/hive_data_gateway.dart';
 import 'package:wardrobe_app/shared/use_cases/impls/seasons.dart';
 import 'package:wardrobe_app/shared/use_cases/use_cases.dart';
 import 'package:wardrobe_app/theme/shared_preferences_theme_storage_agent.dart';
@@ -31,7 +37,12 @@ class GlobalDependencyInitialiser {
     ClothItemMatcherInitialiser(),
     ClothItemExporterInitialiser(),
     ClothItemImporterInitialiser(),
-    OutfitManagerInitialiser(),
+    OutfitDataGatewayInitialiser(),
+    OutfitUiNotifierInitialiser(),
+    OutfitQuerierInitialiser(),
+    OutfitSaverInitialiser(),
+    OutfitDeleterInitialiser(),
+    OutfitSharerInitialiser(),
     SeasonGetterInitialiser(),
     SeasonSetterInitialiser(),
     ThemeStorageControllerInitialiser(),
@@ -48,21 +59,6 @@ class HiveInitialiser implements Dependancy {
   @override
   Future<void> initialise() async {
     await Hive.initFlutter();
-  }
-}
-
-class OutfitManagerInitialiser
-    extends GetItRegisterableDependancy<OutfitManager> {
-  @override
-  Future<void> _initialise() async {
-    final storageAgent = await _createOutfitStorageAgent();
-    _dependancy = OutfitManager(storageAgent: storageAgent);
-  }
-
-  Future<OutfitStorageAgent> _createOutfitStorageAgent() async {
-    final storageAgent = HiveOutfitStorageAgent();
-    await storageAgent.initialise();
-    return storageAgent;
   }
 }
 
@@ -154,6 +150,55 @@ class SeasonGetterInitialiser
   @override
   Future<void> _initialise() async {
     _dependancy = SeasonGetterImpl();
+  }
+}
+
+class OutfitQuerierInitialiser
+    extends GetItRegisterableDependancy<OutfitQuerier> {
+  @override
+  Future<void> _initialise() async {
+    _dependancy = OutfitQuerierImpl();
+  }
+}
+
+class OutfitUiNotifierInitialiser
+    extends GetItRegisterableDependancy<OutfitUiNotifier> {
+  @override
+  Future<void> _initialise() async {
+    _dependancy = OutfitUiNotifier();
+  }
+}
+
+class OutfitSaverInitialiser extends GetItRegisterableDependancy<OutfitSaver> {
+  @override
+  Future<void> _initialise() async {
+    _dependancy = OutfitSaverImpl();
+  }
+}
+
+class OutfitDeleterInitialiser
+    extends GetItRegisterableDependancy<OutfitDeleter> {
+  @override
+  Future<void> _initialise() async {
+    _dependancy = OutfitDeleterImpl();
+  }
+}
+
+class OutfitSharerInitialiser
+    extends GetItRegisterableDependancy<OutfitSharer> {
+  @override
+  Future<void> _initialise() async {
+    _dependancy = OutfitSharerImpl();
+  }
+}
+
+class OutfitDataGatewayInitialiser
+    extends GetItRegisterableDependancy<OutfitDataGateway> {
+  @override
+  Future<void> _initialise() async {
+    final dataGateway = HiveOutfitDataGateway();
+    await dataGateway.initialise();
+    _dependancy = dataGateway;
   }
 }
 

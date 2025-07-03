@@ -1,12 +1,11 @@
 import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/outfit/backend/manager.dart';
-import 'package:wardrobe_app/outfit/backend/outfit.dart';
+import 'package:wardrobe_app/outfit/domain/outfit.dart';
+import 'package:wardrobe_app/outfit/domain/use_cases/use_cases.dart';
 
-class OutfitSaver {
-  final _outfitManager = GetIt.I.get<OutfitManager>();
+class OutfitEditingManager {
   Outfit _outfit;
 
-  OutfitSaver({required Outfit outfit}) : _outfit = outfit;
+  OutfitEditingManager({required Outfit outfit}) : _outfit = outfit;
 
   void updateName(String name) {
     _outfit = _outfit.copyWith(name: name);
@@ -14,7 +13,7 @@ class OutfitSaver {
 
   void save() {
     _assingId();
-    _outfitManager.saveOutfit(_outfit);
+    GetIt.I<OutfitSaver>().save(_outfit);
   }
 
   void _assingId() {

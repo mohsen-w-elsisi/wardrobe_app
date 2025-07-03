@@ -1,9 +1,9 @@
 import 'package:hive/hive.dart';
-import 'package:wardrobe_app/outfit/backend/manager.dart';
+import 'package:wardrobe_app/outfit/domain/data_gateway.dart';
 
-import 'outfit.dart';
+import '../domain/outfit.dart';
 
-class HiveOutfitStorageAgent implements OutfitStorageAgent {
+class HiveOutfitDataGateway implements OutfitDataGateway {
   static const _boxName = "outfits";
 
   late final Box<Outfit> _box;
@@ -14,12 +14,12 @@ class HiveOutfitStorageAgent implements OutfitStorageAgent {
   }
 
   @override
-  void deletAllOutfits() {
+  void deletAll() {
     _box.clear();
   }
 
   @override
-  void deleteOutfit(Outfit outfit) {
+  void delete(Outfit outfit) {
     _assertExists(outfit);
     _box.delete(outfit.id);
   }
@@ -42,4 +42,20 @@ class HiveOutfitStorageAgent implements OutfitStorageAgent {
   }
 
   List<Outfit> get _outfits => _box.values.toList();
+
+  @override
+  Iterable<Outfit> getAll() {
+    return _outfits;
+  }
+
+  @override
+  Outfit getById(String id) {
+    return _box.get(id) ?? (throw StateError('Outfit with id $id not found.'));
+  }
+
+  @override
+  bool outfitIsSaved(Outfit outfit) {
+    _assertNonEphemiral(outfit);
+    return _box.containsKey(outfit.id);
+  }
 }

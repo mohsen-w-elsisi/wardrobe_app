@@ -5,11 +5,11 @@ import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
 import 'package:wardrobe_app/cloth_item/domain/use_cases/use_cases.dart';
 import 'package:wardrobe_app/cloth_item/presentation/shared_widgets/grid_view.dart';
 
-import 'package:wardrobe_app/outfit/backend/manager.dart';
-import 'package:wardrobe_app/outfit/backend/outfit.dart';
-import 'package:wardrobe_app/outfit/backend/outfit_saver.dart';
-import 'package:wardrobe_app/outfit/backend/sharer.dart';
-import 'package:wardrobe_app/outfit/views/outfit_was_saved_snackbar.dart';
+import 'package:wardrobe_app/outfit/domain/outfit.dart';
+import 'package:wardrobe_app/outfit/presentation/screens/presenter_screen/editing_manager.dart';
+import 'package:wardrobe_app/outfit/domain/ui_notifier.dart';
+import 'package:wardrobe_app/outfit/domain/use_cases/use_cases.dart';
+import 'package:wardrobe_app/outfit/presentation/screens/presenter_screen/outfit_was_saved_snackbar.dart';
 
 import 'saving_modal.dart';
 
@@ -124,31 +124,20 @@ class _AppBar extends StatelessWidget {
     );
   }
 
-  Future<void> _share() async {
-    OutfitSharer(await _clothItems).share();
-  }
-
-  Future<List<ClothItem>> get _clothItems async {
-    final clothitemQuerier = GetIt.I<ClothItemQuerier>();
-    return [
-      for (final itemId in _outfit.items)
-        await clothitemQuerier.getById(itemId),
-    ];
-  }
+  void _share() => GetIt.I<OutfitSharer>().share(_outfit);
 }
 
 class _SaveButton extends StatelessWidget {
-  final _outfitManager = GetIt.I.get<OutfitManager>();
   final Outfit _outfit;
 
-  _SaveButton({required Outfit outfit}) : _outfit = outfit;
+  const _SaveButton({required Outfit outfit}) : _outfit = outfit;
 
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: _outfitManager,
+      listenable: GetIt.I<OutfitUiNotifier>(),
       builder: (context, _) {
-        return _outfitManager.outfitIsSaved(_outfit)
+        return GetIt.I<OutfitQuerier>().outfitExists(_outfit)
             ? _unsaveButton()
             : _saveButton(context);
       },
@@ -164,7 +153,7 @@ class _SaveButton extends StatelessWidget {
   }
 
   void _showSavingModal(BuildContext context) {
-    final outfitSaver = OutfitSaver(outfit: _outfit);
+    final outfitSaver = OutfitEditingManager(outfit: _outfit);
     OutfitSavingDialog(
       outfitSaver: outfitSaver,
       onSubmit: () {
@@ -181,8 +170,5 @@ class _SaveButton extends StatelessWidget {
     );
   }
 
-  void _unsave() {
-    final outfitManager = GetIt.I.get<OutfitManager>();
-    outfitManager.deleteOutfit(_outfit);
-  }
+  void _unsave() => GetIt.I<OutfitDeleter>().delete(_outfit);
 }

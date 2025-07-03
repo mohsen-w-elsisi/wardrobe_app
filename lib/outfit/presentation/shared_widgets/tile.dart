@@ -4,8 +4,8 @@ import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
 import 'package:wardrobe_app/cloth_item/domain/use_cases/use_cases.dart';
 import 'package:wardrobe_app/cloth_item/presentation/shared_widgets/attribute_icon_row.dart';
-import '../backend/outfit.dart';
-import 'presenter_screen.dart';
+import '../../domain/outfit.dart';
+import '../screens/presenter_screen/presenter_screen.dart';
 
 class OutfitTile extends StatelessWidget {
   final Outfit _outfit;
