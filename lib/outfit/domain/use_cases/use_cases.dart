@@ -3,6 +3,7 @@ import 'package:wardrobe_app/outfit/domain/outfit.dart';
 abstract class OutfitQuerier {
   Outfit getById(String id);
   Iterable<Outfit> getAll();
+  Future<Iterable<Outfit>> getAllOfCurrentSeason();
   bool outfitExists(Outfit outfit);
 }
 

@@ -21,13 +21,36 @@ class OutfitListScreen extends StatelessWidget {
     );
   }
 
-  Widget get _listOrEmptyMessage =>
-      _outfits.isNotEmpty ? _list : _noOutfitsMessage;
+  Widget get _listOrEmptyMessage {
+    return FutureBuilder(
+      future: _outfits,
+      builder: (_, snapshot) {
+        if (snapshot.hasData) {
+          final outfits = snapshot.data!;
+          if (outfits.isNotEmpty) {
+            return _list(outfits);
+          } else {
+            return _noOutfitsMessage;
+          }
+        } else {
+          return _loadingSpinner;
+        }
+      },
+    );
+  }
 
   Widget get _noOutfitsMessage {
     return const SliverFillRemaining(
       child: Center(
         child: Text("no outfits saved yet"),
+      ),
+    );
+  }
+
+  Widget get _loadingSpinner {
+    return const SliverFillRemaining(
+      child: Center(
+        child: CircularProgressIndicator(),
       ),
     );
   }
@@ -38,18 +61,19 @@ class OutfitListScreen extends StatelessWidget {
     );
   }
 
-  Widget get _list {
+  Widget _list(List<Outfit> outfits) {
     return ListenableBuilder(
       listenable: GetIt.I<OutfitUiNotifier>(),
       builder: (_, __) {
         return SliverList.separated(
-          itemCount: _outfits.length,
-          itemBuilder: (_, index) => OutfitTile(_outfits[index]),
+          itemCount: outfits.length,
+          itemBuilder: (_, index) => OutfitTile(outfits[index]),
           separatorBuilder: (_, __) => const Divider(),
         );
       },
     );
   }
 
-  List<Outfit> get _outfits => GetIt.I<OutfitQuerier>().getAll().toList();
+  Future<List<Outfit>> get _outfits async =>
+      (await GetIt.I<OutfitQuerier>().getAllOfCurrentSeason()).toList();
 }
