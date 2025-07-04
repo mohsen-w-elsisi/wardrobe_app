@@ -4,8 +4,11 @@ import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
 import 'package:wardrobe_app/cloth_item/domain/use_cases/use_cases.dart';
 import 'package:wardrobe_app/cloth_item/presentation/shared_widgets/attribute_icon_row.dart';
-import '../../domain/outfit.dart';
-import '../screens/presenter_screen/presenter_screen.dart';
+import 'package:wardrobe_app/outfit/domain/outfit_season_calculator.dart';
+import 'package:wardrobe_app/shared/entities/season.dart';
+import 'package:wardrobe_app/shared/widgets/season_icon.dart';
+import 'package:wardrobe_app/outfit/domain/outfit.dart';
+import 'package:wardrobe_app/outfit/presentation/screens/presenter_screen/presenter_screen.dart';
 
 class OutfitTile extends StatelessWidget {
   final Outfit _outfit;
@@ -24,6 +27,8 @@ class OutfitTile extends StatelessWidget {
 
   Color _color(BuildContext context) => Theme.of(context).colorScheme.surface;
 
+  Widget _openBuilder(_, __) => OutfitPresenterScreen(_outfit);
+
   Widget _closedBuilder(_, __) {
     return ListTile(
       title: Text(_outfit.name),
@@ -34,30 +39,64 @@ class OutfitTile extends StatelessWidget {
           return Text(snapshot.data!, overflow: TextOverflow.ellipsis);
         },
       ),
-      trailing: FutureBuilder(
-        future: _attributes,
-        initialData: const <ClothItemAttribute>[],
-        builder: (_, snapshot) {
-          return _attributesRow(snapshot.data!);
-        },
-      ),
+      trailing: _DiscribterIcons(_outfit),
     );
   }
 
   Future<String> get _itemNames => _OutfitItemsLabeler(_outfit.items).label();
+}
 
-  Widget _attributesRow(Iterable<ClothItemAttribute> attributes) {
+class _DiscribterIcons extends StatelessWidget {
+  static const _maxRowWidth = 130.0;
+  static const _maxAttributeRowWidth = 100.0;
+
+  final Outfit outfit;
+
+  const _DiscribterIcons(this.outfit);
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
-      width: 100,
-      child: ClothItemAttributeIconRow(attributes, alignEnd: true),
+      width: _maxRowWidth,
+      child: Row(
+        children: [
+          _attributeIconRow(),
+          const SizedBox(width: 4), // space as in AttributeIconRow
+          _seasonIcon(),
+        ],
+      ),
+    );
+  }
+
+  FutureBuilder<Iterable<ClothItemAttribute>> _attributeIconRow() {
+    return FutureBuilder(
+      future: _attributes,
+      initialData: const <ClothItemAttribute>[],
+      builder: (_, snapshot) => SizedBox(
+        width: _maxAttributeRowWidth,
+        child: ClothItemAttributeIconRow(snapshot.data!, alignEnd: true),
+      ),
     );
   }
 
   Future<Iterable<ClothItemAttribute>> get _attributes {
-    return _OutfitAttributeCalculator(_outfit.items).attributes();
+    return _OutfitAttributeCalculator(outfit.items).attributes();
   }
 
-  Widget _openBuilder(_, __) => OutfitPresenterScreen(_outfit);
+  FutureBuilder<Season> _seasonIcon() {
+    return FutureBuilder(
+      future: _season,
+      builder: (_, snapshot) {
+        if (snapshot.hasData) {
+          return SeasonIcon(snapshot.data!, hideAllSeasons: true);
+        } else {
+          return Container();
+        }
+      },
+    );
+  }
+
+  Future<Season> get _season => OutfitSeasonCalculator(outfit).season();
 }
 
 class _OutfitItemsLabeler {
@@ -66,7 +105,7 @@ class _OutfitItemsLabeler {
   final _clothItemQuerier = GetIt.I<ClothItemQuerier>();
 
   final Iterable<String> _ids;
-  late final Iterable<ClothItem> _clothitems;
+  late final Iterable<ClothItem> _clothItems;
   late final Iterable<String> _names;
   late String _label;
 
@@ -80,13 +119,13 @@ class _OutfitItemsLabeler {
   }
 
   Future<void> _getClothItems() async {
-    _clothitems = [
+    _clothItems = [
       for (final id in _ids) await _clothItemQuerier.getById(id),
     ].nonNulls;
   }
 
   void _getNames() {
-    _names = [for (final item in _clothitems) item.name];
+    _names = [for (final item in _clothItems) item.name];
   }
 
   void _concatNames() {
