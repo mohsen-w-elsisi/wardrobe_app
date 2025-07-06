@@ -21,11 +21,4 @@ class ClothItemDeleterImpl extends ClothItemDeleter with UseCaseUtils {
       }
     }
   }
-
-  @override
-  void clearWardrobe() {
-    dataGateway.deleteAll();
-    GetIt.I<OutfitDeleter>().deleteAll();
-    notifyUi();
-  }
 }

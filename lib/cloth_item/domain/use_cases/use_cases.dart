@@ -22,7 +22,6 @@ abstract class ClothItemFavouriteToggler {
 
 abstract class ClothItemDeleter {
   void delete(ClothItem item);
-  void clearWardrobe();
 }
 
 abstract class ClothItemImporter {

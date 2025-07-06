@@ -13,7 +13,6 @@ abstract class OutfitSaver {
 
 abstract class OutfitDeleter {
   void delete(Outfit outfit);
-  void deleteAll();
 }
 
 abstract class OutfitSharer {

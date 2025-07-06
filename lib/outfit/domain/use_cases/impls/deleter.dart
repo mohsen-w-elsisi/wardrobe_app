@@ -11,12 +11,6 @@ class OutfitDeleterImpl extends OutfitDeleter with OutfitUseCaseUtils {
     notifyUi();
   }
 
-  @override
-  void deleteAll() {
-    datagateway.deletAll();
-    notifyUi();
-  }
-
   void _assertNonEphemeral(Outfit outfit) {
     assert(!outfit.isEphemiral, 'Cannot delete an ephemeral outfit.');
   }

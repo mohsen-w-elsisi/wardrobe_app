@@ -19,7 +19,7 @@ class ClothItemHiveDataGateway extends ClothItemDataGateway {
   Future<void> delete(String id) async => _box.delete(id);
 
   @override
-  Future<void> deleteAll() async => _box.clear();
+  Future<void> deleteAll() => _box.clear();
 
   @override
   Future<Iterable<ClothItem>> getAllItems() async {

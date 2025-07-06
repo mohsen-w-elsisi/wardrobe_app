@@ -21,6 +21,7 @@ import 'package:wardrobe_app/outfit/domain/use_cases/impls/sharer.dart';
 import 'package:wardrobe_app/outfit/domain/use_cases/use_cases.dart';
 import 'package:wardrobe_app/outfit/persistance/hive_data_gateway.dart';
 import 'package:wardrobe_app/shared/use_cases/impls/seasons.dart';
+import 'package:wardrobe_app/shared/use_cases/impls/wardrobe_clearer.dart';
 import 'package:wardrobe_app/shared/use_cases/use_cases.dart';
 import 'package:wardrobe_app/theme/shared_preferences_theme_storage_agent.dart';
 import 'package:wardrobe_app/theme/theme_settings_controller.dart';
@@ -45,6 +46,7 @@ class GlobalDependencyInitialiser {
     OutfitSharerInitialiser(),
     SeasonGetterInitialiser(),
     SeasonSetterInitialiser(),
+    WardrobeClearerInitialiser(),
     ThemeStorageControllerInitialiser(),
   ];
 
@@ -207,6 +209,14 @@ class SeasonSetterInitialiser
   @override
   Future<void> _initialise() async {
     _dependancy = SeasonSetterImpl();
+  }
+}
+
+class WardrobeClearerInitialiser
+    extends GetItRegisterableDependancy<WardrobeClearer> {
+  @override
+  Future<void> _initialise() async {
+    _dependancy = WardrobeClearerImpl();
   }
 }
 

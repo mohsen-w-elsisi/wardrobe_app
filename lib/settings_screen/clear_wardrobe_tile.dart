@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/cloth_item/domain/use_cases/use_cases.dart';
+import 'package:wardrobe_app/shared/use_cases/use_cases.dart';
 
 class SettingsScreenClearWardrobeTile extends StatelessWidget {
   const SettingsScreenClearWardrobeTile({super.key});
@@ -50,7 +50,7 @@ class _Dialog extends StatelessWidget {
 
   void _deleteAll(BuildContext context) {
     _close(context);
-    GetIt.I<ClothItemDeleter>().clearWardrobe();
+    GetIt.I<WardrobeClearer>().clear();
     _showConfirmationSnackbar(context);
   }
 

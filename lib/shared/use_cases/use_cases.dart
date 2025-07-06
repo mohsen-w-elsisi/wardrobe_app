@@ -7,3 +7,7 @@ abstract class SeasonSetter {
 abstract class SeasonGetter {
   Future<Season> currentSeason();
 }
+
+abstract class WardrobeClearer {
+  Future<void> clear();
+}
