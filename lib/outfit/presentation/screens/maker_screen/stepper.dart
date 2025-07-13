@@ -37,8 +37,10 @@ class OutfitMakerStepper extends StatelessWidget {
     );
   }
 
-  List<Step> get _steps =>
-      [for (final type in ClothItemType.values) _stepForType(type)];
+  List<Step> get _steps => [
+        for (final type in outfitMakerManager.availableTypes)
+          _stepForType(type),
+      ];
 
   Step _stepForType(ClothItemType type) {
     return _Step(outfitMakerManager, type).step;
@@ -102,11 +104,10 @@ class _StepIcon extends StatelessWidget {
 
 class _SkipButton extends StatelessWidget {
   final OutfitMakerManager outfitMakerManager;
-  late final ClothItemType _type;
+  final ClothItemType _type;
 
-  _SkipButton(this.outfitMakerManager) {
-    _type = outfitMakerManager.typeOfCurrentStep;
-  }
+  _SkipButton(this.outfitMakerManager)
+      : _type = outfitMakerManager.typeOfCurrentStep;
 
   @override
   Widget build(BuildContext context) {

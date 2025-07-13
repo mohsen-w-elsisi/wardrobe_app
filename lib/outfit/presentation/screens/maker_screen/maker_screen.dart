@@ -40,12 +40,9 @@ class OutfitMakerScreen extends StatelessWidget {
   }
 
   void _updateAvailableItems() {
-    final availableItems = _getItemsFilteredBySelectedAttributes();
-    if (_attributeFilterationManager.selectedAttributes.isNotEmpty) {
-      _outfitMakerManager.setAvailableItems(availableItems);
-    } else {
-      _outfitMakerManager.setAvailableItems(_allSavedItems);
-    }
+    _outfitMakerManager.filterByAttributes(
+      _attributeFilterationManager.selectedAttributes,
+    );
   }
 
   List<ClothItem> _getItemsFilteredBySelectedAttributes() {

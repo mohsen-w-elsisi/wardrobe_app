@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:wardrobe_app/cloth_item/presentation/shared_presenters/organiser.dart';
 import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
 
-class OutfitMakerManager extends ChangeNotifier
+class OutfitMakerManager extends _OufitMakerManagerBase
     with _StepController, _SelectedItemRegistry {
   bool _isInitialised = false;
 
@@ -23,9 +23,18 @@ class OutfitMakerManager extends ChangeNotifier
     setAvailableItems(avaliableItems);
     notifyListeners();
   }
+
+  @override
+  bool get stilIsSelectableItems {
+    final remainingTypes = availableTypes.sublist(currentStep + 1);
+    for (final type in remainingTypes) {
+      if (validItemsOfType(type).isNotEmpty) return true;
+    }
+    return false;
+  }
 }
 
-mixin _StepController on ChangeNotifier {
+mixin _StepController on _OufitMakerManagerBase {
   Function()? onLastStepDone;
 
   int _currentStep = 0;
@@ -38,7 +47,7 @@ mixin _StepController on ChangeNotifier {
   }
 
   void nextStep() {
-    if (isOnLastStep) {
+    if (isOnLastStep || !stilIsSelectableItems) {
       if (onLastStepDone != null) onLastStepDone!();
     } else {
       currentStep++;
@@ -53,18 +62,23 @@ mixin _StepController on ChangeNotifier {
     }
   }
 
-  bool get isOnLastStep => currentStep == ClothItemType.values.length - 1;
+  bool get isOnLastStep => currentStep == availableTypes.length - 1;
   bool get isOnFirstStep => currentStep == 0;
 
-  ClothItemType get typeOfCurrentStep => ClothItemType.values[currentStep];
+  ClothItemType get typeOfCurrentStep => availableTypes[currentStep];
 }
 
-mixin _SelectedItemRegistry on ChangeNotifier {
+mixin _SelectedItemRegistry on _OufitMakerManagerBase {
   final Map<ClothItemType, ClothItem?> _selectedItems = {
     for (final type in ClothItemType.values) type: null
   };
 
-  late List<ClothItem> _avaliableItems;
+  Set<ClothItemAttribute> _filterAttributes = <ClothItemAttribute>{};
+
+  void filterByAttributes(Set<ClothItemAttribute> attributes) {
+    _filterAttributes = attributes;
+    notifyListeners();
+  }
 
   void setAvailableItems(List<ClothItem> newAvailableItems) {
     _avaliableItems = newAvailableItems;
@@ -79,7 +93,9 @@ mixin _SelectedItemRegistry on ChangeNotifier {
   }
 
   List<ClothItem> validItemsOfType(ClothItemType type) {
-    return ClothItemOrganiser(_avaliableItems)
+    final filteredAvailableItems = ClothItemOrganiser(_avaliableItems)
+        .filterUsingAttributes(_filterAttributes);
+    return ClothItemOrganiser(filteredAvailableItems)
         .itemsMatchingWithBaseitemsOfType(selectedItemsAsList, type);
   }
 
@@ -88,7 +104,10 @@ mixin _SelectedItemRegistry on ChangeNotifier {
   }
 
   Map<ClothItemType, ClothItem?> get selectedItems {
-    return Map.unmodifiable(_selectedItems);
+    return Map.unmodifiable({
+      for (final entry in _selectedItems.entries)
+        if (availableTypes.contains(entry.key)) entry.key: entry.value
+    });
   }
 
   void setSelectedItem(ClothItem item) {
@@ -106,4 +125,19 @@ mixin _SelectedItemRegistry on ChangeNotifier {
   List<ClothItem> get selectedItemsAsList {
     return selectedItems.values.nonNulls.toList();
   }
+}
+
+abstract class _OufitMakerManagerBase with ChangeNotifier {
+  late List<ClothItem> _avaliableItems;
+
+  List<ClothItemType> get availableTypes {
+    final typesInAvailableItems =
+        {for (final item in _avaliableItems) item.type}.toList();
+    typesInAvailableItems.sort(
+      (a, b) => a.index.compareTo(b.index),
+    );
+    return typesInAvailableItems;
+  }
+
+  bool get stilIsSelectableItems;
 }
