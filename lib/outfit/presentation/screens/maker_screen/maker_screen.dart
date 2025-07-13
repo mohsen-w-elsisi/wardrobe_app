@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wardrobe_app/cloth_item/presentation/shared_presenters/organiser.dart';
+import 'package:wardrobe_app/cloth_item/domain/ui_controllers.dart';
 import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
 import 'package:wardrobe_app/cloth_item/domain/use_cases/use_cases.dart';
 import 'package:wardrobe_app/outfit/presentation/screens/maker_screen/manager.dart';
@@ -9,29 +9,41 @@ import 'package:wardrobe_app/cloth_item/presentation/shared_presenters/attribute
 import 'attribute_filter_chips.dart';
 import 'stepper.dart';
 
-class OutfitMakerScreen extends StatelessWidget {
+class OutfitMakerScreen extends StatefulWidget {
+  final List<ClothItem>? preSelectedItems;
+
+  OutfitMakerScreen({this.preSelectedItems, super.key}) {}
+
+  @override
+  State<OutfitMakerScreen> createState() => _OutfitMakerScreenState();
+}
+
+class _OutfitMakerScreenState extends State<OutfitMakerScreen> {
   final _clothItemQuerier = GetIt.I<ClothItemQuerier>();
   final _attributeFilterationManager = ClothItemAttributeSelectionManager({});
   final _outfitMakerManager = OutfitMakerManager();
 
   late List<ClothItem> _allSavedItems;
 
-  OutfitMakerScreen({List<ClothItem>? preSelectedItems, super.key}) {
-    _initOutfitMakerManager().whenComplete(() {
-      _registerPreSelectedItemsWithOutfitMakerManager(preSelectedItems);
-      _listenToChangesInFilteredAttributesAndUpdateAvailableItems();
-    });
+  @override
+  void initState() {
+    _fetchSavedItems().whenComplete(_initOutfitMakerManager);
+    super.initState();
   }
 
-  Future<void> _initOutfitMakerManager() async {
-    await _fetchSavedItems();
+  Future<void> _fetchSavedItems() async {
+    _allSavedItems = await _clothItemQuerier.getAll();
+  }
+
+  void _initOutfitMakerManager() {
     _outfitMakerManager.initialiseAvailableItems(_allSavedItems);
+    _registerPreSelectedItemsWithOutfitMakerManager();
+    _listenToChangesInFilteredAttributesAndUpdateAvailableItems();
   }
 
-  void _registerPreSelectedItemsWithOutfitMakerManager(
-      List<ClothItem>? preSelectedItems) {
-    if (preSelectedItems != null) {
-      preSelectedItems.forEach(_outfitMakerManager.setSelectedItem);
+  void _registerPreSelectedItemsWithOutfitMakerManager() {
+    if (widget.preSelectedItems != null) {
+      widget.preSelectedItems!.forEach(_outfitMakerManager.setSelectedItem);
     }
   }
 
@@ -45,28 +57,46 @@ class OutfitMakerScreen extends StatelessWidget {
     );
   }
 
-  List<ClothItem> _getItemsFilteredBySelectedAttributes() {
-    final organiser = ClothItemOrganiser(_allSavedItems);
-    final filterAttributes = _attributeFilterationManager.selectedAttributes;
-    return organiser.filterUsingAttributes(filterAttributes);
-  }
-
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: _outfitMakerManager,
-      builder: (_, __) {
-        return Scaffold(
-          appBar: _appBar,
-          body: ListView(
-            children: [
-              _attributeFilterChips,
-              _stepper,
-            ],
-          ),
-          floatingActionButton: _skipToPreviewButton,
-        );
-      },
+      listenable: Listenable.merge([
+        _outfitMakerManager,
+        GetIt.I<ClothItemUiNotifier>(),
+      ]),
+      builder: (_, __) =>
+          _outfitMakerManager.isInitialised ? _screenUi : Container(),
+    );
+  }
+
+  Widget get _screenUi {
+    return _ScreenUi(
+      outfitMakerManager: _outfitMakerManager,
+      attributeFilterationManager: _attributeFilterationManager,
+    );
+  }
+}
+
+class _ScreenUi extends StatelessWidget {
+  final OutfitMakerManager outfitMakerManager;
+  final ClothItemAttributeSelectionManager attributeFilterationManager;
+
+  const _ScreenUi({
+    required this.outfitMakerManager,
+    required this.attributeFilterationManager,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: _appBar,
+      body: ListView(
+        children: [
+          _attributeFilterChips,
+          _stepper,
+        ],
+      ),
+      floatingActionButton: _skipToPreviewButton,
     );
   }
 
@@ -78,28 +108,24 @@ class OutfitMakerScreen extends StatelessWidget {
 
   Widget get _stepper {
     return OutfitMakerStepper(
-      outfitMakerManager: _outfitMakerManager,
+      outfitMakerManager: outfitMakerManager,
     );
   }
 
   Widget get _attributeFilterChips {
     return OutfitMakerAtributeFilterChips(
-      selectionManager: _attributeFilterationManager,
+      selectionManager: attributeFilterationManager,
     );
   }
 
   Widget get _skipToPreviewButton {
     return Visibility(
-      visible: !(_outfitMakerManager.notEnoughItemsSelected),
+      visible: !(outfitMakerManager.notEnoughItemsSelected),
       child: FloatingActionButton(
         tooltip: "preview outfit",
-        onPressed: () => _outfitMakerManager.onLastStepDone!(),
+        onPressed: () => outfitMakerManager.onLastStepDone!(),
         child: const Icon(Icons.arrow_forward),
       ),
     );
-  }
-
-  Future<void> _fetchSavedItems() async {
-    _allSavedItems = await _clothItemQuerier.getAll();
   }
 }
