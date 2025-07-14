@@ -31,7 +31,8 @@ class OutfitMakerStepper extends StatelessWidget {
         onStepCancel: outfitMakerManager.previousStep,
         onStepTapped: (value) => outfitMakerManager.currentStep = value,
         controlsBuilder: (_, __) => _SkipButton(outfitMakerManager),
-        stepIconBuilder: (index, __) => _StepIcon(ClothItemType.values[index]),
+        stepIconBuilder: (index, __) =>
+            _StepIcon(outfitMakerManager.availableTypes[index]),
         steps: _steps,
       ),
     );

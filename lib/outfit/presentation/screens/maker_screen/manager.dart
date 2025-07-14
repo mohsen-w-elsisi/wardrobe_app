@@ -11,6 +11,7 @@ class OutfitMakerManager extends _OufitMakerManagerBase
   }) {
     if (avaliableItems != null) {
       _avaliableItems = avaliableItems;
+      _initAvailableTypes();
       _isInitialised = true;
     }
   }
@@ -21,6 +22,7 @@ class OutfitMakerManager extends _OufitMakerManagerBase
     assert(!_isInitialised, "OutfitMakerManager is already initialised");
     _isInitialised = true;
     setAvailableItems(avaliableItems);
+    _initAvailableTypes();
     notifyListeners();
   }
 
@@ -69,9 +71,14 @@ mixin _StepController on _OufitMakerManagerBase {
 }
 
 mixin _SelectedItemRegistry on _OufitMakerManagerBase {
-  final Map<ClothItemType, ClothItem?> _selectedItems = {
-    for (final type in ClothItemType.values) type: null
-  };
+  static final _emptySelectedItemsMap = Map.unmodifiable({
+    for (final type in ClothItemType.values) type: null,
+  });
+
+  Map<ClothItemType, ClothItem?> _selectedItems =
+      Map.from(_emptySelectedItemsMap);
+
+  late List<ClothItem> _avaliableItems;
 
   Set<ClothItemAttribute> _filterAttributes = <ClothItemAttribute>{};
 
@@ -87,9 +94,7 @@ mixin _SelectedItemRegistry on _OufitMakerManagerBase {
   }
 
   void clearAllSelectedItems() {
-    for (final item in selectedItemsAsList) {
-      clearSelectedItemOfType(item.type);
-    }
+    _selectedItems = Map.from(_emptySelectedItemsMap);
   }
 
   List<ClothItem> validItemsOfType(ClothItemType type) {
@@ -125,19 +130,20 @@ mixin _SelectedItemRegistry on _OufitMakerManagerBase {
   List<ClothItem> get selectedItemsAsList {
     return selectedItems.values.nonNulls.toList();
   }
-}
 
-abstract class _OufitMakerManagerBase with ChangeNotifier {
-  late List<ClothItem> _avaliableItems;
-
-  List<ClothItemType> get availableTypes {
-    final typesInAvailableItems =
-        {for (final item in _avaliableItems) item.type}.toList();
+  void _initAvailableTypes() {
+    final typesInAvailableItems = {
+      for (final item in _avaliableItems) item.type,
+    }.toList();
     typesInAvailableItems.sort(
       (a, b) => a.index.compareTo(b.index),
     );
-    return typesInAvailableItems;
+    availableTypes = typesInAvailableItems;
   }
+}
+
+abstract class _OufitMakerManagerBase with ChangeNotifier {
+  late List<ClothItemType> availableTypes;
 
   bool get stilIsSelectableItems;
 }

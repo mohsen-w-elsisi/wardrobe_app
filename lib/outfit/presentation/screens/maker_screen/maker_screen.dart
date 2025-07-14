@@ -38,7 +38,7 @@ class _OutfitMakerScreenState extends State<OutfitMakerScreen> {
   void _initOutfitMakerManager() {
     _outfitMakerManager.initialiseAvailableItems(_allSavedItems);
     _registerPreSelectedItemsWithOutfitMakerManager();
-    _listenToChangesInFilteredAttributesAndUpdateAvailableItems();
+    _listenToUiToUpdateMakerManager();
   }
 
   void _registerPreSelectedItemsWithOutfitMakerManager() {
@@ -47,23 +47,26 @@ class _OutfitMakerScreenState extends State<OutfitMakerScreen> {
     }
   }
 
-  void _listenToChangesInFilteredAttributesAndUpdateAvailableItems() {
-    _attributeFilterationManager.addListener(_updateAvailableItems);
+  void _listenToUiToUpdateMakerManager() {
+    _attributeFilterationManager.addListener(_updateFilterAttrInMakerManager);
+    GetIt.I<ClothItemUiNotifier>().addListener(_reloadAllItemsIntoMakerManager);
   }
 
-  void _updateAvailableItems() {
+  void _updateFilterAttrInMakerManager() {
     _outfitMakerManager.filterByAttributes(
       _attributeFilterationManager.selectedAttributes,
     );
   }
 
+  void _reloadAllItemsIntoMakerManager() async {
+    final allItems = await GetIt.I<ClothItemQuerier>().getAll();
+    _outfitMakerManager.setAvailableItems(allItems);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: Listenable.merge([
-        _outfitMakerManager,
-        GetIt.I<ClothItemUiNotifier>(),
-      ]),
+      listenable: _outfitMakerManager,
       builder: (_, __) =>
           _outfitMakerManager.isInitialised ? _screenUi : Container(),
     );
