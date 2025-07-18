@@ -7,18 +7,19 @@ class ClothItemDetailScreenStartOutfitFAB extends StatelessWidget {
 
   const ClothItemDetailScreenStartOutfitFAB({
     required this.clothItem,
+    super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
       tooltip: "new outfit with this",
-      onPressed: () => _openDetailsScreen(context),
+      onPressed: () => _openOutfitMaker(context),
       child: const Icon(Icons.checkroom_outlined),
     );
   }
 
-  void _openDetailsScreen(BuildContext context) {
+  void _openOutfitMaker(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => OutfitMakerScreen(

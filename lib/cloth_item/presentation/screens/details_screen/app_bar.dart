@@ -19,6 +19,7 @@ class ClothItemDetailScreenAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar.medium(
       title: Text(clothItem.name, overflow: TextOverflow.ellipsis),
+      pinned: false,
       actions: [
         _FavouriteButton(clothItem: clothItem),
         _MatchingItemsButton(clothItem: clothItem),
