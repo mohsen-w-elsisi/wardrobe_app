@@ -23,8 +23,6 @@ import 'package:wardrobe_app/outfit/persistance/hive_data_gateway.dart';
 import 'package:wardrobe_app/shared/use_cases/impls/seasons.dart';
 import 'package:wardrobe_app/shared/use_cases/impls/wardrobe_clearer.dart';
 import 'package:wardrobe_app/shared/use_cases/use_cases.dart';
-import 'package:wardrobe_app/theme/shared_preferences_theme_storage_agent.dart';
-import 'package:wardrobe_app/theme/theme_settings_controller.dart';
 
 class GlobalDependencyInitialiser {
   static final List<Dependancy> _dependancies = [
@@ -47,7 +45,6 @@ class GlobalDependencyInitialiser {
     SeasonGetterInitialiser(),
     SeasonSetterInitialiser(),
     WardrobeClearerInitialiser(),
-    ThemeStorageControllerInitialiser(),
   ];
 
   static Future<void> initiaseDependencies() async {
@@ -61,15 +58,6 @@ class HiveInitialiser implements Dependancy {
   @override
   Future<void> initialise() async {
     await Hive.initFlutter();
-  }
-}
-
-class ThemeStorageControllerInitialiser
-    extends GetItRegisterableDependancy<ThemeSettingsController> {
-  @override
-  Future<void> _initialise() async {
-    final storageAgent = SharedPreferencesThemeStorageAgent();
-    _dependancy = ThemeSettingsController(storageAgent: storageAgent);
   }
 }
 

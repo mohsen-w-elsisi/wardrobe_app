@@ -1,10 +1,9 @@
 import 'dart:async';
 
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:wardrobe_app/dependancies/global_dependency_initialiser.dart';
 import 'package:wardrobe_app/home_screen.dart';
-import 'package:wardrobe_app/theme/theme_settings_controller.dart';
 
 Future<void> main() async {
   await GlobalDependencyInitialiser.initiaseDependencies();
@@ -16,25 +15,19 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: themeSettingsController,
-      builder: (_, __) {
-        return MaterialApp(
-          theme: ThemeData(
-            useMaterial3: true,
-            colorSchemeSeed: themeSettingsController.colorSchemeSeed,
-          ),
-          darkTheme: ThemeData(
-            brightness: Brightness.dark,
-            useMaterial3: true,
-            colorSchemeSeed: themeSettingsController.colorSchemeSeed,
-          ),
-          home: const HomeScreen(),
-        );
-      },
+    return DynamicColorBuilder(
+      builder: (lightDynamic, darkDynamic) => MaterialApp(
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: lightDynamic,
+        ),
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+          useMaterial3: true,
+          colorScheme: darkDynamic,
+        ),
+        home: const HomeScreen(),
+      ),
     );
   }
-
-  ThemeSettingsController get themeSettingsController =>
-      GetIt.I.get<ThemeSettingsController>();
 }

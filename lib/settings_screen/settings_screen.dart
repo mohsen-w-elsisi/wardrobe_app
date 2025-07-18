@@ -6,13 +6,11 @@ import 'package:wardrobe_app/shared/widgets/season_dropdown_button.dart';
 
 import 'about_app_tile.dart';
 import 'clear_wardrobe_tile.dart';
-import 'color_scheme.dart';
 import 'import_export_tile.dart';
 
 class SettingsScreen extends StatelessWidget {
   static const _settingsTiles = [
     SettingsScreenSeasonSelectorTile(),
-    ColorSchemeDropDownSettingsTile(),
     SettingsScreenImportTile(),
     SettingsScreenExportTile(),
     SettingsScreenClearWardrobeTile(),
