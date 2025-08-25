@@ -17,7 +17,7 @@ abstract class ClothItemSaver {
 }
 
 abstract class ClothItemFavouriteToggler {
-  void toggleItem(ClothItem item);
+  Future<void> toggleItem(ClothItem item);
 }
 
 abstract class ClothItemDeleter {

@@ -38,7 +38,7 @@ class _FavouriteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () => _toggleItemFavourite,
+      onPressed: _toggleItemFavourite,
       icon: _favouriteIcon,
       tooltip: "favorite",
     );

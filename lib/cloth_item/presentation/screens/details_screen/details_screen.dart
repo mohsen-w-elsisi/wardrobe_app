@@ -3,7 +3,6 @@ import 'package:get_it/get_it.dart';
 
 import 'package:wardrobe_app/cloth_item/domain/entities/data_structures.dart';
 import 'package:wardrobe_app/cloth_item/domain/ui_controllers.dart';
-import 'package:wardrobe_app/cloth_item/domain/use_cases/impls/querier.dart';
 import 'package:wardrobe_app/cloth_item/domain/use_cases/use_cases.dart';
 
 import 'describter_chips.dart';
