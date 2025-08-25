@@ -16,17 +16,28 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DynamicColorBuilder(
-      builder: (lightDynamic, darkDynamic) => MaterialApp(
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: lightDynamic,
-        ),
-        darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          useMaterial3: true,
-          colorScheme: darkDynamic,
-        ),
-        home: const HomeScreen(),
+      builder: (dynamicColorScheme, _) {
+        return MaterialApp(
+          theme: _themeFromDynamicScheme(dynamicColorScheme),
+          darkTheme: _themeFromDynamicScheme(dynamicColorScheme, dark: true),
+          home: const HomeScreen(),
+        );
+      },
+    );
+  }
+
+  ThemeData _themeFromDynamicScheme(
+    ColorScheme? dynamicScheme, {
+    bool dark = false,
+  }) {
+    final primaryColor = dynamicScheme?.primary ?? Colors.blue;
+    final brightness = dark ? Brightness.dark : Brightness.light;
+    return ThemeData(
+      useMaterial3: true,
+      brightness: brightness,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: primaryColor,
+        brightness: brightness,
       ),
     );
   }
