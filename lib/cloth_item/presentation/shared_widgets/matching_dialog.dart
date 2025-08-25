@@ -153,7 +153,7 @@ class _ListTile extends StatelessWidget {
   void _openDetailsScreen(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => ClothItemDetailScreen(item.id),
+        builder: (_) => ClothItemDetailScreen(item),
       ),
     );
   }

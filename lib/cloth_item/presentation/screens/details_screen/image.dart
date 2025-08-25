@@ -9,6 +9,7 @@ class ClothItemDetailScreenImage extends StatelessWidget {
   const ClothItemDetailScreenImage({
     required this.clothItem,
     required this.enableHeroImage,
+    super.key,
   });
 
   @override

@@ -74,6 +74,6 @@ class _ListTile extends StatelessWidget {
   }
 
   Widget _maximisedDetailScreen() {
-    return ClothItemDetailScreen(clothItem.id);
+    return ClothItemDetailScreen(clothItem);
   }
 }

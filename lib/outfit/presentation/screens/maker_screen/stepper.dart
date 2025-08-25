@@ -198,7 +198,7 @@ class _ItemChoiceTile extends StatelessWidget {
   void _openDetailsScreenForItem(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => ClothItemDetailScreen(item.id),
+        builder: (_) => ClothItemDetailScreen(item),
       ),
     );
   }
