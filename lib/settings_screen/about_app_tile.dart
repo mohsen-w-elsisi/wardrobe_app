@@ -12,7 +12,7 @@ class AboutAppTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return AboutListTile(
       applicationName: "wardrobe",
-      applicationVersion: "version 1.1",
+      applicationVersion: "version 1.2.1",
       aboutBoxChildren: [
         RichText(
           text: TextSpan(
